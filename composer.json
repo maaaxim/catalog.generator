@@ -1,0 +1,6 @@
+{
+    "require": {
+        "zendframework/zend-progressbar": "^2.5",
+        "fzaninotto/faker": "^1.7"
+    }
+}
