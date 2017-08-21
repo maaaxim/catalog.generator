@@ -1,18 +1,8 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT'] . "/bitrix/modules/main/include/prolog_before.php");
-
-/**
- * Individ module
- *
- * @category    Individ
- * @link        http://individ.ru
- * @revision    $Revision$
- * @date        $Date$
- */
 
 use Bitrix\Main\Loader;
 use Bitrix\Main\Localization\Loc;
-use Indi\Faker\Iblock\Prototype;
+use Faker\Iblock\Prototype;
 
 Loader::includeModule("iblock");
 
@@ -92,7 +82,7 @@ class indi_faker extends \CModule
 		$this->PARTNER_URI = Loc::getMessage('INDI_FAKER_PARTNER_URI');
 
 		$this->eventHandlers = array(
-			array('main', 'OnAdminContextMenuShow', '\Indi\Faker\Iblock\Prototype', 'onAdminContextMenuShow'),
+			array('main', 'OnAdminContextMenuShow', '\Faker\Iblock\Prototype', 'onAdminContextMenuShow'),
 		);
 	}
 
@@ -168,6 +158,7 @@ class indi_faker extends \CModule
 	}
 
 	/**
+     * @TODO понять, почему не появляются кнопки и всё такое
 	 * Устанавливает файлы модуля
 	 *
 	 * @return boolean

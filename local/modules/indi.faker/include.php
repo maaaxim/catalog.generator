@@ -15,7 +15,7 @@ use Bitrix\Main\Loader;
 Loader::includeModule("iblock");
 
 // подключаем внешние библиотеки из композера
-require_once($_SERVER['DOCUMENT_ROOT'] . "/local/modules/indi.faker/composer/vendor/autoload.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/vendor/autoload.php");
 /**
  * Базовый каталог модуля
  */

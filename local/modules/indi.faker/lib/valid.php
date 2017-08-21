@@ -8,7 +8,7 @@
  * @date        08.08.2016 13:39
  */
 
-namespace Indi\Faker;
+namespace Faker;
 
 /**
  * Individ module
