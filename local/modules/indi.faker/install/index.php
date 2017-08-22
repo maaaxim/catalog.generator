@@ -158,7 +158,6 @@ class indi_faker extends \CModule
 	}
 
 	/**
-     * @TODO понять, почему не появляются кнопки и всё такое
 	 * Устанавливает файлы модуля
 	 *
 	 * @return boolean

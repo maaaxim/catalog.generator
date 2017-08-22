@@ -64,7 +64,7 @@ class Prototype
                 'ICON' => '',
                 'TITLE' => Loc::getMessage("INDI_FAKER_IBLOCK_PROTOTYPE_GENERATE_BUTTON_DESC"),
                 'LINK' => '',
-                'LINK_PARAM' => 'class="adm-btn js-demo-generate-default" data-url="/bitrix/admin/indi_faker_ajax_controller.php"',
+                'LINK_PARAM' => 'class="adm-btn js-demo-generate-default" data-url="/bitrix/admin/aero_catalog_generator_controller.php"',
             );
         }
 
@@ -82,7 +82,7 @@ class Prototype
                 'ICON' => '',
                 'TITLE' => Loc::getMessage("INDI_FAKER_IBLOCK_PROTOTYPE_DELETE_BUTTON_DESC"),
                 'LINK' => '',
-                'LINK_PARAM' => 'class="adm-btn js-demo-delete" data-url="/bitrix/admin/indi_faker_ajax_controller.php"',
+                'LINK_PARAM' => 'class="adm-btn js-demo-delete" data-url="/bitrix/admin/aero_catalog_generator_controller.php"',
             );
 
         }

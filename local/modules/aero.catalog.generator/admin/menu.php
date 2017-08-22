@@ -6,19 +6,19 @@ Loc::loadMessages(__FILE__);
 
 $menu = array(
     array(
-        'parent_menu' => 'global_menu_content',
-        'sort' => 400,
+        'parent_menu' => 'global_menu_services',
+        'sort' => 5000,
         'text' => Loc::getMessage('CATALOG_MAKER_MENU_TITLE'),
         'title' => Loc::getMessage('CATALOG_MAKER_MENU_TITLE'),
-        'url' => 'CATALOG_MAKER.php',
+        'url' => 'catalog_maker.php',
         'items_id' => 'menu_references',
         'items' => array(
             array(
                 'text' => Loc::getMessage('CATALOG_MAKER_SUBMENU_TITLE'),
-                'url' => 'd7dull_index.php?param1=paramval&lang=' . LANGUAGE_ID,
-                'more_url' => array('d7dull_index.php?param1=paramval&lang=' . LANGUAGE_ID),
+                'url' => 'aero_catalog_generator_controller.php?param1=paramval&lang=' . LANGUAGE_ID,
+                'more_url' => array('aero_catalog_generator_controller.php?param1=paramval&lang=' . LANGUAGE_ID),
                 'title' => Loc::getMessage('CATALOG_MAKER_SUBMENU_TITLE'),
-            ),
+            )
         ),
     ),
 );
