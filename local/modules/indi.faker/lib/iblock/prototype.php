@@ -15,7 +15,7 @@ use Bitrix\Highloadblock\HighloadBlockTable;
 use Bitrix\Main\Entity\ExpressionField;
 use Bitrix\Main\Loader;
 use Bitrix\Main\Localization\Loc;
-use Indi\Faker\Factory;
+use Faker\Factory;
 use Indi\Faker\Config;
 use Indi\Faker\Util;
 

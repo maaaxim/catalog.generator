@@ -1,8 +1,8 @@
 <?
 use Bitrix\Main\Loader;
-use Faker\Controller;
-use Faker\Valid;
-use Faker\Iblock\Prototype as IblockDataManager;
+use Indi\Faker\Controller;
+use Indi\Faker\Valid;
+use Indi\Faker\Iblock\Prototype as IblockDataManager;
 
 require_once($_SERVER['DOCUMENT_ROOT'] . "/bitrix/modules/main/include/prolog_before.php");
 
