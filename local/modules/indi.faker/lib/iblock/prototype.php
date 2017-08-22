@@ -9,15 +9,15 @@
  * @date        $Date$
  */
 
-namespace Faker\Iblock;
+namespace Indi\Faker\Iblock;
 
 use Bitrix\Highloadblock\HighloadBlockTable;
 use Bitrix\Main\Entity\ExpressionField;
 use Bitrix\Main\Loader;
 use Bitrix\Main\Localization\Loc;
-use Faker\Factory;
-use Faker\Config;
-use Faker\Util;
+use Indi\Faker\Factory;
+use Indi\Faker\Config;
+use Indi\Faker\Util;
 
 Loc::loadMessages(__FILE__);
 

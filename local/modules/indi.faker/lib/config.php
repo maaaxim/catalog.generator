@@ -8,7 +8,7 @@
  * @date        08.08.2016 13:39
  */
 
-namespace Faker;
+namespace Indi\Faker;
 
 use Bitrix\Main\Config\Option;
 

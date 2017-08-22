@@ -2,7 +2,7 @@
 
 use Bitrix\Main\Loader;
 use Bitrix\Main\Localization\Loc;
-use Faker\Iblock\Prototype;
+use Indi\Faker\Iblock\Prototype;
 
 Loader::includeModule("iblock");
 
@@ -82,7 +82,7 @@ class indi_faker extends \CModule
 		$this->PARTNER_URI = Loc::getMessage('INDI_FAKER_PARTNER_URI');
 
 		$this->eventHandlers = array(
-			array('main', 'OnAdminContextMenuShow', '\Faker\Iblock\Prototype', 'onAdminContextMenuShow'),
+			array('main', 'OnAdminContextMenuShow', 'Indi\Faker\Iblock\Prototype', 'onAdminContextMenuShow'),
 		);
 	}
 
@@ -255,7 +255,7 @@ class indi_faker extends \CModule
 	 *
 	 * @return void
 	 */
-	public function DoInstall()
+	public function doInstall()
 	{
 		if ($this->installDB()
 			&& $this->installEvents()
@@ -270,7 +270,7 @@ class indi_faker extends \CModule
 	 *
 	 * @return void
 	 */
-	public function DoUninstall()
+	public function doUninstall()
 	{
 		$this->deleteFakeData();
 		$this->deleteFakeProperty();

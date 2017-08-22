@@ -8,7 +8,7 @@
  * @date        09.08.2016 13:22
  */
 
-namespace Faker;
+namespace Indi\Faker;
 
 class Util
 {
