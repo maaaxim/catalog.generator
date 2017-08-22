@@ -3,6 +3,6 @@
         "zendframework/zend-progressbar": "^2.5",
         "fzaninotto/faker": "^1.7",
         "zendframework/zend-json": "^3.0",
-        "zendframework/zend-session": "2.5"
+        "zendframework/zend-session": "2.5.2"
     }
 }
