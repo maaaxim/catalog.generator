@@ -44,7 +44,7 @@
                 "session" : that.session,
                 "iterator" : current
             };
-            var process = $.post("up.php", request, function(){}, "json");
+            var process = $.post("aero_catalog_generator_controller.php", request, function(){}, "json");
             process.done(function (data) {
                 current++;
                 if(data.finished == true){
@@ -76,13 +76,11 @@
         this.initFields = function () {
             $(document).ready(function () {
                 that.$progressbar = $(".pg-progress");
-                if(typeof $progressbar != 'undefined'){
-                    that.$form = $("#progress-starter");
-                    that.$text1 = $("#pg-text-1");
-                    that.$text2= $("#pg-text-2");
-                    var data = that.$form.data();
-                    that.session = data.session;
-                }
+                that.$form = $("#progress-starter");
+                that.$text1 = $("#pg-text-1");
+                that.$text2= $("#pg-text-2");
+                var data = that.$form.data();
+                that.session = data.session;
             });
         };
 
