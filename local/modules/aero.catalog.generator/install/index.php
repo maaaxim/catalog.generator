@@ -49,6 +49,10 @@ class aero_catalog_generator extends CModule {
                 'target' => '/bitrix/js',
                 'rewrite' => false,
             ),
+            '/panel' => array(
+                'target' => '/bitrix/panel',
+                'rewrite' => false,
+            ),
         );
         foreach ($parts as $dir => $config) {
             CopyDirFiles(
@@ -63,6 +67,7 @@ class aero_catalog_generator extends CModule {
 
     public function UnInstallFiles(){
         DeleteDirFilesEx('/bitrix/js/' . $this->MODULE_ID . '/');
+        DeleteDirFilesEx('/bitrix/panel/' . $this->MODULE_ID . '/');
         DeleteDirFiles(
             $_SERVER["DOCUMENT_ROOT"] . "/local/modules/" . $this->MODULE_ID . "/install/admin",
             $_SERVER["DOCUMENT_ROOT"] . "/bitrix/admin"

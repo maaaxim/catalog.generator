@@ -1,0 +1,52 @@
+#progressbar-container {
+    position: relative;
+}
+
+#progressbar {
+    position: absolute;
+    left: 10px;
+    top: 50px;
+}
+
+.pg-progressbar {
+    position: relative;
+    width: 250px;
+    height: 24px;
+    overflow: hidden;
+    border: 1px solid #c6c6c6;
+}
+
+.pg-progress {
+    z-index: 150;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 24px;
+    overflow: hidden;
+}
+
+.pg-progressstyle {
+    height: 22px;
+    border: 1px solid #748a9e;
+}
+
+.pg-text,
+.pg-invertedtext {
+    position: absolute;
+    left: 0;
+    top: 4px;
+    width: 250px;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 12px;
+}
+
+.pg-invertedtext {
+    color: #666;
+}
+
+.pg-text {
+    z-index: 100;
+    color: #000000;
+}
