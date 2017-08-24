@@ -7,7 +7,7 @@ use Bitrix\Main\ModuleManager;
 
 Loc::loadMessages(__FILE__);
 
-class aero_catalog_generator extends CModule{
+class aero_catalog_generator extends CModule {
 
     public function __construct(){
         $arModuleVersion = array();
@@ -40,10 +40,29 @@ class aero_catalog_generator extends CModule{
     }
 
     public function InstallFiles(){
-        CopyDirFiles(__DIR__ . '/admin', $_SERVER['DOCUMENT_ROOT'] . '/bitrix/admin');
+        $parts = array(
+            '/admin' => array(
+                'target' => '/bitrix/admin',
+                'rewrite' => false,
+            ),
+            '/js' => array(
+                'target' => '/bitrix/js',
+                'rewrite' => false,
+            ),
+        );
+        foreach ($parts as $dir => $config) {
+            CopyDirFiles(
+                __DIR__ . $dir,
+                $_SERVER['DOCUMENT_ROOT'] . $config['target'],
+                $config['rewrite'],
+                true
+            );
+        }
+        return true;
     }
 
     public function UnInstallFiles(){
+        DeleteDirFilesEx('/bitrix/js/' . $this->MODULE_ID . '/');
         DeleteDirFiles(
             $_SERVER["DOCUMENT_ROOT"] . "/local/modules/" . $this->MODULE_ID . "/install/admin",
             $_SERVER["DOCUMENT_ROOT"] . "/bitrix/admin"
