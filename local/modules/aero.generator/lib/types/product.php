@@ -6,7 +6,7 @@
  * Time: 23:25
  */
 
-namespace Aero\Types;
+namespace Aero\Generator\Types;
 
 
 class Product implements Generateable

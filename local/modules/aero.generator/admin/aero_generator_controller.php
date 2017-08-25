@@ -17,14 +17,14 @@ if (isset($_REQUEST['session'])) {
     }
 }
 
-$APPLICATION->SetAdditionalCSS('/bitrix/panel/aero.catalog.generator/aero_catalog_generator.css');
-\Bitrix\Main\Loader::includeModule("aero.catalog.generator");
-\CJSCore::Init(array("aero_catalog_generator"));
+$APPLICATION->SetAdditionalCSS('/bitrix/panel/aero.generator/aero_generator.css');
+\Bitrix\Main\Loader::includeModule("aero.generator");
+\CJSCore::Init(array("aero_generator"));
 
 require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_admin_after.php';
 ?>
 <div id="progressbar-container">
-    <form data-session="<?php echo md5(uniqid(rand())); ?>"  id="progress-starter" enctype="multipart/form-data" method="post" action="aero_catalog_generator_controller.php">
+    <form data-session="<?php echo md5(uniqid(rand())); ?>"  id="progress-starter" enctype="multipart/form-data" method="post" action="aero_generator_controller.php">
         <input type="submit" value="Upload!" />
     </form>
     <div id="progressbar">

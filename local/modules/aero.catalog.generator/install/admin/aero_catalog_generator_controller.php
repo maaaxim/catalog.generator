@@ -1,1 +1,0 @@
-<?require($_SERVER["DOCUMENT_ROOT"]. "/local/modules/aero.catalog.generator/admin/aero_catalog_generator_controller.php");?>

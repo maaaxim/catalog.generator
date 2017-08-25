@@ -7,7 +7,7 @@ use Bitrix\Main\ModuleManager;
 
 Loc::loadMessages(__FILE__);
 
-class aero_catalog_generator extends CModule {
+class aero_generator extends CModule {
 
     public function __construct(){
         $arModuleVersion = array();
@@ -19,7 +19,7 @@ class aero_catalog_generator extends CModule {
             $this->MODULE_VERSION_DATE = $arModuleVersion['VERSION_DATE'];
         }
 
-        $this->MODULE_ID = 'aero.catalog.generator';
+        $this->MODULE_ID = 'aero.generator';
         $this->MODULE_NAME = Loc::getMessage('CATALOG_MAKER_MODULE_NAME');
         $this->MODULE_DESCRIPTION = Loc::getMessage('CATALOG_MAKER_MODULE_DESCRIPTION');
         $this->MODULE_GROUP_RIGHTS = 'N';

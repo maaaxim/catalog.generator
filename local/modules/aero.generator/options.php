@@ -1,5 +1,5 @@
 <?
-$moduleID = 'aero.catalog.generator';
+$moduleID = 'aero.generator';
 $moduleRight = $APPLICATION->GetGroupRight($moduleID);
 if ($moduleRight >= "R"):
 	IncludeModuleLangFile($_SERVER["DOCUMENT_ROOT"] . BX_ROOT . "/modules/main/options.php");

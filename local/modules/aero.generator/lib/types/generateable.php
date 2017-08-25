@@ -1,5 +1,5 @@
 <?php
-namespace Aero\Types;
+namespace Aero\Generator\Types;
 
 interface Generateable
 {

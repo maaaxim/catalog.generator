@@ -44,7 +44,7 @@
                 "session" : that.session,
                 "iterator" : current
             };
-            var process = $.post("aero_catalog_generator_controller.php", request, function(){}, "json");
+            var process = $.post("aero_generator_controller.php", request, function(){}, "json");
             process.done(function (data) {
                 current++;
                 if(data.finished == true){

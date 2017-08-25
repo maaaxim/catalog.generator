@@ -15,8 +15,8 @@ $menu = array(
         'items' => array(
             array(
                 'text' => Loc::getMessage('CATALOG_MAKER_SUBMENU_TITLE'),
-                'url' => 'aero_catalog_generator_controller.php?param1=paramval&lang=' . LANGUAGE_ID,
-                'more_url' => array('aero_catalog_generator_controller.php?param1=paramval&lang=' . LANGUAGE_ID),
+                'url' => 'aero_generator_controller.php?param1=paramval&lang=' . LANGUAGE_ID,
+                'more_url' => array('aero_generator_controller.php?param1=paramval&lang=' . LANGUAGE_ID),
                 'title' => Loc::getMessage('CATALOG_MAKER_SUBMENU_TITLE'),
             )
         ),
