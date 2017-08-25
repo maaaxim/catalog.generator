@@ -1,8 +1,10 @@
 <?php
 
 // @TODO make peace between zend and bitrix sessions %)
-require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_admin_before.php';
 require_once $_SERVER["DOCUMENT_ROOT"] . '/vendor/autoload.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_admin_before.php';
+
+sleep(1);
 
 use Zend\ProgressBar\Adapter\JsPull;
 use Zend\ProgressBar\ProgressBar;
@@ -11,8 +13,8 @@ if (isset($_REQUEST['session'])) {
     $iterator = (int) $_REQUEST["iterator"];
     if(empty($iterator)) die();
     $adapter = new JsPull();
-    $progressBar = new ProgressBar($adapter, 0, 20, $_REQUEST['session']);
-    if (20 === $iterator) {
+    $progressBar = new ProgressBar($adapter, 0, 30, $_REQUEST['session']);
+    if (30 === $iterator) {
         $progressBar->finish();
     } else {
         $progressBar->update($iterator);
