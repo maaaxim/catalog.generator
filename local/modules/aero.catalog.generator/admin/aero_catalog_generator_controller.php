@@ -45,5 +45,4 @@ require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_admi
     </div>
 </div>
 <?
-
 require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/epilog_admin.php';
