@@ -12,11 +12,6 @@ class Generator
 {
     public function setConfig(){}
 
-    /**
-     * Returns estimated time of arrival
-     */
-    public function getETA(){}
-
     public function createItem(Types\Generateable $item){
         $item->generate();
     }

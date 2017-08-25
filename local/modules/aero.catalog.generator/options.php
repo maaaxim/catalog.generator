@@ -13,6 +13,13 @@ if ($moduleRight >= "R"):
 				"TITLE" => GetMessage("AERO_CATALOG_CREATOR_TAB_SETTINGS_TITLE"),
 			),
 			'options' => array(
+				array("total_products", GetMessage("AERO_CATALOG_CREATOR_TOTAL_PRODUCTS"), array("text", 24), 'default' => '1000'),
+				array("total_prices", GetMessage("AERO_CATALOG_CREATOR_TOTAL_PRICES"), array("text", 24), 'default' => '10'),
+				array("total_stores", GetMessage("AERO_CATALOG_CREATOR_TOTAL_STORES"), array("text", 24), 'default' => '100'),
+				array("total_properties", GetMessage("AERO_CATALOG_CREATOR_TOTAL_PRODUCT_PROPERTIES"), array("text", 24), 'default' => '100'),
+				array("total_properties", GetMessage("AERO_CATALOG_CREATOR_TOTAL_SKU_PROPERTIES"), array("text", 24), 'default' => '200'),
+                array("sku_per_product", GetMessage("AERO_CATALOG_CREATOR_SKU_PER_PRODUCT"), array("text", 24), 'default' => '10'),
+
 				array("count", GetMessage("AERO_CATALOG_CREATOR_OPT_COUNT"), array("text", 24), 'default' => '50'),
 				array("words_in_el_name", GetMessage("AERO_CATALOG_CREATOR_OPT_WORDS_IN_EL_NAME"), array("text", 24), 'default' => '5'),
 				array("preview_text_length", GetMessage("AERO_CATALOG_CREATOR_OPT_PREVIEW_TEXT_LENGTH"), array("text", 24), 'default' => '150'),
