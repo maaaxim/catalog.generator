@@ -12,11 +12,11 @@
         var that = this;
 
         /**
-         *  Session identifyer
+         *  Current step
          *
-         *  @type string
+         *  @type integer
          */
-        var session;
+        var step;
 
         /**
          *  Jquery objects
@@ -36,17 +36,14 @@
 
         /**
          * Update progressbar staus
-         *
-         * @param current
          */
-        this.update = function (current) {
+        this.update = function () {
             var request = {
-                "session" : that.session,
-                "iterator" : current
+                "step" : that.step
             };
             var process = $.post("aero_generator_controller.php", request, function(){}, "json");
             process.done(function (data) {
-                current++;
+                that.step++;
                 if(data.finished == true){
                     that.setSize(100);
                     that.setText(0, true);
@@ -54,7 +51,7 @@
                 }
                 that.setSize(data.percent);
                 that.setText(data.timeRemaining, false);
-                that.update(current);
+                that.update(that.step);
             });
         };
 
@@ -64,7 +61,8 @@
         this.initHandlers = function () {
             $(document).ready(function () {
                 $(document).on("submit", "#progress-starter", function () {
-                    that.update(1);
+                    that.update(that.step);
+                    // @TODO deactivate event after click
                     return false;
                 });
             });
@@ -80,7 +78,7 @@
                 that.$text1 = $("#pg-text-1");
                 that.$text2= $("#pg-text-2");
                 var data = that.$form.data();
-                that.session = data.session;
+                that.step = data.step;
             });
         };
 
@@ -110,6 +108,6 @@
         };
     };
 
-    catalogLoader.init()
+    catalogLoader.init();
 
 })();

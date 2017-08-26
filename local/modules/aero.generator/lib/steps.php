@@ -9,7 +9,8 @@ class Steps
     protected $stepCount = 10;
 
     public function __construct(){
-        $this->stepSize = 1;
+        $this->step = 1; // @TODO get it from DB
+        $this->stepSize = 1; // @TODO set up automatically depending on data size
     }
 
     /**
@@ -40,6 +41,10 @@ class Steps
      */
     public function getTotal(){
         return $this->stepCount;
+    }
+
+    public function getCurrent(){
+        return $this->step;
     }
 
     public function setConfig(){}

@@ -10,6 +10,6 @@ Loader::includeModule("iblock");
 \CJSCore::RegisterExt(
 	"aero_generator",
 	array(
-		'js' => '/bitrix/js/aero.catalog.generator/aero.generator.js'
+		'js' => '/bitrix/js/aero.generator/aero.generator.js'
 	)
 );
