@@ -16,6 +16,13 @@ if(\Aero\Generator\JsonBar::isAjax()){
     $progress->finish();
 }
 
+if(\Aero\Generator\JsonBar::isAjax()){
+    // Get total and cur from step
+    // Calc percantage
+    // Send respnse
+}
+
+
 $APPLICATION->SetAdditionalCSS('/bitrix/panel/aero.generator/aero_generator.css');
 \CJSCore::Init(array("aero_generator"));
 
