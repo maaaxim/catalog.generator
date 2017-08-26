@@ -10,7 +10,6 @@ $menu = array(
         'sort' => 5000,
         'text' => Loc::getMessage('CATALOG_MAKER_MENU_TITLE'),
         'title' => Loc::getMessage('CATALOG_MAKER_MENU_TITLE'),
-        'url' => 'catalog_maker.php',
         'items_id' => 'menu_references',
         'items' => array(
             array(
