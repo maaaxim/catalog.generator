@@ -5,9 +5,6 @@ require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_admi
 // @TODO leave step, counters etc only in Steps
 // JsonBar shuld be responsible only for notify and calc percent
 
-echo "<pre>"; var_dump(\Aero\Generator\Entity\GeneratorTable::getMap()); echo "</pre>";
-die();
-
 $steps = new \Aero\Generator\Steps();
 if(\Aero\Generator\JsonBar::isAjax()){
     $progress = new \Aero\Generator\JsonBar(
