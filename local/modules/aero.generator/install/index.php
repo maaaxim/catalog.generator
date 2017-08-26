@@ -75,10 +75,14 @@ class aero_generator extends CModule {
     }
 
     public function installDB(){
-        if (Loader::includeModule($this->MODULE_ID)) {}
+        global $DB;
+        $DB->RunSQLBatch(__DIR__ . '/sql/install.sql');
+        return true;
     }
 
     public function uninstallDB(){
-        if (Loader::includeModule($this->MODULE_ID)) {}
+        global $DB;
+        $DB->RunSQLBatch(__DIR__ . '/sql/uninstall.sql');
+        return true;
     }
 }
