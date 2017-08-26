@@ -2,49 +2,40 @@
 
 namespace Aero\Generator\Command;
 
+use Aero\Generator\Steps;
 use Notamedia\ConsoleJedi\Application\Command\BitrixCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 
 /**
- * Created by PhpStorm.
- * User: maxim
- * Date: 26.08.2017
- * Time: 0:04
+ * Manage generation using console interface
  */
 class GenerateCommand extends BitrixCommand
 {
-    protected function configure()
-    {
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function configure(){
         $this->setName('aero:generate')
             ->setDescription('Start catalog generation process');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $output->writeln('<info>Yohoho!</info>');
+    /**
+     * {@inheritdoc}
+     */
+    protected function execute(InputInterface $input, OutputInterface $output){
 
-        // create a new progress bar (10 units)
-        $progress = new ProgressBar($output, 10);
+        $steps = new Steps();
 
-        // start and displays the progress bar
+        $output->writeln('<info>Catalog generation process started</info>');
+        $progress = new ProgressBar($output, $steps->getTotal());
         $progress->start();
 
-        $i = 0;
-        while ($i++ < 10) {
+        while($stepsCompleted = $steps->createNext())
+            $progress->advance($stepsCompleted);
 
-            sleep(1);
-            // ... do some work
-
-            // advance the progress bar 1 unit
-            $progress->advance();
-
-            // you can also advance the progress bar by more than 1 unit
-            // $progress->advance(3);
-        }
-
-        // ensure that the progress bar is at 100%
         $progress->finish();
 
         echo PHP_EOL;
