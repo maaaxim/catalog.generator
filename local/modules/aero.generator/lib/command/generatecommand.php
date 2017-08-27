@@ -30,7 +30,7 @@ class GenerateCommand extends BitrixCommand
         $steps = new Steps();
 
         $output->writeln('<info>Catalog generation process started</info>');
-        $progress = new ProgressBar($output, $steps->getTotal());
+        $progress = new ProgressBar($output, $steps->getCount());
         $progress->start();
 
         while($stepsCompleted = $steps->createNext())
