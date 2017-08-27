@@ -13,13 +13,14 @@ class Steps
 
     public function __construct(){
 
+        $this->makePlan();
+
         $this->step = $this->getCurrentStepNumber();
         $this->stepCount = $this->getCountFromDb();
 
         $this->stepSize = 1; // @TODO set up automatically depending on data size
 
 //        $this->cleanSteps();
-//        $this->makePlan();
     }
 
     /**
@@ -37,9 +38,7 @@ class Steps
             || $this->step > $this->stepCount
         ) return 0;
 
-        $stepsComplete = $this->stepSize;
-
-        return $stepsComplete;
+        return $this->stepSize;
     }
 
     /**
@@ -63,6 +62,35 @@ class Steps
     public function setConfig(){}
 
     private function makePlan(){
+
+        // Check data exist
+        if($this->getCountFromDb() === 0){
+
+            // Read config (main settings) - to getConfig
+            $config["types_product"]              = \Bitrix\Main\Config\Option::get("aero.generator", "types_product");
+            $config["types_price"]                = \Bitrix\Main\Config\Option::get("aero.generator", "types_price");
+            $config["types_store"]                = \Bitrix\Main\Config\Option::get("aero.generator", "types_store");
+            $config["types_product_property"]     = \Bitrix\Main\Config\Option::get("aero.generator", "types_product_property");
+            $config["types_product_property_sku"] = \Bitrix\Main\Config\Option::get("aero.generator", "types_product_property_sku");
+            $config["types_product_sku"]          = \Bitrix\Main\Config\Option::get("aero.generator", "types_product_sku");
+
+            $plan = [];
+            foreach($config as $key => $setting){
+                $exploded = explode("_", $key);
+                $typeClassname = ucfirst($exploded[1]);
+                $class = '\\Aero\\Generator\\Types\\' . $typeClassname;
+                $plan[$class] = [
+                    "order" => $class::ORDER,
+                    "exploded" => $exploded,
+                    "setting" => $setting
+                ];
+            }
+            echo "<pre>"; var_dump($plan); echo "</pre>";
+
+            // Make step for each entity and type of entity
+        }
+
+        /*
         for($i = 1; $i < 31; $i++){
             GeneratorTable::add([
                 "STEP" => $i,
@@ -71,6 +99,7 @@ class Steps
                 "ITEMS_PER_STEP" => 1
             ]);
         }
+        */
     }
 
     /**

@@ -9,9 +9,9 @@
 namespace Aero\Generator\Types;
 
 
-class Iblock implements Generateable
+class Store implements Generateable
 {
-    const ORDER = 1;
+    const ORDER = 4;
 
     public function __construct()
     {

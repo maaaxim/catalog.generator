@@ -11,6 +11,7 @@ namespace Aero\Generator\Types;
 
 class Product implements Generateable
 {
+    const ORDER = 5;
 
     public function __construct()
     {
