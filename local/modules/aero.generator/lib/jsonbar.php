@@ -11,32 +11,41 @@ namespace Aero\Generator;
 
 class JsonBar
 {
-    protected $response = [];
+    protected $response;
+    protected $percent;
 
-    public function __construct($max, $step){
+    public function __construct(){
         $this->response = [
-            "max"      => $max,
-            "step"  => $step,
+            "max"      => false,
+            "step"     => false,
             "percent"  => false,
             "finished" => false
         ];
-
-        // Calc percent
-        if ($max === $step) {
-            $this->response["percent"] = false;
-        } else {
-            $this->response["percent"] = (float) $step / $max * 100;
-        }
     }
 
     /**
      * Advances the progress output X steps.
      *
-     * @param int $step Number of steps to advance
+     * @param Steps $stepsInstance
+     * @internal param int $step Number of steps to advance
      */
-    public function advance($step){
-        sleep(1);
-        $this->response["percent"] += $step;
+    public function advance(Steps $stepsInstance){
+
+        $this->response["text"]  = "Generating...";
+
+        $this->response["step"] = $stepsInstance->getCurrent();
+        $this->response["max"] = $stepsInstance->getCount();
+
+        if($this->response["step"] == 0)
+            $this->finish();
+
+        // Calc percent
+        if ($this->response["max"] === $this->response["step"]) {
+            $this->response["percent"] = 100;
+        } else {
+            $this->response["percent"] = ceil($this->response["step"] / $this->response["max"] * 100);
+        }
+
         $this->notify();
     }
 
@@ -45,9 +54,16 @@ class JsonBar
      */
     public function finish(){
         $this->response["finished"] = true;
+        $this->response["percent"]  = 100;
+        $this->response["text"]  = "Finished!";
         $this->notify();
     }
 
+    /**
+     * Check ajax request
+     *
+     * @return bool
+     */
     public static function isAjax(){
         if(!(empty($_REQUEST["step"]))) // @TODO wtf
             return true;
@@ -55,6 +71,9 @@ class JsonBar
             return false;
     }
 
+    /**
+     * Show json response
+     */
     private function notify(){
         echo json_encode($this->response);
         die();

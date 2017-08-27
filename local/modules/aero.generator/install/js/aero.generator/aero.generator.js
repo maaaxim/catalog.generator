@@ -44,13 +44,12 @@
             var process = $.post("aero_generator_controller.php", request, function(){}, "json");
             process.done(function (data) {
                 that.step++;
+                that.setText(data.text);
                 if(data.finished == true){
                     that.setSize(100);
-                    that.setText(0, true);
                     return;
                 }
                 that.setSize(data.percent);
-                that.setText(data.timeRemaining, false);
                 that.update(that.step);
             });
         };
@@ -97,12 +96,7 @@
          * @param remaining
          * @param finish
          */
-        this.setText = function (remaining, finish) {
-            var text = remaining + " sec remaining";
-            if(remaining == 0)
-                text = "calculating...";
-            if(finish === true)
-                text = "completed!";
+        this.setText = function (text) {
             that.$text1.html(text);
             that.$text2.html(text);
         };

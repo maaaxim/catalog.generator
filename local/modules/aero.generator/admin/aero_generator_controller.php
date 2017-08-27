@@ -2,26 +2,15 @@
 require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_admin_before.php';
 \Bitrix\Main\Loader::includeModule("aero.generator");
 
-// @TODO leave step, counters etc only in Steps
-// JsonBar shuld be responsible only for notify and calc percent
-
 $steps = new \Aero\Generator\Steps();
 if(\Aero\Generator\JsonBar::isAjax()){
-    $progress = new \Aero\Generator\JsonBar(
-        $steps->getTotal(),
-        $steps->getCurrent()
-    );
-    while($stepsCompleted = $steps->createNext())
-        $progress->advance($stepsCompleted);
+    $progress = new \Aero\Generator\JsonBar();
+    while($stepsCompleted = $steps->createNext()){
+        $progress->advance($steps);
+    }
+
     $progress->finish();
 }
-
-if(\Aero\Generator\JsonBar::isAjax()){
-    // Get total and cur from step
-    // Calc percantage
-    // Send respnse
-}
-
 
 $APPLICATION->SetAdditionalCSS('/bitrix/panel/aero.generator/aero_generator.css');
 \CJSCore::Init(array("aero_generator"));
