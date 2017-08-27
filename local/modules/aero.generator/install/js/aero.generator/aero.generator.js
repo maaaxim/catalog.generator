@@ -39,7 +39,8 @@
          */
         this.update = function () {
             var request = {
-                "step" : that.step
+                "step" : that.step,
+                "ajax" : "y"
             };
             var process = $.post("aero_generator_controller.php", request, function(){}, "json");
             process.done(function (data) {

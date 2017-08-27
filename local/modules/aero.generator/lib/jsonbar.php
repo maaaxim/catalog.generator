@@ -65,7 +65,7 @@ class JsonBar
      * @return bool
      */
     public static function isAjax(){
-        if(!(empty($_REQUEST["step"]))) // @TODO wtf
+        if($_REQUEST["ajax"] == "y")
             return true;
         else
             return false;
