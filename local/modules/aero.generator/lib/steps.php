@@ -11,6 +11,9 @@ class Steps
     public function __construct(){
         $this->step = 1; // @TODO get it from DB
         $this->stepSize = 1; // @TODO set up automatically depending on data size
+
+        // $this->makePlan();
+         $this->getNextStep();
     }
 
     /**
@@ -48,4 +51,26 @@ class Steps
     }
 
     public function setConfig(){}
+
+    private function makePlan(){
+        for($i = 0; $i < 30; $i++){
+            \Aero\Generator\Entity\GeneratorTable::add([
+                "STATUS" => 0,
+                "TYPE" => "product",
+                "ITEMS_PER_STEP" => 1
+            ]);
+        }
+    }
+
+    private function getNextStep(){
+        $stepRes = \Aero\Generator\Entity\GeneratorTable::getList([
+            "filter" => ["STATUS" => 0],
+            "order" => ["ID" => "ASC"],
+            "select" => ["ID", "STEP"],
+            "limit" => 1
+        ]);
+        if($stepFields = $stepRes->fetch())
+            echo "<pre>"; var_dump($stepFields); echo "</pre>";
+        die();
+    }
 }

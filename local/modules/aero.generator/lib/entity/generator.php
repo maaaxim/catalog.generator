@@ -32,6 +32,10 @@ class GeneratorTable extends Main\Entity\DataManager
                 'autocomplete' => true,
                 'title' => Loc::getMessage('GENERATOR_ENTITY_ID_FIELD'),
             ),
+            'STEP' => array(
+                'data_type' => 'integer',
+                'title' => Loc::getMessage('GENERATOR_ENTITY_ITEMS_STEP_FIELD'),
+            ),
             'STATUS' => array(
                 'data_type' => 'integer',
                 'title' => Loc::getMessage('GENERATOR_ENTITY_STATUS_FIELD'),
