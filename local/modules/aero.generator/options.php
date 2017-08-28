@@ -16,11 +16,12 @@ if ($moduleRight >= "R"):
 
 				array("types_catalog",         GetMessage("AERO_CATALOG_CREATOR_TOTAL_CATALOGS"), array("text", 24), 'default' => '1'),
 				array("types_product",         GetMessage("AERO_CATALOG_CREATOR_TOTAL_PRODUCTS"), array("text", 24), 'default' => '1000'),
-                array("types_sku",             GetMessage("AERO_CATALOG_CREATOR_SKU_PER_PRODUCT"), array("text", 24), 'default' => '10'),
 				array("types_price",           GetMessage("AERO_CATALOG_CREATOR_TOTAL_PRICES"), array("text", 24), 'default' => '10'),
 				array("types_store",           GetMessage("AERO_CATALOG_CREATOR_TOTAL_STORES"), array("text", 24), 'default' => '100'),
 				array("types_productproperty", GetMessage("AERO_CATALOG_CREATOR_TOTAL_PRODUCT_PROPERTIES"), array("text", 24), 'default' => '100'),
 				array("types_skuproperty",     GetMessage("AERO_CATALOG_CREATOR_TOTAL_SKU_PROPERTIES"), array("text", 24), 'default' => '200'),
+
+                array("sku_count",             GetMessage("AERO_CATALOG_CREATOR_SKU_PER_PRODUCT"), array("text", 24), 'default' => '10'),
 
 				array("count", GetMessage("AERO_CATALOG_CREATOR_OPT_COUNT"), array("text", 24), 'default' => '50'),
 				array("words_in_el_name", GetMessage("AERO_CATALOG_CREATOR_OPT_WORDS_IN_EL_NAME"), array("text", 24), 'default' => '5'),
