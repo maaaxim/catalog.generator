@@ -5,6 +5,12 @@ namespace Aero\Generator;
 use Aero\Generator\Entity\GeneratorTable;
 use Bitrix\Main\DB\Exception;
 
+/**
+ * Class Steps
+ * responsible for making steps according to plan from db
+ *
+ * @package Aero\Generator
+ */
 class Steps
 {
     protected $step;

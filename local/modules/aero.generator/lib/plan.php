@@ -10,6 +10,13 @@ namespace Aero\Generator;
 
 use Aero\Generator\Entity\GeneratorTable;
 
+/**
+ * Class Plan
+ * responsible for making plan
+ * (computing step size, writing to the db)
+ *
+ * @package Aero\Generator
+ */
 class Plan
 {
     private $config;
