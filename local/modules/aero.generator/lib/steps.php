@@ -67,12 +67,13 @@ class Steps
         if($this->getCountFromDb() === 0){
 
             // Read config (main settings) - to getConfig
-            $config["types_product"]              = \Bitrix\Main\Config\Option::get("aero.generator", "types_product");
-            $config["types_price"]                = \Bitrix\Main\Config\Option::get("aero.generator", "types_price");
-            $config["types_store"]                = \Bitrix\Main\Config\Option::get("aero.generator", "types_store");
-            $config["types_product_property"]     = \Bitrix\Main\Config\Option::get("aero.generator", "types_product_property");
-            $config["types_product_property_sku"] = \Bitrix\Main\Config\Option::get("aero.generator", "types_product_property_sku");
-            $config["types_product_sku"]          = \Bitrix\Main\Config\Option::get("aero.generator", "types_product_sku");
+            $config["types_catalog"]         = \Bitrix\Main\Config\Option::get("aero.generator", "types_catalog");
+            $config["types_product"]         = \Bitrix\Main\Config\Option::get("aero.generator", "types_product");
+            $config["types_sku"]             = \Bitrix\Main\Config\Option::get("aero.generator", "types_sku");
+            $config["types_price"]           = \Bitrix\Main\Config\Option::get("aero.generator", "types_price");
+            $config["types_store"]           = \Bitrix\Main\Config\Option::get("aero.generator", "types_store");
+            $config["types_productproperty"] = \Bitrix\Main\Config\Option::get("aero.generator", "types_productproperty");
+            $config["types_skuproperty"]     = \Bitrix\Main\Config\Option::get("aero.generator", "types_skuproperty");
 
             $plan = [];
             foreach($config as $key => $setting){
@@ -85,6 +86,13 @@ class Steps
                     "setting" => $setting
                 ];
             }
+
+            // Sort multidimensional array by one of values
+            uasort($plan, function($a, $b) {
+                $return = $a['order'] <=> $b['order'];
+                return $return;
+            });
+
             echo "<pre>"; var_dump($plan); echo "</pre>";
 
             // Make step for each entity and type of entity

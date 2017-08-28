@@ -9,9 +9,9 @@
 namespace Aero\Generator\Types;
 
 
-class Store implements Generateable
+class Sku implements Generateable
 {
-    const ORDER = 5;
+    const ORDER = 7;
 
     public function __construct()
     {

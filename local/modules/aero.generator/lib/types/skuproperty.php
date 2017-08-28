@@ -9,9 +9,9 @@
 namespace Aero\Generator\Types;
 
 
-class Property implements Generateable
+class SkuProperty implements Generateable
 {
-    const ORDER = 2;
+    const ORDER = 3;
 
     public function __construct()
     {

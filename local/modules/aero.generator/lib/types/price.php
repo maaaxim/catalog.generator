@@ -11,7 +11,7 @@ namespace Aero\Generator\Types;
 
 class Price implements Generateable
 {
-    const ORDER = 3;
+    const ORDER = 4;
 
     public function __construct()
     {
