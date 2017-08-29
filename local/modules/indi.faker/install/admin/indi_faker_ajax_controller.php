@@ -1,1 +1,0 @@
-<?require($_SERVER["DOCUMENT_ROOT"]."/local/modules/indi.faker/admin/indi_faker_ajax_controller.php");?>
