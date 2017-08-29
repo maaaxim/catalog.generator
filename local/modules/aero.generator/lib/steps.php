@@ -126,7 +126,7 @@ class Steps
      */
     private function createGenerateable(string $type): Generateable {
         if(!class_exists($type))
-            throw new \InvalidArgumentException("$type is not a valid vehicle");
+            throw new \InvalidArgumentException("$type is not a valid type!");
         return new $type();
     }
 
