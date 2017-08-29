@@ -35,10 +35,6 @@ class Steps
 //        $this->cleanSteps();
     }
 
-    public function getType(){
-        return $this->type;
-    }
-
     /**
      * Makes a generation step.
      * Returns 0 if there is nothing to do.
@@ -56,8 +52,7 @@ class Steps
             ) return 0;
 
             try {
-                $generateable = $this->getType();
-                $generateable->generate();
+                $this->type->generate();
                 $this->finish();
             } catch (Exception $exception) {
                 $this->errors[] = $exception;
