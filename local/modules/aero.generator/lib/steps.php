@@ -3,6 +3,7 @@
 namespace Aero\Generator;
 
 use Aero\Generator\Entity\GeneratorTable;
+use Aero\Generator\Types\Generateable;
 use Bitrix\Main\DB\Exception;
 
 /**
@@ -17,32 +18,55 @@ class Steps
     protected $stepSize;
     protected $stepCount;
 
+    protected $type;
+    protected $id;
+    protected $errors;
+
     public function __construct(){
 
-        $this->makePlan();
+        $this->setCountFromDb();
 
-        $this->step = $this->getCurrentStepNumber();
-        $this->stepCount = $this->getCountFromDb();
+        $this->makePlan(); // @TODO run it on first ajax request
+
+        $this->setCurrentStepNumber();
 
         $this->stepSize = 1; // @TODO set up automatically depending on data size
 
-        //$this->cleanSteps();
+//        $this->cleanSteps();
+    }
+
+    public function getType(){
+        return $this->type;
     }
 
     /**
      * Makes a generation step.
      * Returns 0 if there is nothing to do.
+     *
      * @return int
      * @throws Exception
      */
     public function createNext(){
 
-        $this->step = $this->getNextStepNumber();
+        if($this->initStep()){
 
-        if(
-            $this->step <= 0
-            || $this->step > $this->stepCount
-        ) return 0;
+            if(
+                $this->step <= 0
+                || $this->step > $this->stepCount
+            ) return 0;
+
+            try {
+                $generateable = $this->getType();
+                $generateable->generate();
+                $this->finish();
+            } catch (Exception $exception) {
+                $this->errors[] = $exception;
+                return 0;
+            }
+
+        } else {
+            return 0;
+        }
 
         return $this->stepSize;
     }
@@ -68,54 +92,67 @@ class Steps
     public function setConfig(){}
 
     private function makePlan(){
-        // Check data exist
-        if($this->getCountFromDb() === 0){
+        if($this->stepCount === 0){
             $plan = new Plan();
             $plan->init();
         }
     }
 
     /**
-     * Get step number from db
+     * Initializes fields for step
      *
      * @return int
-     * @throws Exception
      */
-    private function getNextStepNumber(){
+    private function initStep(){
         $stepRes = GeneratorTable::getList([
             "filter" => ["STATUS" => 0],
             "order" => ["ID" => "ASC"],
-            "select" => ["ID", "STEP"],
+            "select" => ["ID", "STEP", "TYPE"],
             "limit" => 1
         ]);
         if($stepFields = $stepRes->fetch()){
-            $result = GeneratorTable::update($stepFields["ID"], [
-                "STATUS" => 1,
-            ]);
-            if (!$result->isSuccess()){
-                throw new Exception($result->getErrorMessages());
-            }
-            return (int) $stepFields["STEP"];
+            $this->step = (int) $stepFields["STEP"];
+            $this->id   = (int) $stepFields["ID"];
+            $this->type = $this->createGenerateable($stepFields["TYPE"]);
+            return true;
         } else {
-            return 0;
+            return false;
         }
     }
 
     /**
-     * @return int
+     * @param string $type
+     * @return Generateable
      */
-    private function getCurrentStepNumber(){
+    private function createGenerateable(string $type): Generateable {
+        if(!class_exists($type))
+            throw new \InvalidArgumentException("$type is not a valid vehicle");
+        return new $type();
+    }
+
+    /**
+     * Update step in db
+     *
+     * @throws Exception
+     */
+    private function finish(){
+        $result = GeneratorTable::update($this->id, [
+            "STATUS" => 1,
+        ]);
+        if (!$result->isSuccess()){
+            throw new Exception($result->getErrorMessages());
+        }
+    }
+
+    private function setCurrentStepNumber(){
         $stepRes = GeneratorTable::getList([
             "filter" => ["STATUS" => 0],
             "order" => ["ID" => "ASC"],
             "select" => ["STEP"],
             "limit" => 1
         ]);
-        if($stepFields = $stepRes->fetch()){
-            return (int) $stepFields["STEP"];
-        } else {
-            return 0;
-        }
+        if($stepFields = $stepRes->fetch())
+            $this->step = (int) $stepFields["STEP"];
     }
 
     /**
@@ -134,7 +171,7 @@ class Steps
      *
      * @return int
      */
-    private function getCountFromDb(){
+    private function setCountFromDb(){
         $cntRes = GeneratorTable::getList(array(
             'select' => array('CNT'),
             'runtime' => array(
@@ -142,6 +179,6 @@ class Steps
             )
         ));
         $result = $cntRes->fetch();
-        return (int) $result["CNT"];
+        $this->stepCount = (int) $result["CNT"];
     }
 }

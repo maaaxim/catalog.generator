@@ -19,7 +19,8 @@ class JsonBar
             "max"      => false,
             "step"     => false,
             "percent"  => false,
-            "finished" => false
+            "finished" => false,
+            "text"     => false
         ];
     }
 
