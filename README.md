@@ -10,3 +10,4 @@
 2. Calculate step sizes in Plan class
 3. Calculate ETA
 4. Features etc
+5. Refactor: set return types
