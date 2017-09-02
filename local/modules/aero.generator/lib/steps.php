@@ -97,7 +97,7 @@ class Steps
      * Initializes fields for step
      * @return bool
      */
-    private function initStep() : bool {
+    private function initStep() {
         $stepRes = GeneratorTable::getList([
             "filter" => ["STATUS" => 0],
             "order" => ["ID" => "ASC"],
@@ -118,7 +118,7 @@ class Steps
      * @param string $type
      * @return Generateable
      */
-    private function createGenerateable(string $type) : Generateable {
+    private function createGenerateable(string $type) {
         if(!class_exists($type))
             throw new \InvalidArgumentException("$type is not a valid type!");
         return new $type();
