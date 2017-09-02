@@ -50,7 +50,7 @@ class Catalog implements Generateable
      * Catalog constructor.
      */
     public function __construct(){
-        // cfg
+        // cfg @TODO we need only 1 catalog
         $this->catalogCount  = (int) Option::get("aero.generator", "types_catalog");
         $this->skuPerProduct = (int) Option::get("aero.generator", "sku_count");
         // need sku?
