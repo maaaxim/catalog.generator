@@ -19,15 +19,44 @@ use Bitrix\Iblock\TypeLanguageTable;
 
 abstract class Property
 {
+    /**
+     * Variant for HL-type
+     */
     const TYPE_REFERENCE = "REF";
 
+    /**
+     * Max enumeration count each property
+     */
+    const MAX_ENUM_COUNT = 10;
+
+    /**
+     * Max entity count each property
+     */
+    const MAX_ENTITY_COUNT = 10;
+
+    /**
+     * @var iblock id
+     */
     protected $iblockId;
 
+    /**
+     * @var property name
+     */
     private $name;
+
+    /**
+     * @var property code
+     */
     private $code;
+
+    /**
+     * @var \Faker\Generator
+     */
+    private $faker;
 
     public function __construct()
     {
+        $this->faker = Factory::create('ru_RU');
         $this->setIblockId();
         $this->generatePropertyFields();
     }
@@ -45,7 +74,6 @@ abstract class Property
 
         // choose random type
         $type = $types[rand(0, sizeof($types) - 1)];
-        $type = "E";
 
         // gen prop
         switch($type) {
@@ -165,27 +193,34 @@ abstract class Property
         $propertyDescription = array(
             'PROPERTY_TYPE' => PropertyTable::TYPE_LIST,
             'USER_TYPE' => null,
-            'NAME' => "list prop name",
-            'CODE' => "LIST_CODE",
+            'NAME' => $this->name,
+            'CODE' => $this->code,
             'MULTIPLE' => 'Y',
             'ACTIVE' => 'Y',
             "IBLOCK_ID" => $this->iblockId
         );
 
         $propId = $this->addProperty($propertyDescription);
+        $this->generateEnums($propId);
 
-        // @TODO order it
-        for($i = 0; $i <= 10; $i++){
+        return $propId;
+    }
+
+    private function generateEnums($propId)
+    {
+        for($i = 0; $i <= self::MAX_ENUM_COUNT; $i++){
+            $sentence = $this->faker->sentence(rand(1, 3));
+            $value = substr($sentence, 0, strlen($sentence) - 1);
+            $noSpaced = str_replace(' ', '_', $value);
+            $xmlId = strtoupper($noSpaced);
             $enumId = PropertyEnumerationTable::add([
                 "PROPERTY_ID" => $propId,
-                "VALUE" => "VALUE " . $i,
-                "XML_ID" => "XML_ID_" . $i
+                "VALUE" => $value,
+                "XML_ID" => $xmlId
             ]);
             if($enumId <= 0)
                 throw new \Exception("Prop enum is not set");
         }
-
-        return $propId;
     }
 
     protected function generateReference()
@@ -193,18 +228,29 @@ abstract class Property
         if(!Loader::includeModule("highloadblock"))
             throw new \Exception("hl iblock is not defined");
 
-        $name = "entity"; // @TODO faker
+        $convertToCamelCase = function ($sentence) {
+            $ucSentence = ucwords($sentence);
+            return str_replace(" ", "", $ucSentence);
+        };
 
-        $hlIblockId = $this->addHlBlock($name);
+        // Names for hl
+        $tableName = strtolower($this->code);
+        $entityName = $convertToCamelCase($this->name);
 
+        // Add hl
+        $hlIblockId = $this->addHlBlock($entityName, $tableName);
+        if($hlIblockId <= 0)
+            throw new \Exception("Can't create hl-iblock");
+
+        // Add hl fields
         $arUserFields = $this->getDefaultHlFields($hlIblockId);
         $this->addUserFields($arUserFields);
 
-        // Create iblock prop
+        // Create iblock prop linked to hl
         $propertyDescription = array(
             'PROPERTY_TYPE' => PropertyTable::TYPE_STRING,
-            'NAME' => "ref prop name",
-            'CODE' => "REF_CODE_REF",
+            'NAME' => $this->name,
+            'CODE' => $this->code,
             'ACTIVE' => 'Y',
             "IBLOCK_ID" => $this->iblockId,
             "USER_TYPE" => "directory",
@@ -216,28 +262,69 @@ abstract class Property
                     "width" => "0",
                     "group" => "N",
                     "multiple" => "N",
-                    "TABLE_NAME" => "b_aero_generator_" . $name
+                    "TABLE_NAME" => "b_aero_generator_" . $tableName
                 )
             )
         );
-        return $this->addProperty($propertyDescription);
+
+        $propId = $this->addProperty($propertyDescription);
+        if($propId <= 0)
+            throw new \Exception("Can't create property");
+
+        $this->generateEntityItems($hlIblockId);
+
+        return $propId;
+    }
+
+    /**
+     * Create few hl data
+     *
+     * @param $hlIblockId
+     * @throws \Exception
+     */
+    private function generateEntityItems($hlIblockId)
+    {
+        $hlBlock = HighloadBlockTable::getById($hlIblockId)->fetch();
+        $entity = HighloadBlockTable::compileEntity($hlBlock);
+        $entityClass = $entity->getDataClass();
+
+        if(!class_exists($entityClass))
+            throw new \Exception($entityClass . " class is not exist");
+
+        for($i = 0; $i <= self::MAX_ENTITY_COUNT; $i++){
+            $sentence = $this->faker->sentence(1,3);
+            $sentence = substr($sentence, 0, strlen($sentence) - 1);
+            $withUnderscores = str_replace(" ", "_", $sentence);
+            $bitrixStyle = strtoupper($withUnderscores);
+            $entityClass::add([
+                "UF_NAME" => $sentence,
+                "UF_LINK" => $withUnderscores,
+                "UF_XML_ID" => $bitrixStyle
+            ]);
+        }
     }
 
     private function generatePropertyFields()
     {
-        $faker = Factory::create('ru_RU');
-        $sentence = $faker->sentence(rand(1, 3));
+        $sentence = $this->faker->sentence(rand(1, 3));
         $this->name = substr($sentence, 0, strlen($sentence) - 1);
         $noSpaced = str_replace(' ', '_', $this->name);
         $this->code = strtoupper($noSpaced);
     }
 
-    // mk hl-block
-    private function addHlBlock($name)
+    /**
+     * creates hl-block
+     *
+     * @param $entityPostfix
+     * @param $tablePostfix
+     * @return int
+     * @throws \Exception
+     */
+    private function addHlBlock($entityPostfix, $tablePostfix)
     {
         $result = HighloadBlockTable::add(array(
-            'NAME' => 'AeroGenerator' . ucfirst($name),
-            'TABLE_NAME' => "b_aero_generator_" . $name,
+            'NAME' => 'AeroGenerator' . $entityPostfix,
+            'TABLE_NAME' => "b_aero_generator_" . $tablePostfix,
         ));
         if (!$result->isSuccess()) {
             throw new \Exception(implode(" ", $result->getErrorMessages()));
@@ -247,7 +334,12 @@ abstract class Property
         return $hlIblockId;
     }
 
-    // adding user fields
+    /**
+     * adding user fields for hl-block
+     *
+     * @param $arUserFields
+     * @throws \Exception
+     */
     private function addUserFields($arUserFields)
     {
         $obUserField  = new \CUserTypeEntity;
