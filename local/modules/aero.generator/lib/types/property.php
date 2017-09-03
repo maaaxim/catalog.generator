@@ -98,8 +98,6 @@ abstract class Property
                 $this->generateReference();
                 break;
         }
-
-        die();
     }
 
     /**
