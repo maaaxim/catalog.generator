@@ -63,6 +63,7 @@ abstract class Property
 
     function generate()
     {
+        return;
         // set types
         $types = [
             PropertyTable::TYPE_STRING,
