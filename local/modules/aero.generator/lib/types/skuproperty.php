@@ -9,16 +9,8 @@
 namespace Aero\Generator\Types;
 
 
-class SkuProperty implements Generateable
+class SkuProperty extends Property implements Generateable
 {
     const ORDER = 3;
-
-    public function __construct()
-    {
-    }
-
-    function generate()
-    {
-        // TODO: Implement generate() method.
-    }
+    const IBLOCK_CODE = "sku_aero_generator";
 }
