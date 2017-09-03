@@ -94,10 +94,15 @@ class ProductProperty extends Property implements Generateable
         return $id;
     }
 
+    /**
+     * Set iblock id for catalog! @TODO
+     *
+     * @throws \Exception
+     */
     protected function setIblockId()
     {
         $iblockRes = IblockTable::getList([
-            "filter" => ["CODE" => "catalog_aero_generator_0"],
+            "filter" => ["CODE" => "catalog_aero_generator"],
             "select" => ["ID"],
             "limit" => 1
         ]);

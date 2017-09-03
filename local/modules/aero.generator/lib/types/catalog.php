@@ -27,6 +27,11 @@ class Catalog implements Generateable
     const ORDER = 1;
 
     /**
+     * Iblock type id
+     */
+    const IBLOCK_TYPE = "aero_generator";
+
+    /**
      * @var bool
      */
     private $hasSku;
@@ -34,24 +39,12 @@ class Catalog implements Generateable
     /**
      * @var int
      */
-    private $catalogCount;
-
-    /**
-     * @var int
-     */
     private $skuPerProduct;
-
-    /**
-     * @var int
-     */
-    private $iterator = 0;
 
     /**
      * Catalog constructor.
      */
-    public function __construct(){
-        // cfg @TODO we need only 1 catalog
-        $this->catalogCount  = (int) Option::get("aero.generator", "types_catalog");
+    public function __construct(){;
         $this->skuPerProduct = (int) Option::get("aero.generator", "sku_count");
         // need sku?
         if($this->skuPerProduct > 0)
@@ -65,7 +58,7 @@ class Catalog implements Generateable
      */
     function generate(){
         $this->includeModules();
-        $this->makeTypes();
+        $this->makeType();
         $this->cleanCache();
         $this->makeIblocks();
     }
@@ -83,20 +76,18 @@ class Catalog implements Generateable
     /**
      * Create iblock types
      */
-    private function makeTypes(){
-        for($i = 0; $i < $this->catalogCount; $i++){
-            $id = "aero_generator_" . $i;
-            $typesRes = TypeTable::getList(["filter" => ["ID" => $id]]);
-            if(!$typeFields = $typesRes->fetch()){
-                TypeTable::add(["ID" => $id]);
-                TypeLanguageTable::add([
-                    "IBLOCK_TYPE_ID" => $id,
-                    "LANGUAGE_ID" => "en",
-                    "NAME" => "AERO Generator #" . $i,
-                    "SECTIONS_NAME" => "Section",
-                    "ELEMENTS_NAME" => "Element"
-                ]);
-            }
+    private function makeType(){
+        $id = self::IBLOCK_TYPE;
+        $typesRes = TypeTable::getList(["filter" => ["ID" => $id]]);
+        if(!$typeFields = $typesRes->fetch()){
+            TypeTable::add(["ID" => $id]);
+            TypeLanguageTable::add([
+                "IBLOCK_TYPE_ID" => $id,
+                "LANGUAGE_ID" => "en",
+                "NAME" => "AERO Generator",
+                "SECTIONS_NAME" => "Section",
+                "ELEMENTS_NAME" => "Element"
+            ]);
         }
     }
 
@@ -113,10 +104,10 @@ class Catalog implements Generateable
      */
     private function makeIblocks(){
         $typeRes = TypeTable::getList([
-            "filter" => ["%=ID" => "aero%"],
+            "filter" => ["=ID" => self::IBLOCK_TYPE],
             "select" => ["ID"]
         ]);
-        while ($typeFields = $typeRes->fetch()){
+        if ($typeFields = $typeRes->fetch()){
             $catalogId = $this->makeCatalogIblock($typeFields["ID"]);
             $this->setUpCatalog($catalogId);
             if($this->hasSku === true){
@@ -124,7 +115,6 @@ class Catalog implements Generateable
                 $linkPropertyId = $this->linkSkuToCatlaog($skuId, $catalogId);
                 $this->connectSkuToCatalog($skuId, $catalogId, $linkPropertyId);
             }
-            $this->iterator++;
         }
     }
 
@@ -139,7 +129,7 @@ class Catalog implements Generateable
         $ib = new \CIBlock;
         $arFields = [
             "ACTIVE" => "Y",
-            "NAME" => "Catalog #" . $this->iterator,
+            "NAME" => "Catalog",
             "CODE" => "catalog_" . $iblockType,
             "LIST_PAGE_URL" => "/catalog_" . $iblockType . "/", // @TODO real paths
             "DETAIL_PAGE_URL" => "catalog_" . $iblockType . "/",
@@ -180,7 +170,7 @@ class Catalog implements Generateable
         $ib = new \CIBlock;
         $arFields = [
             "ACTIVE" => "Y",
-            "NAME" => "Sku #" . $this->iterator,
+            "NAME" => "Sku",
             "CODE" => "sku_" . $iblockType,
             "IBLOCK_TYPE_ID" => $iblockType,
             "SITE_ID" => ["s1"], // @TODO get from existing site

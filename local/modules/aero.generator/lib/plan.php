@@ -34,8 +34,7 @@ class Plan
     }
 
     private function setConfig(){
-        // Read config (main settings) - to getConfig
-        $this->config["types_catalog"]         = \Bitrix\Main\Config\Option::get("aero.generator", "types_catalog");
+        $this->config["types_catalog"]         = 1; // 1 catalog is enough
         $this->config["types_product"]         = \Bitrix\Main\Config\Option::get("aero.generator", "types_product");
         $this->config["types_price"]           = \Bitrix\Main\Config\Option::get("aero.generator", "types_price");
         $this->config["types_store"]           = \Bitrix\Main\Config\Option::get("aero.generator", "types_store");

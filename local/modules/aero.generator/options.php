@@ -14,7 +14,6 @@ if ($moduleRight >= "R"):
 			),
 			'options' => array(
 
-				array("types_catalog",         GetMessage("AERO_CATALOG_CREATOR_TOTAL_CATALOGS"), array("text", 24), 'default' => '1'),
 				array("types_product",         GetMessage("AERO_CATALOG_CREATOR_TOTAL_PRODUCTS"), array("text", 24), 'default' => '1000'),
 				array("types_price",           GetMessage("AERO_CATALOG_CREATOR_TOTAL_PRICES"), array("text", 24), 'default' => '10'),
 				array("types_store",           GetMessage("AERO_CATALOG_CREATOR_TOTAL_STORES"), array("text", 24), 'default' => '100'),
