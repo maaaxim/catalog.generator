@@ -136,51 +136,15 @@ class ProductProperty extends Property implements Generateable
         return $this->addProperty($propertyDescription);
     }
 
-    // @TODO Refactor
     protected function generateElementLink()
     {
-        // make helper type if not exist
-        $typeId = $iblockCode = "aero_generator_helper";
-        $typesRes = TypeTable::getList(["filter" => ["ID" => $typeId]]);
-        if(!$typeFields = $typesRes->fetch()){
-            TypeTable::add(["ID" => $typeId]);
-            TypeLanguageTable::add([
-                "IBLOCK_TYPE_ID" => $typeId,
-                "LANGUAGE_ID" => "en",
-                "NAME" => "AERO Generator helpers",
-                "SECTIONS_NAME" => "Section",
-                "ELEMENTS_NAME" => "Element"
-            ]);
-        }
+        $typeId = $iblockCode = $this->generateHelperType();
 
-        // cache
         global $CACHE_MANAGER;
         $CACHE_MANAGER->CleanAll();
 
-        // make iblock helper if not exist
-        $iblockRes = IblockTable::getList([
-            "filter" => ["CODE" => $iblockCode],
-            "select" => ["ID"],
-            "limit" => 1
-        ]);
-        if(!$iblockFields = $iblockRes->Fetch()){
-            $ib = new \CIBlock;
-            $arFields = [
-                "ACTIVE" => "Y",
-                "NAME" => "AERO Generator helper",
-                "CODE" => $iblockCode,
-                "IBLOCK_TYPE_ID" => $typeId,
-                "SITE_ID" => ["s1"], // @TODO get from existing site
-                "SORT" => 500
-            ];
-            $iblockId = $ib->Add($arFields);
-            if($iblockId <= 0)
-                throw new \Exception($ib->LAST_ERROR . " error happened!");
-        } else {
-            $iblockId = (int) $iblockFields["ID"];
-        }
+        $iblockId = $this->generateHelperIblock($typeId, $iblockCode);
 
-        // and prop
         $propertyDescription = array(
             'PROPERTY_TYPE' => PropertyTable::TYPE_ELEMENT,
             'USER_TYPE' => null,
@@ -380,5 +344,65 @@ class ProductProperty extends Property implements Generateable
                 'IS_SEARCHABLE' => 'N',
             )
         );
+    }
+
+    /**
+     * Creates iblock type for helper iblock
+     *
+     * @return int
+     */
+    public function generateHelperType()
+    {
+        // make helper type if not exist
+        $typeId = "aero_generator_helper";
+        $typesRes = TypeTable::getList(["filter" => ["ID" => $typeId]]);
+        if(!$typeFields = $typesRes->fetch()){
+            TypeTable::add(["ID" => $typeId]);
+            TypeLanguageTable::add([
+                "IBLOCK_TYPE_ID" => $typeId,
+                "LANGUAGE_ID" => "en",
+                "NAME" => "AERO Generator helpers",
+                "SECTIONS_NAME" => "Section",
+                "ELEMENTS_NAME" => "Element"
+            ]);
+        }
+
+        return $typeId;
+    }
+
+    /**
+     * Creates helper iblock
+     *
+     * @param $typeId
+     * @param $iblockCode
+     * @return int
+     * @throws \Exception
+     */
+    public function generateHelperIblock($typeId, $iblockCode)
+    {
+        // make iblock helper if not exist
+        $iblockRes = IblockTable::getList([
+            "filter" => ["CODE" => $iblockCode],
+            "select" => ["ID"],
+            "limit" => 1
+        ]);
+        if(!$iblockFields = $iblockRes->Fetch()){
+            $ib = new \CIBlock;
+            $arFields = [
+                "ACTIVE" => "Y",
+                "NAME" => "AERO Generator helper",
+                "CODE" => $iblockCode,
+                "IBLOCK_TYPE_ID" => $typeId,
+                "SITE_ID" => ["s1"], // @TODO get from existing site
+                "SORT" => 500
+            ];
+            $iblockId = $ib->Add($arFields);
+            if($iblockId <= 0)
+                throw new \Exception($ib->LAST_ERROR . " error happened!");
+        } else {
+            $iblockId = (int) $iblockFields["ID"];
+        }
+
+        return $iblockId;
     }
 }
