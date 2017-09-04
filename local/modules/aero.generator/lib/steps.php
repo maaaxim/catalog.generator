@@ -32,7 +32,7 @@ class Steps
 
         $this->stepSize = 1; // @TODO set up automatically depending on data size
 
-//        $this->cleanSteps();
+        // $this->cleanSteps();
     }
 
     /**

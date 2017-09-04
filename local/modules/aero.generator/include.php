@@ -9,6 +9,9 @@ require_once ($_SERVER["DOCUMENT_ROOT"] . "/vendor/autoload.php");
 
 \CJSCore::Init('jquery');
 
+// @TODO put somewhere
+define("MODULE_IMG_PATH", '/local/modules/aero.generator/images/');
+
 \CJSCore::RegisterExt(
 	"aero_generator",
 	array(
