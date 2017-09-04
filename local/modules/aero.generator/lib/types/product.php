@@ -45,6 +45,8 @@ class Product implements Generateable
         $this->setConfig();
         $this->setIblockId();
         $this->faker = Factory::create('ru_RU');
+        if (!Loader::includeModule('catalog'))
+            throw new \Exception("Catalog module is not included");
     }
 
     /**
@@ -53,7 +55,7 @@ class Product implements Generateable
     function generate()
     {
         // create element
-        $el = new \CIBlockElement;
+        $element = new \CIBlockElement;
 
         // get props array like code => val
         $arProps = $this->getDataProps();
@@ -62,11 +64,26 @@ class Product implements Generateable
         $arFields = $this->getDataFields();
         $arFields["PROPERTY_VALUES"] = $arProps;
 
-        $elementId = $el->Add($arFields);
+        $elementId = $element->Add($arFields);
+
+        if (intval($elementId) && \CCatalog::GetByID($this->iblockId)) {
+            $productData = $this->getDataProduct($elementId);
+            \CCatalogProduct::Add(
+                [
+                    'ID' => $elementId,
+                    'QUANTITY' => $productData['QUANTITY'],
+                    'WEIGHT' => $productData['WEIGHT'],
+                    'WIDTH' => $productData['WIDTH'],
+                    'LENGTH' => $productData['LENGTH'],
+                    'HEIGHT' => $productData['HEIGHT'],
+                ]
+            );
+            \CPrice::Add($productData['PRICE']);
+        }
+
 
         // @TODO
-        // add prices
-        // add availability
+        // add availability and all prices
 
         // @TODO sku
     }
@@ -584,5 +601,42 @@ class Product implements Generateable
             "property_string_length"     => Option::get(self::MODULE_NAME, "property_string_length"),
             "property_text_length"       => Option::get(self::MODULE_NAME, "property_text_length")
         ];
+    }
+
+    /**
+     * Generates catalog data
+     *
+     * @param $productId
+     * @return array
+     * @internal param $arParams
+     */
+    public function getDataProduct($productId):array
+    {
+        $arPriceType = \CCatalogGroup::GetBaseGroup();
+        $arPriceTypeId = $arPriceType["ID"];
+        $arPriceFields = [
+            "PRODUCT_ID" => $productId,
+            "CATALOG_GROUP_ID" => $arPriceTypeId,
+            "PRICE" => $this->faker->randomFloat(
+                $this->config['catalog_price_max_decimals'],
+                $this->config['catalog_price_min'],
+                $this->config['catalog_price_max']
+            ),
+            "CURRENCY" => "RUB",
+        ];
+        $weight = $this->faker->numberBetween($this->config['catalog_weight_min'], $this->config['catalog_weight_max']);
+        $width = $this->faker->numberBetween($this->config['catalog_width_min'], $this->config['catalog_width_max']);
+        $length = $this->faker->numberBetween($this->config['catalog_length_min'], $this->config['catalog_length_max']);
+        $height = $this->faker->numberBetween($this->config['catalog_height_min'], $this->config['catalog_height_max']);
+        $quantity = $this->faker->numberBetween($this->config['catalog_quantity_min'], $this->config['catalog_quantity_max']);
+        $arProduct = [
+            'PRICE' => $arPriceFields,
+            "WEIGHT" => $weight,
+            "WIDTH" => $width,
+            "LENGTH" => $length,
+            "HEIGHT" => $height,
+            "QUANTITY" => $quantity,
+        ];
+        return $arProduct;
     }
 }
