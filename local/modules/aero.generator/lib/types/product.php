@@ -8,6 +8,8 @@
 
 namespace Aero\Generator\Types;
 
+use Bitrix\Catalog\GroupTable;
+use Bitrix\Catalog\PriceTable;
 use Faker\Factory;
 use Bitrix\Iblock\IblockTable;
 use Bitrix\Main\Loader;
@@ -64,10 +66,14 @@ class Product implements Generateable
         $arFields = $this->getDataFields();
         $arFields["PROPERTY_VALUES"] = $arProps;
 
+        // add iblock element
         $elementId = $element->Add($arFields);
 
-        if (intval($elementId) && \CCatalog::GetByID($this->iblockId)) {
+        if (intval($elementId) > 0 && \CCatalog::GetByID($this->iblockId)) {
+            // get product data
             $productData = $this->getDataProduct($elementId);
+
+            // add product
             \CCatalogProduct::Add(
                 [
                     'ID' => $elementId,
@@ -78,7 +84,9 @@ class Product implements Generateable
                     'HEIGHT' => $productData['HEIGHT'],
                 ]
             );
-            \CPrice::Add($productData['PRICE']);
+
+            // set prices
+            $this->generatePrices($elementId);
         }
 
 
@@ -599,7 +607,8 @@ class Product implements Generateable
             "catalog_quantity_max"       => Option::get(self::MODULE_NAME, "catalog_quantity_max"),
             "property_multiple_count"    => Option::get(self::MODULE_NAME, "property_multiple_count"),
             "property_string_length"     => Option::get(self::MODULE_NAME, "property_string_length"),
-            "property_text_length"       => Option::get(self::MODULE_NAME, "property_text_length")
+            "property_text_length"       => Option::get(self::MODULE_NAME, "property_text_length"),
+            "types_price"                => Option::get(self::MODULE_NAME, "types_price")
         ];
     }
 
@@ -638,5 +647,39 @@ class Product implements Generateable
             "QUANTITY" => $quantity,
         ];
         return $arProduct;
+    }
+
+    /**
+     * @param $elementId
+     * @throws \Exception
+     */
+    private function generatePrices(int $elementId)
+    {
+        $priceCount = (int)$this->config["types_price"];
+        if ($priceCount <= 0)
+            throw new \Exception("We need more then 0 prices");
+        $priceTypesRes = GroupTable::getList([
+            "select" => ["ID", "BASE"],
+            "limit" => $priceCount
+        ]);
+        while ($priceTypesFields = $priceTypesRes->fetch()) {
+            $priceTypes[] = $priceTypesFields;
+            $price = $this->faker->randomFloat(
+                $this->config["catalog_price_max_decimals"],
+                $this->config["catalog_price_min"],
+                $this->config["catalog_price_max"]
+            );
+            $fields = [
+                "PRODUCT_ID" => $elementId,
+                "CATALOG_GROUP_ID" => $priceTypesFields["ID"],
+                "PRICE" => $price,
+                "PRICE_SCALE" => $price,
+                "CURRENCY" => "RUB"
+            ];
+            $result = PriceTable::add($fields);
+            if (!$result->isSuccess()) {
+                throw new \Exception(implode(" ", $result->getErrorMessages()));
+            }
+        }
     }
 }
