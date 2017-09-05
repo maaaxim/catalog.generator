@@ -10,6 +10,8 @@ namespace Aero\Generator\Types;
 
 use Bitrix\Catalog\GroupTable;
 use Bitrix\Catalog\PriceTable;
+use Bitrix\Catalog\StoreProductTable;
+use Bitrix\Catalog\StoreTable;
 use Faker\Factory;
 use Bitrix\Iblock\IblockTable;
 use Bitrix\Main\Loader;
@@ -73,11 +75,14 @@ class Product implements Generateable
             // get product data
             $productData = $this->getDataProduct($elementId);
 
+            // set store counts
+            $totalCount = $this->generateStoresCount($elementId);
+
             // add product
             \CCatalogProduct::Add(
                 [
                     'ID' => $elementId,
-                    'QUANTITY' => $productData['QUANTITY'],
+                    'QUANTITY' => $totalCount,
                     'WEIGHT' => $productData['WEIGHT'],
                     'WIDTH' => $productData['WIDTH'],
                     'LENGTH' => $productData['LENGTH'],
@@ -89,11 +94,8 @@ class Product implements Generateable
             $this->generatePrices($elementId);
         }
 
-
-        // @TODO
-        // add availability and all prices
-
         // @TODO sku
+        // @TODO refactor
     }
 
     /**
@@ -663,7 +665,6 @@ class Product implements Generateable
             "limit" => $priceCount
         ]);
         while ($priceTypesFields = $priceTypesRes->fetch()) {
-            $priceTypes[] = $priceTypesFields;
             $price = $this->faker->randomFloat(
                 $this->config["catalog_price_max_decimals"],
                 $this->config["catalog_price_min"],
@@ -681,5 +682,30 @@ class Product implements Generateable
                 throw new \Exception(implode(" ", $result->getErrorMessages()));
             }
         }
+    }
+
+    /**
+     * @param $elementId
+     * @return int
+     */
+    private function generateStoresCount(int $elementId): int
+    {
+        $totalCount = 0;
+        $storesRes = StoreTable::getList([
+            "filter" => ["ID"]
+        ]);
+        while ($storesFields = $storesRes->fetch()) {
+            $count = $this->faker->numberBetween(
+                $this->config['catalog_quantity_min'],
+                $this->config['catalog_quantity_max']
+            );
+            StoreProductTable::add([
+                "PRODUCT_ID" => $elementId,
+                "AMOUNT" => $count,
+                "STORE_ID" => $storesFields["ID"]
+            ]);
+            $totalCount += $count;
+        }
+        return $totalCount;
     }
 }
