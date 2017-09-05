@@ -19,7 +19,7 @@ use Bitrix\Highloadblock\HighloadBlockTable;
 use Bitrix\Main\Entity\ExpressionField;
 use Bitrix\Main\Config\Option;
 
-class CatalogProduct implements Generateable
+abstract class CatalogProduct implements Generateable
 {
     // @TODO replace
     const MODULE_NAME = "aero.generator";
