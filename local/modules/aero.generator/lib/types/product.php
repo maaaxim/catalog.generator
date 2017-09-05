@@ -42,6 +42,7 @@ class Product extends CatalogProduct implements Generateable
              $this->hasSku = true;
          else
              $this->hasSku = false;
+         parent::__construct();
     }
 
     /**
