@@ -24,10 +24,13 @@ abstract class CatalogProduct implements Generateable
     // @TODO replace
     const MODULE_NAME = "aero.generator";
 
+    // @TODO dry
+    const IBLOCK_CODE = "catalog_aero_generator";
+
     /**
      * @var \Faker\Generator
      */
-    private $faker;
+    protected $faker;
 
     /**
      * @var iblock id
@@ -37,7 +40,7 @@ abstract class CatalogProduct implements Generateable
     /**
      * @var option data for content settings
      */
-    private $config;
+    protected $config;
 
     /**
      * Product constructor.
@@ -114,7 +117,7 @@ abstract class CatalogProduct implements Generateable
      * @param array $arParams
      * @return array
      */
-    public function getDataFields($arParams = []):array
+    public function getDataFields(array $arParams = []):array
     {
         $iblockId = $this->iblockId;
 
@@ -267,8 +270,9 @@ abstract class CatalogProduct implements Generateable
      */
     protected function setIblockId()
     {
+        $calledClass = get_called_class();
         $iblockRes = IblockTable::getList([
-            "filter" => ["CODE" => ProductProperty::IBLOCK_CODE],
+            "filter" => ["CODE" => $calledClass::IBLOCK_CODE],
             "select" => ["ID"],
             "limit" => 1
         ]);

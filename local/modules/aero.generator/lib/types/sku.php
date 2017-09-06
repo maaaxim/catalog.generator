@@ -9,16 +9,80 @@
 namespace Aero\Generator\Types;
 
 
-class Sku implements Generateable
+class Sku extends CatalogProduct implements Generateable
 {
     const ORDER = 7;
 
-    public function __construct()
+    // @TODO dry
+    const IBLOCK_CODE = "sku_aero_generator";
+
+    /**
+     * Product id
+     *
+     * @var int
+     */
+    protected $productId;
+
+    /**
+     * Product name
+     *
+     * @var string
+     */
+    protected $productName;
+
+    public function __construct(int $productId)
     {
+        $this->productId = $productId;
+        $this->setProductName();
+        parent::__construct();
     }
 
     function generate()
     {
-        // TODO: Implement generate() method.
+        $elementId = $this->addIblockElement();
+        $totalCount = $this->addStoresCount($elementId);
+        $this->addCatalogProduct($elementId, $totalCount);
+        $this->addPrices($elementId);
+    }
+
+    /**
+     * Returns filled fields
+     *
+     * @param array $arParams
+     * @return array
+     */
+    public function getDataFields(array $arParams = []):array
+    {
+        $iblockId = $this->iblockId;
+        $skuName = $this->faker->sentence($this->config["words_in_el_name"]);
+        $name = $skuName . " (" . $this->productName . ")";
+        $arFields = [
+            "IBLOCK_ID" => $iblockId,
+            "NAME" => $name,
+            "DATE_ACTIVE_FROM" => self::getCurDateSiteFormat(),
+            "CODE" => \Cutil::translit($skuName, "ru"),
+            "ACTIVE" => "Y"
+        ];
+        return $arFields;
+    }
+
+    /**
+     * Returns props and their values
+     *
+     * @return array
+     */
+    public function getDataProps():array
+    {
+        return ["CML2_LINK" => $this->productId];
+    }
+
+    /**
+     * Set product name
+     */
+    protected function setProductName()
+    {
+        $productRes = \CIBlockElement::GetByID($this->productId);
+        $product = $productRes->Fetch();
+        $this->productName = $product["NAME"];
     }
 }
