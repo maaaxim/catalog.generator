@@ -12,5 +12,9 @@ namespace Aero\Generator\Types;
 class SkuProperty extends Property implements Generateable
 {
     const ORDER = 3;
+
+    /**
+     * Iblock code for sku
+     */
     const IBLOCK_CODE = "sku_aero_generator";
 }

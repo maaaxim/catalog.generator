@@ -54,6 +54,9 @@ abstract class Property
      */
     private $faker;
 
+    /**
+     * Property constructor.
+     */
     public function __construct()
     {
         $this->faker = Factory::create('ru_RU');
@@ -61,6 +64,9 @@ abstract class Property
         $this->generatePropertyFields();
     }
 
+    /**
+     * Generate method
+     */
     function generate()
     {
         // set types
@@ -105,7 +111,7 @@ abstract class Property
      * @return int
      * @throws \Exception
      */
-    private function addProperty($parameters)
+    private function addProperty(array $parameters):int
     {
         $propertyResult = PropertyTable::add($parameters);
         if ($propertyResult->isSuccess()) {
@@ -136,9 +142,14 @@ abstract class Property
         }
     }
 
-    protected function generateString()
+    /**
+     * Generates string prop
+     *
+     * @return int
+     */
+    protected function generateString():int
     {
-        $propertyDescription = array(
+        $propertyDescription = [
             'PROPERTY_TYPE' => PropertyTable::TYPE_STRING,
             'USER_TYPE' => null,
             'NAME' => $this->name,
@@ -146,13 +157,18 @@ abstract class Property
             'MULTIPLE' => 'N',
             'ACTIVE' => 'Y',
             "IBLOCK_ID" => $this->iblockId
-        );
+        ];
         return $this->addProperty($propertyDescription);
     }
 
-    protected function generateNumeric()
+    /**
+     * Generates numeric prop
+     *
+     * @return int
+     */
+    protected function generateNumeric():int
     {
-        $propertyDescription = array(
+        $propertyDescription = [
             'PROPERTY_TYPE' => PropertyTable::TYPE_NUMBER,
             'USER_TYPE' => null,
             'NAME' => $this->name,
@@ -160,11 +176,16 @@ abstract class Property
             'MULTIPLE' => 'N',
             'ACTIVE' => 'Y',
             "IBLOCK_ID" => $this->iblockId
-        );
+        ];
         return $this->addProperty($propertyDescription);
     }
 
-    protected function generateElementLink()
+    /**
+     * Generates element-link prop
+     *
+     * @return int
+     */
+    protected function generateElementLink():int
     {
         $typeId = $iblockCode = $this->generateHelperType();
 
@@ -173,7 +194,7 @@ abstract class Property
 
         $iblockId = $this->generateHelperIblock($typeId, $iblockCode);
 
-        $propertyDescription = array(
+        $propertyDescription = [
             'PROPERTY_TYPE' => PropertyTable::TYPE_ELEMENT,
             'USER_TYPE' => null,
             'NAME' => $this->name,
@@ -182,13 +203,18 @@ abstract class Property
             'ACTIVE' => 'Y',
             "LINK_IBLOCK_ID" => $iblockId,
             "IBLOCK_ID" => $this->iblockId
-        );
+        ];
         return $this->addProperty($propertyDescription);
     }
 
-    protected function generateList()
+    /**
+     * Generates list prop
+     *
+     * @return int
+     */
+    protected function generateList():int
     {
-        $propertyDescription = array(
+        $propertyDescription = [
             'PROPERTY_TYPE' => PropertyTable::TYPE_LIST,
             'USER_TYPE' => null,
             'NAME' => $this->name,
@@ -196,7 +222,7 @@ abstract class Property
             'MULTIPLE' => 'Y',
             'ACTIVE' => 'Y',
             "IBLOCK_ID" => $this->iblockId
-        );
+        ];
 
         $propId = $this->addProperty($propertyDescription);
         $this->generateEnums($propId);
@@ -204,7 +230,13 @@ abstract class Property
         return $propId;
     }
 
-    private function generateEnums($propId)
+    /**
+     * Generates enums for list property
+     *
+     * @param int $propId
+     * @throws \Exception
+     */
+    private function generateEnums(int $propId)
     {
         for($i = 0; $i <= self::MAX_ENUM_COUNT; $i++){
             $sentence = $this->faker->sentence(rand(1, 3));
@@ -221,7 +253,13 @@ abstract class Property
         }
     }
 
-    protected function generateReference()
+    /**
+     * Generates reference property
+     *
+     * @return int
+     * @throws \Exception
+     */
+    protected function generateReference():int
     {
         if(!Loader::includeModule("highloadblock"))
             throw new \Exception("hl iblock is not defined");
@@ -245,7 +283,7 @@ abstract class Property
         $this->addUserFields($arUserFields);
 
         // Create iblock prop linked to hl
-        $propertyDescription = array(
+        $propertyDescription = [
             'PROPERTY_TYPE' => PropertyTable::TYPE_STRING,
             'NAME' => $this->name,
             'CODE' => $this->code,
@@ -255,15 +293,15 @@ abstract class Property
             "LIST_TYPE" => "L",
             "MULTIPLE" => "Y",
             "USER_TYPE_SETTINGS" => serialize(
-                array(
+                [
                     "size" => "1",
                     "width" => "0",
                     "group" => "N",
                     "multiple" => "N",
                     "TABLE_NAME" => "b_aero_generator_" . $tableName
-                )
+                ]
             )
-        );
+        ];
 
         $propId = $this->addProperty($propertyDescription);
         if($propId <= 0)
@@ -280,7 +318,7 @@ abstract class Property
      * @param $hlIblockId
      * @throws \Exception
      */
-    private function generateEntityItems($hlIblockId)
+    private function generateEntityItems(int $hlIblockId)
     {
         $hlBlock = HighloadBlockTable::getById($hlIblockId)->fetch();
         $entity = HighloadBlockTable::compileEntity($hlBlock);
@@ -302,6 +340,9 @@ abstract class Property
         }
     }
 
+    /**
+     * Generates fields for property
+     */
     private function generatePropertyFields()
     {
         $sentence = $this->faker->sentence(rand(1, 3));
@@ -318,12 +359,12 @@ abstract class Property
      * @return int
      * @throws \Exception
      */
-    private function addHlBlock($entityPostfix, $tablePostfix)
+    private function addHlBlock(string $entityPostfix, string $tablePostfix):int
     {
-        $result = HighloadBlockTable::add(array(
+        $result = HighloadBlockTable::add([
             'NAME' => 'AeroGenerator' . $entityPostfix,
             'TABLE_NAME' => "b_aero_generator_" . $tablePostfix,
-        ));
+        ]);
         if (!$result->isSuccess()) {
             throw new \Exception(implode(" ", $result->getErrorMessages()));
         } else {
@@ -338,13 +379,13 @@ abstract class Property
      * @param $arUserFields
      * @throws \Exception
      */
-    private function addUserFields($arUserFields)
+    private function addUserFields(array $arUserFields)
     {
         $obUserField  = new \CUserTypeEntity;
         foreach ($arUserFields as $arFields) {
             $dbRes = \CUserTypeEntity::GetList(
-                Array(),
-                Array("ENTITY_ID" => $arFields["ENTITY_ID"], "FIELD_NAME" => $arFields["FIELD_NAME"])
+                [],
+                ["ENTITY_ID" => $arFields["ENTITY_ID"], "FIELD_NAME" => $arFields["FIELD_NAME"]]
             );
             if ($dbRes->Fetch())
                 continue;
@@ -354,10 +395,14 @@ abstract class Property
         }
     }
 
-    private function getDefaultHlFields($hlIblockId)
+    /**
+     * @param int $hlIblockId
+     * @return array
+     */
+    private function getDefaultHlFields(int $hlIblockId):array
     {
-        return array (
-            array (
+        return [
+            [
                 'ENTITY_ID' => 'HLBLOCK_'.$hlIblockId,
                 'FIELD_NAME' => 'UF_NAME',
                 'USER_TYPE_ID' => 'string',
@@ -369,8 +414,8 @@ abstract class Property
                 'SHOW_IN_LIST' => 'Y',
                 'EDIT_IN_LIST' => 'Y',
                 'IS_SEARCHABLE' => 'Y',
-            ),
-            array (
+            ],
+            [
                 'ENTITY_ID' => 'HLBLOCK_'.$hlIblockId,
                 'FIELD_NAME' => 'UF_FILE',
                 'USER_TYPE_ID' => 'file',
@@ -382,8 +427,8 @@ abstract class Property
                 'SHOW_IN_LIST' => 'Y',
                 'EDIT_IN_LIST' => 'Y',
                 'IS_SEARCHABLE' => 'Y',
-            ),
-            array (
+            ],
+            [
                 'ENTITY_ID' => 'HLBLOCK_'.$hlIblockId,
                 'FIELD_NAME' => 'UF_LINK',
                 'USER_TYPE_ID' => 'string',
@@ -395,8 +440,8 @@ abstract class Property
                 'SHOW_IN_LIST' => 'Y',
                 'EDIT_IN_LIST' => 'Y',
                 'IS_SEARCHABLE' => 'Y',
-            ),
-            array (
+            ],
+            [
                 'ENTITY_ID' => 'HLBLOCK_'.$hlIblockId,
                 'FIELD_NAME' => 'UF_SORT',
                 'USER_TYPE_ID' => 'double',
@@ -408,8 +453,8 @@ abstract class Property
                 'SHOW_IN_LIST' => 'Y',
                 'EDIT_IN_LIST' => 'Y',
                 'IS_SEARCHABLE' => 'N',
-            ),
-            array (
+            ],
+            [
                 'ENTITY_ID' => 'HLBLOCK_'.$hlIblockId,
                 'FIELD_NAME' => 'UF_DEF',
                 'USER_TYPE_ID' => 'boolean',
@@ -421,8 +466,8 @@ abstract class Property
                 'SHOW_IN_LIST' => 'Y',
                 'EDIT_IN_LIST' => 'Y',
                 'IS_SEARCHABLE' => 'N',
-            ),
-            array (
+            ],
+            [
                 'ENTITY_ID' => 'HLBLOCK_'.$hlIblockId,
                 'FIELD_NAME' => 'UF_XML_ID',
                 'USER_TYPE_ID' => 'string',
@@ -434,16 +479,16 @@ abstract class Property
                 'SHOW_IN_LIST' => 'Y',
                 'EDIT_IN_LIST' => 'Y',
                 'IS_SEARCHABLE' => 'N',
-            )
-        );
+            ]
+        ];
     }
 
     /**
      * Creates iblock type for helper iblock
      *
-     * @return int
+     * @return string
      */
-    public function generateHelperType()
+    public function generateHelperType():string
     {
         // make helper type if not exist
         $typeId = "aero_generator_helper";
@@ -470,7 +515,7 @@ abstract class Property
      * @return int
      * @throws \Exception
      */
-    public function generateHelperIblock($typeId, $iblockCode)
+    public function generateHelperIblock(string $typeId, string $iblockCode):int
     {
         // make iblock helper if not exist
         $iblockRes = IblockTable::getList([

@@ -25,34 +25,34 @@ class GeneratorTable extends Main\Entity\DataManager
      */
     public static function getMap()
     {
-        return array(
-            'ID' => array(
+        return [
+            'ID' => [
                 'data_type' => 'integer',
                 'primary' => true,
                 'autocomplete' => true,
                 'title' => Loc::getMessage('GENERATOR_ENTITY_ID_FIELD'),
-            ),
-            'STEP' => array(
+            ],
+            'STEP' => [
                 'data_type' => 'integer',
                 'title' => Loc::getMessage('GENERATOR_ENTITY_ITEMS_STEP_FIELD'),
-            ),
-            'STATUS' => array(
+            ],
+            'STATUS' => [
                 'data_type' => 'integer',
                 'title' => Loc::getMessage('GENERATOR_ENTITY_STATUS_FIELD'),
-            ),
-            'TYPE' => array(
+            ],
+            'TYPE' => [
                 'data_type' => 'text',
                 'required' => true,
                 'title' => Loc::getMessage('GENERATOR_ENTITY_TYPE_FIELD'),
-            ),
-            'ITEMS_PER_STEP' => array(
+            ],
+            'ITEMS_PER_STEP' => [
                 'data_type' => 'integer',
                 'title' => Loc::getMessage('GENERATOR_ENTITY_ITEMS_PER_STEP_FIELD'),
-            ),
-            'CREATED' => array(
+            ],
+            'CREATED' => [
                 'data_type' => 'datetime',
                 'title' => Loc::getMessage('GENERATOR_ENTITY_CREATED_FIELD'),
-            ),
-        );
+            ],
+        ];
     }
 }

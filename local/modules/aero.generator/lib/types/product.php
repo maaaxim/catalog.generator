@@ -18,6 +18,11 @@ class Product extends CatalogProduct implements Generateable
     const MODULE_NAME = "aero.generator";
 
     /**
+     * Iblock code for product
+     */
+    const IBLOCK_CODE = "catalog_aero_generator";
+
+    /**
      * @var iblock id
      */
     protected $iblockId;

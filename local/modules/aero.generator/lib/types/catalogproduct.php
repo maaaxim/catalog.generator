@@ -19,13 +19,10 @@ use Bitrix\Highloadblock\HighloadBlockTable;
 use Bitrix\Main\Entity\ExpressionField;
 use Bitrix\Main\Config\Option;
 
-abstract class CatalogProduct implements Generateable
+abstract class CatalogProduct
 {
     // @TODO replace
     const MODULE_NAME = "aero.generator";
-
-    // @TODO dry
-    const IBLOCK_CODE = "catalog_aero_generator";
 
     /**
      * @var \Faker\Generator
@@ -52,22 +49,6 @@ abstract class CatalogProduct implements Generateable
         $this->faker = Factory::create('ru_RU');
         if (!Loader::includeModule('catalog'))
             throw new \Exception("Catalog module is not included");
-    }
-
-    /**
-     * Generate method
-     */
-    function generate()
-    {
-        $elementId = $this->addIblockElement();
-        if (intval($elementId) > 0 && \CCatalog::GetByID($this->iblockId)) {
-            $totalCount = $this->addStoresCount($elementId);
-            $this->addCatalogProduct($elementId, $totalCount);
-            $this->addPrices($elementId);
-        }
-
-        // @TODO sku
-        // @TODO refactor
     }
 
     /**

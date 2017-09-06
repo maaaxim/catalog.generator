@@ -32,7 +32,7 @@ class Steps
 
         $this->stepSize = 1; // @TODO set up automatically depending on data size
 
-        // $this->cleanSteps();
+        //$this->cleanSteps();
     }
 
     /**
@@ -166,12 +166,12 @@ class Steps
      * @return int
      */
     private function setCountFromDb(){
-        $cntRes = GeneratorTable::getList(array(
-            'select' => array('CNT'),
-            'runtime' => array(
+        $cntRes = GeneratorTable::getList([
+            'select' => ['CNT'],
+            'runtime' => [
                 new \Bitrix\Main\Entity\ExpressionField('CNT', 'COUNT(*)')
-            )
-        ));
+            ]
+        ]);
         $result = $cntRes->fetch();
         $this->stepCount = (int) $result["CNT"];
     }

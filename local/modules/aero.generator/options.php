@@ -4,71 +4,68 @@ $moduleRight = $APPLICATION->GetGroupRight($moduleID);
 if ($moduleRight >= "R"):
 	IncludeModuleLangFile($_SERVER["DOCUMENT_ROOT"] . BX_ROOT . "/modules/main/options.php");
 	IncludeModuleLangFile(__FILE__);
-	$arTabs = array(
-		array(
-			'tab' => array(
+	$arTabs = [
+		[
+			'tab' => [
 				"DIV" => "Settings",
 				"TAB" => GetMessage("AERO_CATALOG_CREATOR_TAB_SETTINGS"),
 				"ICON" => $moduleID . "_settings",
 				"TITLE" => GetMessage("AERO_CATALOG_CREATOR_TAB_SETTINGS_TITLE"),
-			),
-			'options' => array(
-
-				array("types_product",         GetMessage("AERO_CATALOG_CREATOR_TOTAL_PRODUCTS"), array("text", 24), 'default' => '1000'),
-				array("types_price",           GetMessage("AERO_CATALOG_CREATOR_TOTAL_PRICES"), array("text", 24), 'default' => '10'),
-				array("types_store",           GetMessage("AERO_CATALOG_CREATOR_TOTAL_STORES"), array("text", 24), 'default' => '100'),
-				array("types_productproperty", GetMessage("AERO_CATALOG_CREATOR_TOTAL_PRODUCT_PROPERTIES"), array("text", 24), 'default' => '100'),
-				array("types_skuproperty",     GetMessage("AERO_CATALOG_CREATOR_TOTAL_SKU_PROPERTIES"), array("text", 24), 'default' => '200'),
-
-                array("sku_count",             GetMessage("AERO_CATALOG_CREATOR_SKU_PER_PRODUCT"), array("text", 24), 'default' => '10'),
-
-				array("count", GetMessage("AERO_CATALOG_CREATOR_OPT_COUNT"), array("text", 24), 'default' => '50'),
-				array("words_in_el_name", GetMessage("AERO_CATALOG_CREATOR_OPT_WORDS_IN_EL_NAME"), array("text", 24), 'default' => '5'),
-				array("preview_text_length", GetMessage("AERO_CATALOG_CREATOR_OPT_PREVIEW_TEXT_LENGTH"), array("text", 24), 'default' => '150'),
-				array("detail_text_length", GetMessage("AERO_CATALOG_CREATOR_OPT_DETAIL_TEXT_LENGTH"), array("text", 24), 'default' => '600'),
-				array("preview_picture_width", GetMessage("AERO_CATALOG_CREATOR_OPT_PREVIEW_PICTURE_WIDTH"), array("text", 24), 'default' => '300'),
-				array("preview_picture_height", GetMessage("AERO_CATALOG_CREATOR_OPT_PREVIEW_PICTURE_HEIGHT"), array("text", 24), 'default' => '200'),
-				array("detail_picture_width", GetMessage("AERO_CATALOG_CREATOR_OPT_DETAIL_PICTURE_WIDTH"), array("text", 24), 'default' => '800'),
-				array("detail_picture_height", GetMessage("AERO_CATALOG_CREATOR_OPT_DETAIL_PICTURE_HEIGHT"), array("text", 24), 'default' => '600'),
-				array("catalog_price_max_decimals", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_PRICE_MAX_DECIMALS"), array("text", 24), 'default' => '2'),
-				array("catalog_price_min", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_PRICE_MIN"), array("text", 24), 'default' => '0'),
-				array("catalog_price_max", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_PRICE_MAX"), array("text", 24), 'default' => '10000'),
-				array("catalog_weight_min", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_WEIGHT_MIN"), array("text", 24), 'default' => '0'),
-				array("catalog_weight_max", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_WEIGHT_MAX"), array("text", 24), 'default' => '100'),
-				array("catalog_width_min", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_WIDTH_MIN"), array("text", 24), 'default' => '0'),
-				array("catalog_width_max", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_WIDTH_MAX"), array("text", 24), 'default' => '100'),
-				array("catalog_length_min", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_LENGTH_MIN"), array("text", 24), 'default' => '0'),
-				array("catalog_length_max", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_LENGTH_MAX"), array("text", 24), 'default' => '100'),
-				array("catalog_height_min", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_HEIGHT_MIN"), array("text", 24), 'default' => '0'),
-				array("catalog_height_max", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_HEIGHT_MAX"), array("text", 24), 'default' => '100'),
-				array("catalog_quantity_min", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_QUANTITY_MIN"), array("text", 24), 'default' => '0'),
-				array("catalog_quantity_max", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_QUANTITY_MAX"), array("text", 24), 'default' => '100'),
-				array("property_multiple_count", GetMessage("AERO_CATALOG_CREATOR_OPT_PROPERTY_MULTIPLE_COUNT"), array("text", 24), 'default' => '3'),
-				array("property_string_length", GetMessage("AERO_CATALOG_CREATOR_OPT_PROPERTY_STRING_LENGTH"), array("text", 24), 'default' => '10'),
-				array("property_text_length", GetMessage("AERO_CATALOG_CREATOR_OPT_PROPERTY_TEXT_LENGTH"), array("text", 24), 'default' => '600'),
-			)
-		),
-		array(
-			'tab' => array(
+            ],
+			'options' => [
+				["types_product",         GetMessage("AERO_CATALOG_CREATOR_TOTAL_PRODUCTS"), ["text", 24], 'default' => '1000'],
+				["types_price",           GetMessage("AERO_CATALOG_CREATOR_TOTAL_PRICES"), ["text", 24], 'default' => '10'],
+				["types_store",           GetMessage("AERO_CATALOG_CREATOR_TOTAL_STORES"), ["text", 24], 'default' => '100'],
+				["types_productproperty", GetMessage("AERO_CATALOG_CREATOR_TOTAL_PRODUCT_PROPERTIES"), ["text", 24], 'default' => '100'],
+				["types_skuproperty",     GetMessage("AERO_CATALOG_CREATOR_TOTAL_SKU_PROPERTIES"), ["text", 24], 'default' => '200'],
+                ["sku_count",             GetMessage("AERO_CATALOG_CREATOR_SKU_PER_PRODUCT"), ["text", 24], 'default' => '10'],
+				["count", GetMessage("AERO_CATALOG_CREATOR_OPT_COUNT"), ["text", 24], 'default' => '50'],
+				["words_in_el_name", GetMessage("AERO_CATALOG_CREATOR_OPT_WORDS_IN_EL_NAME"), ["text", 24], 'default' => '5'],
+				["preview_text_length", GetMessage("AERO_CATALOG_CREATOR_OPT_PREVIEW_TEXT_LENGTH"), ["text", 24], 'default' => '150'],
+				["detail_text_length", GetMessage("AERO_CATALOG_CREATOR_OPT_DETAIL_TEXT_LENGTH"), ["text", 24], 'default' => '600'],
+				["preview_picture_width", GetMessage("AERO_CATALOG_CREATOR_OPT_PREVIEW_PICTURE_WIDTH"), ["text", 24], 'default' => '300'],
+				["preview_picture_height", GetMessage("AERO_CATALOG_CREATOR_OPT_PREVIEW_PICTURE_HEIGHT"), ["text", 24], 'default' => '200'],
+				["detail_picture_width", GetMessage("AERO_CATALOG_CREATOR_OPT_DETAIL_PICTURE_WIDTH"), ["text", 24], 'default' => '800'],
+				["detail_picture_height", GetMessage("AERO_CATALOG_CREATOR_OPT_DETAIL_PICTURE_HEIGHT"), ["text", 24], 'default' => '600'],
+				["catalog_price_max_decimals", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_PRICE_MAX_DECIMALS"), ["text", 24], 'default' => '2'],
+				["catalog_price_min", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_PRICE_MIN"), ["text", 24], 'default' => '0'],
+				["catalog_price_max", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_PRICE_MAX"), ["text", 24], 'default' => '10000'],
+				["catalog_weight_min", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_WEIGHT_MIN"), ["text", 24], 'default' => '0'],
+				["catalog_weight_max", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_WEIGHT_MAX"), ["text", 24], 'default' => '100'],
+				["catalog_width_min", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_WIDTH_MIN"), ["text", 24], 'default' => '0'],
+				["catalog_width_max", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_WIDTH_MAX"), ["text", 24], 'default' => '100'],
+				["catalog_length_min", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_LENGTH_MIN"), ["text", 24], 'default' => '0'],
+				["catalog_length_max", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_LENGTH_MAX"), ["text", 24], 'default' => '100'],
+				["catalog_height_min", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_HEIGHT_MIN"), ["text", 24], 'default' => '0'],
+				["catalog_height_max", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_HEIGHT_MAX"), ["text", 24], 'default' => '100'],
+				["catalog_quantity_min", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_QUANTITY_MIN"), ["text", 24], 'default' => '0'],
+				["catalog_quantity_max", GetMessage("AERO_CATALOG_CREATOR_OPT_CATALOG_QUANTITY_MAX"), ["text", 24], 'default' => '100'],
+				["property_multiple_count", GetMessage("AERO_CATALOG_CREATOR_OPT_PROPERTY_MULTIPLE_COUNT"), ["text", 24], 'default' => '3'],
+				["property_string_length", GetMessage("AERO_CATALOG_CREATOR_OPT_PROPERTY_STRING_LENGTH"), ["text", 24], 'default' => '10'],
+				["property_text_length", GetMessage("AERO_CATALOG_CREATOR_OPT_PROPERTY_TEXT_LENGTH"), ["text", 24], 'default' => '600'],
+            ]
+        ],
+		[
+			'tab' => [
 				"DIV" => "edit2",
 				"TAB" => GetMessage("MAIN_TAB_RIGHTS"),
 				"ICON" => $moduleID . "_settings",
 				"TITLE" => GetMessage("MAIN_TAB_TITLE_RIGHTS")
-			),
-			'options' => array(),
+            ],
+			'options' => [],
 			'require' => "/bitrix/modules/main/admin/group_rights.php",
-		),
-	);
-	$arTabsConfig = array();
+        ],
+    ];
+	$arTabsConfig = [];
 	foreach ($arTabs as $tab)
 		$arTabsConfig[] = $tab['tab'];
 	$tabControl = new CAdminTabControl("tabControl", $arTabsConfig);
 	if ($moduleRight >= "W" && $_SERVER['REQUEST_METHOD'] == "POST" && strlen($_POST['RestoreDefaults'] . $_POST['Update']) > 0 && check_bitrix_sessid()) {
 		if ($_POST['RestoreDefaults']) {
 			COption::RemoveOption($moduleID);
-			$rsGroups = CGroup::GetList($v1 = "id", $v2 = "asc", array("ACTIVE" => "Y", "ADMIN" => "N"));
+			$rsGroups = CGroup::GetList($v1 = "id", $v2 = "asc", ["ACTIVE" => "Y", "ADMIN" => "N"]);
 			while ($arGroup = $rsGroups->Fetch())
-				$APPLICATION->DelGroupRight($moduleID, array($arGroup["ID"]));
+				$APPLICATION->DelGroupRight($moduleID, [$arGroup["ID"]]);
 		}
 		if ($_POST['Update']) {
 			foreach ($arTabs as $tab) {
@@ -76,7 +73,7 @@ if ($moduleRight >= "R"):
 					foreach ($tab['options'] as $option) {
 						if (!is_array($option))
 							continue;
-						if (in_array($option[2][0], array('checkbox', 'text', 'textarea', 'selectbox'))) {
+						if (in_array($option[2][0], ['checkbox', 'text', 'textarea', 'selectbox'])) {
 							$name = $option[0];
 							$val = ${$name};
 							if ($option[2][0] == "checkbox" && $val != "Y")
@@ -91,7 +88,6 @@ if ($moduleRight >= "R"):
 				}
 			}
 		}
-
 		LocalRedirect($APPLICATION->GetCurPage() . "?mid=" . urlencode($moduleID) . "&lang=" . urlencode(LANGUAGE_ID) . "&" . $tabControl->ActiveTabParam());
 	}
 	CModule::IncludeModule($moduleID);
@@ -106,7 +102,7 @@ if ($moduleRight >= "R"):
                 foreach ($tab['options'] as $arOption) {
                     $val = COption::GetOptionString($moduleID, $arOption[0], $arOption['default']);
                     $type = $arOption[2];
-                    if (in_array($type[0], array('checkbox', 'text', 'textarea', 'selectbox'))) {
+                    if (in_array($type[0], ['checkbox', 'text', 'textarea', 'selectbox'])) {
                         ?>
                         <tr>
                             <td valign="top" width="50%">
@@ -132,10 +128,10 @@ if ($moduleRight >= "R"):
                                 elseif ($type[0] == "selectbox"):?>
                                     <?= SelectBoxFromArray(
                                             $arOption[0],
-                                            array(
+                                            [
                                                 'REFERENCE' => array_values($arOption['values']),
                                                 'REFERENCE_ID' => array_keys($arOption['values'])
-                                            ),
+                                            ],
                                             $val
                                     ); ?>
                                 <? endif ?>

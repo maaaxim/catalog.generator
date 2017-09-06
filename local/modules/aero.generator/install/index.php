@@ -10,7 +10,7 @@ Loc::loadMessages(__FILE__);
 class aero_generator extends CModule {
 
     public function __construct(){
-        $arModuleVersion = array();
+        $arModuleVersion = [];
         
         include __DIR__ . '/version.php';
 
@@ -40,20 +40,20 @@ class aero_generator extends CModule {
     }
 
     public function InstallFiles(){
-        $parts = array(
-            '/admin' => array(
+        $parts = [
+            '/admin' => [
                 'target' => '/bitrix/admin',
                 'rewrite' => false,
-            ),
-            '/js' => array(
+            ],
+            '/js' => [
                 'target' => '/bitrix/js',
                 'rewrite' => false,
-            ),
-            '/panel' => array(
+            ],
+            '/panel' => [
                 'target' => '/bitrix/panel',
                 'rewrite' => false,
-            ),
-        );
+            ],
+        ];
         foreach ($parts as $dir => $config) {
             CopyDirFiles(
                 __DIR__ . $dir,

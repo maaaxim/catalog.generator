@@ -13,7 +13,9 @@ class Sku extends CatalogProduct implements Generateable
 {
     const ORDER = 7;
 
-    // @TODO dry
+    /**
+     * Iblock code for sku
+     */
     const IBLOCK_CODE = "sku_aero_generator";
 
     /**
@@ -30,6 +32,10 @@ class Sku extends CatalogProduct implements Generateable
      */
     protected $productName;
 
+    /**
+     * Sku constructor.
+     * @param int $productId
+     */
     public function __construct(int $productId)
     {
         $this->productId = $productId;
@@ -37,6 +43,9 @@ class Sku extends CatalogProduct implements Generateable
         parent::__construct();
     }
 
+    /**
+     * Generate method
+     */
     function generate()
     {
         $elementId = $this->addIblockElement();

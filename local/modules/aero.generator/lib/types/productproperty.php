@@ -11,5 +11,9 @@ namespace Aero\Generator\Types;
 class ProductProperty extends Property implements Generateable
 {
     const ORDER = 2;
+
+    /**
+     * Iblock code for product
+     */
     const IBLOCK_CODE = "catalog_aero_generator";
 }

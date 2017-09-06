@@ -14,7 +14,7 @@ define("MODULE_IMG_PATH", '/local/modules/aero.generator/images/');
 
 \CJSCore::RegisterExt(
 	"aero_generator",
-	array(
+	[
 		'js' => '/bitrix/js/aero.generator/aero.generator.js'
-	)
+    ]
 );

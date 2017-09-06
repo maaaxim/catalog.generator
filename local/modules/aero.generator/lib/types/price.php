@@ -50,7 +50,7 @@ class Price implements Generateable
      */
     function generate()
     {
-        $arFields = array(
+        $arFields = [
             "NAME" => $this->code,
             "SORT" => 500,
             "USER_GROUP" => [2], // @TODO get it from db
@@ -60,7 +60,7 @@ class Price implements Generateable
                 "ru" => $this->name,
                 "en" => $this->name
             ]
-        );
+        ];
         $priceId = \CCatalogGroup::Add($arFields);
         if ($priceId <= 0)
             throw new \Exception("Add price error");
