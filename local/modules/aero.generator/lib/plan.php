@@ -9,6 +9,7 @@
 namespace Aero\Generator;
 
 use Aero\Generator\Entity\GeneratorTable;
+use Bitrix\Main\Config\Option;
 
 /**
  * Class Plan
@@ -35,13 +36,21 @@ class Plan
 
     private function setConfig(){
         $this->config["types_catalog"]         = 1; // 1 catalog is enough
-        $this->config["types_product"]         = \Bitrix\Main\Config\Option::get("aero.generator", "types_product");
-        $this->config["types_price"]           = \Bitrix\Main\Config\Option::get("aero.generator", "types_price");
-        $this->config["types_store"]           = \Bitrix\Main\Config\Option::get("aero.generator", "types_store");
-        $this->config["types_productproperty"] = \Bitrix\Main\Config\Option::get("aero.generator", "types_productproperty");
-        $this->config["types_skuproperty"]     = \Bitrix\Main\Config\Option::get("aero.generator", "types_skuproperty");
+        $this->config["types_product"]         = Option::get("aero.generator", "types_product");
+        $this->config["types_price"]           = Option::get("aero.generator", "types_price");
+        $this->config["types_store"]           = Option::get("aero.generator", "types_store");
+        $this->config["types_productproperty"] = Option::get("aero.generator", "types_productproperty");
+        $this->config["types_skuproperty"]     = Option::get("aero.generator", "types_skuproperty");
     }
-    
+
+    /**
+     * @TODO
+     * 0. Типы и каталоги без создаем без плана
+     * 1. Цены, свойства и склады тоже без плана
+     * 2. Потом добавляем и удаляем товары, вычисляем шаг
+     * 3. Создаем план на основе вычисленного шага
+     * 4. Перепроектируем модуль (сортировка, что в плане, генерация)
+     */
     private function fillPlan(){
         foreach($this->config as $key => $setting){
             $exploded = explode("_", $key);
