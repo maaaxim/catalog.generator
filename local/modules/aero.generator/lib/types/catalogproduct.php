@@ -615,8 +615,7 @@ abstract class CatalogProduct
         if ($priceCount <= 0)
             throw new \Exception("We need more then 0 prices");
         $priceTypesRes = GroupTable::getList([
-            "select" => ["ID", "BASE"],
-            "limit" => $priceCount
+            "select" => ["ID", "BASE"]
         ]);
         while ($priceTypesFields = $priceTypesRes->fetch()) {
             $price = $this->faker->randomFloat(

@@ -193,6 +193,7 @@ abstract class Property
         $CACHE_MANAGER->CleanAll();
 
         $iblockId = $this->generateHelperIblock($typeId, $iblockCode);
+        $this->generateHelperIblockData($iblockId);
 
         $propertyDescription = [
             'PROPERTY_TYPE' => PropertyTable::TYPE_ELEMENT,
@@ -541,5 +542,28 @@ abstract class Property
         }
 
         return $iblockId;
+    }
+
+    /**
+     * Generates few items in iblock helper
+     *
+     * @param int $iblockId
+     */
+    public function generateHelperIblockData(int $iblockId)
+    {
+        $element = new \CIBlockElement;
+        for($i = 0; $i < 10; $i++){
+            $elementName = $this->faker->sentence(1,4);
+            $arFields = [
+                "IBLOCK_ID" => $iblockId,
+                "NAME" => $elementName,
+                "CODE" => \Cutil::translit($elementName, "ru"),
+                "ACTIVE" => "Y",
+                "PREVIEW_TEXT" => $this->faker->sentence($this->config["preview_text_length"]),
+                "DETAIL_TEXT" => $this->faker->sentence($this->config["detail_text_length"]),
+                "DETAIL_TEXT_TYPE" => "html"
+            ];
+            $element->Add($arFields);
+        }
     }
 }
