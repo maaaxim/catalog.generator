@@ -82,7 +82,9 @@ class Sku extends CatalogProduct implements Generateable
      */
     public function getDataProps():array
     {
-        return ["CML2_LINK" => $this->productId];
+        $props = parent::getDataProps();
+        $props["CML2_LINK"] = $this->productId;
+        return $props;
     }
 
     /**
