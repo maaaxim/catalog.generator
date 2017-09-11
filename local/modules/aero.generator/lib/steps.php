@@ -4,7 +4,7 @@ namespace Aero\Generator;
 
 use Aero\Generator\Entity\GeneratorTable;
 use Aero\Generator\Types\Generateable;
-use Bitrix\Main\DB\Exception;
+use Bitrix\Main\Entity\ExpressionField;
 
 /**
  * Class Steps
@@ -14,6 +14,7 @@ use Bitrix\Main\DB\Exception;
  */
 class Steps
 {
+    protected $plan;
     protected $step;
     protected $stepSize;
     protected $stepCount;
@@ -26,17 +27,19 @@ class Steps
 
         $this->setCountFromDb();
 
-        $this->makePlan(); // @TODO run it on first ajax request
+        $this->plan = new Plan();
+        $this->plan->initStructurePlan(); // @TODO run it on first ajax request only
 
         $this->setCurrentStepNumber();
 
         $this->stepSize = 1; // @TODO set up automatically depending on data size
 
-        //$this->cleanSteps();
+        // $this->cleanSteps();
     }
 
     /**
      * Makes a generation step.
+     * Returns count of completed steps.
      * Returns 0 if there is nothing to do.
      *
      * @return int
@@ -44,25 +47,25 @@ class Steps
      */
     public function createNext(){
 
-        if($this->initStep()){
+        // check if steps are complete
+//        if(
+//            $this->step <= 0
+//            || $this->step > $this->stepCount
+//        ) return 0;
 
-            if(
-                $this->step <= 0
-                || $this->step > $this->stepCount
-            ) return 0;
-
-            try {
+        // then generate
+        try {
+            if ($this->initStep()) {
                 $this->type->generate();
                 $this->finish();
-            } catch (Exception $exception) {
-                $this->errors[] = $exception;
+            } else {
                 return 0;
             }
-
-        } else {
+        } catch (\Exception $exception) {
+            $this->errors[] = $exception;
+            // $exception->getMessage()
             return 0;
         }
-
         return $this->stepSize;
     }
 
@@ -84,20 +87,12 @@ class Steps
         return $this->step;
     }
 
-    public function setConfig(){}
-
-    private function makePlan(){
-        if($this->stepCount === 0){
-            $plan = new Plan();
-            $plan->init();
-        }
-    }
-
     /**
      * Initializes fields for step
+     *
      * @return bool
      */
-    private function initStep() {
+    private function initStep():bool {
         $stepRes = GeneratorTable::getList([
             "filter" => ["STATUS" => 0],
             "order" => ["ID" => "ASC"],
@@ -168,8 +163,11 @@ class Steps
     private function setCountFromDb(){
         $cntRes = GeneratorTable::getList([
             'select' => ['CNT'],
+            'filter' => [
+                'TYPE' => '\Aero\Generator\Types\Product'
+            ],
             'runtime' => [
-                new \Bitrix\Main\Entity\ExpressionField('CNT', 'COUNT(*)')
+                new ExpressionField('CNT', 'COUNT(*)')
             ]
         ]);
         $result = $cntRes->fetch();

@@ -10,14 +10,10 @@ namespace Aero\Generator\Types;
 
 use Faker\Factory;
 use Bitrix\Main\Loader;
+use Aero\Generator\Config;
 
 class Price implements Generateable
 {
-    /**
-     * Order in steps
-     */
-    const ORDER = 4;
-
     /**
      * @var \Faker\Generator
      */
@@ -85,5 +81,11 @@ class Price implements Generateable
         $sentence = $this->faker->sentence(rand(1, 3));
         $this->name = substr($sentence, 0, strlen($sentence) - 1);
         $this->code = strtoupper(str_replace(' ', '_', $this->name));
+    }
+
+    public function getStepSize()
+    {
+        $config = Config::getInstance();
+        return $config->getOption("types_price");
     }
 }

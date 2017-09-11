@@ -59,9 +59,6 @@ abstract class Property
      */
     public function __construct()
     {
-        $this->faker = Factory::create('ru_RU');
-        $this->setIblockId();
-        $this->generatePropertyFields();
     }
 
     /**
@@ -69,6 +66,10 @@ abstract class Property
      */
     function generate()
     {
+        $this->faker = Factory::create('ru_RU');
+        $this->setIblockId();
+        $this->generatePropertyFields();
+
         // set types
         $types = [
             PropertyTable::TYPE_STRING,

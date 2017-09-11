@@ -8,6 +8,7 @@
 
 namespace Aero\Generator\Types;
 
+use Aero\Generator\Config;
 use Bitrix\Iblock\TypeLanguageTable;
 use Bitrix\Iblock\TypeTable;
 use Bitrix\Main\Config\Option;
@@ -21,11 +22,6 @@ use Bitrix\Main\Loader;
  */
 class Catalog implements Generateable
 {
-    /**
-     * Order for plan
-     */
-    const ORDER = 1;
-
     /**
      * Iblock type id
      */
@@ -226,5 +222,14 @@ class Catalog implements Generateable
                     throw new \Exception($ex->GetString());
             }
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getStepSize():string
+    {
+        $config = Config::getInstance();
+        return $config->getOption("types_catalog");
     }
 }

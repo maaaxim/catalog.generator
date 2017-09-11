@@ -3,5 +3,6 @@ namespace Aero\Generator\Types;
 
 interface Generateable
 {
-    function generate();
+    public function generate();
+    public function getStepSize();
 }

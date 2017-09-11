@@ -8,13 +8,18 @@
 
 namespace Aero\Generator\Types;
 
+use Aero\Generator\Config;
 
 class SkuProperty extends Property implements Generateable
 {
-    const ORDER = 3;
-
     /**
      * Iblock code for sku
      */
     const IBLOCK_CODE = "sku_aero_generator";
+
+    public function getStepSize()
+    {
+        $config = Config::getInstance();
+        return $config->getOption("types_skuproperty");
+    }
 }

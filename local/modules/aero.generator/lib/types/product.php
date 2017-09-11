@@ -12,8 +12,6 @@ use Bitrix\Main\Config\Option;
 
 class Product extends CatalogProduct implements Generateable
 {
-    const ORDER = 6;
-
     // @TODO replace
     const MODULE_NAME = "aero.generator";
 
@@ -54,5 +52,10 @@ class Product extends CatalogProduct implements Generateable
             $this->addCatalogProduct($elementId, $totalCount);
             $this->addPrices($elementId);
         }
+    }
+
+    public function getStepSize()
+    {
+        // TODO: Implement getStepSize() method.
     }
 }
