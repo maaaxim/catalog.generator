@@ -15,7 +15,8 @@ class Plan implements Generateable
      */
     function generate()
     {
-        // @TODO
+        $plan = new \Aero\Generator\Plan();
+        $plan->initProductsPlan();
     }
 
     public function getStepSize()

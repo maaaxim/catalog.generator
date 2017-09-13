@@ -57,5 +57,6 @@ class Product extends CatalogProduct implements Generateable
     public function getStepSize()
     {
         // TODO: Implement getStepSize() method.
+        return 1;
     }
 }

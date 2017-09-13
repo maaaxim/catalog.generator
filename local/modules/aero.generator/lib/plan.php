@@ -46,7 +46,13 @@ class Plan
 
     public function initProductsPlan()
     {
-
+        $data = [
+            "STEP" => 7,
+            "STATUS" => 0,
+            "TYPE" => '\Aero\Generator\Types\Product',
+            "ITEMS_PER_STEP" => 10
+        ];
+        GeneratorTable::add($data);
     }
 
     private function fillPlan()
@@ -79,5 +85,18 @@ class Plan
             ];
             GeneratorTable::add($data);
         }
+    }
+
+    /**
+     * @return array
+     */
+    public static function getSteps():array
+    {
+        $steps = [];
+        foreach(self::$steps as $key => $name){
+            $class = '\\Aero\\Generator\\Types\\' . $name;
+            $steps[] = $class;
+        }
+        return $steps;
     }
 }

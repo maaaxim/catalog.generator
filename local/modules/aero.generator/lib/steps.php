@@ -27,9 +27,6 @@ class Steps
 
         $this->setCountFromDb();
 
-        $this->plan = new Plan();
-        $this->plan->initStructurePlan(); // @TODO run it on first ajax request only
-
         $this->setCurrentStepNumber();
 
         $this->stepSize = 1; // @TODO set up automatically depending on data size
@@ -46,14 +43,6 @@ class Steps
      * @throws Exception
      */
     public function createNext(){
-
-        // check if steps are complete
-//        if(
-//            $this->step <= 0
-//            || $this->step > $this->stepCount
-//        ) return 0;
-
-        // then generate
         try {
             if ($this->initStep()) {
                 $this->type->generate();
@@ -93,20 +82,38 @@ class Steps
      * @return bool
      */
     private function initStep():bool {
+        $steps = Plan::getSteps();
+        // get last non-updated
+        // or get last updated
+        // or get null
         $stepRes = GeneratorTable::getList([
-            "filter" => ["STATUS" => 0],
-            "order" => ["ID" => "ASC"],
-            "select" => ["ID", "STEP", "TYPE"],
+            "order" => ["STATUS" => "ASC", "ID" => "ASC"],
+            "select" => ["ID", "STEP", "TYPE", "STATUS"],
             "limit" => 1
         ]);
-        if($stepFields = $stepRes->fetch()){
-            $this->step = (int) $stepFields["STEP"];
-            $this->id   = (int) $stepFields["ID"];
-            $this->type = $this->createGenerateable($stepFields["TYPE"]);
-            return true;
-        } else {
+        $lastItem = $stepRes->fetch();
+        if($lastItem["STATUS"] == 1){
+            echo "finished";
             return false;
+        } else {
+            if ($lastItem["TYPE"] == "\Aero\Generator\Types\Product") {
+                echo "gen product";
+                $this->step = (int) $lastItem["STEP"];
+                $this->id   = (int) $lastItem["ID"];
+                $this->type = $this->createGenerateable($lastItem["TYPE"]);
+            } elseif (in_array($lastItem["TYPE"], $steps)) {
+                echo "gen structure";
+                $this->step = (int) $lastItem["STEP"];
+                $this->id   = (int) $lastItem["ID"];
+                $this->type = $this->createGenerateable($lastItem["TYPE"]);
+            } else {
+                echo "make plan";
+                $this->plan = new Plan();
+                $this->plan->initStructurePlan();
+                return true;
+            }
         }
+        return true;
     }
 
     /**

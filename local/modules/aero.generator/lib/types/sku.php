@@ -96,4 +96,10 @@ class Sku extends CatalogProduct implements Generateable
         $product = $productRes->Fetch();
         $this->productName = $product["NAME"];
     }
+
+    public function getStepSize()
+    {
+        return 1;
+        // TODO: Implement getStepSize() method.
+    }
 }

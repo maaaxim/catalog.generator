@@ -3,7 +3,7 @@ require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_admi
 \Bitrix\Main\Loader::includeModule("aero.generator");
 
 $steps = new \Aero\Generator\Steps();
-//echo "<pre>"; var_dump($steps->createNext()); echo "</pre>";
+echo "<pre>"; var_dump($steps->createNext()); echo "</pre>";
 if(\Aero\Generator\JsonBar::isAjax()){
     $progress = new \Aero\Generator\JsonBar();
     while($stepsCompleted = $steps->createNext()){
