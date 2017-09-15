@@ -32,7 +32,7 @@ class Product extends CatalogProduct implements Generateable
 
     public function __construct()
     {
-        $this->skuCount =(int) Option::get("aero.generator", "sku_count");
+        $this->skuCount = (int) Option::get("aero.generator", "sku_count");
         parent::__construct();
     }
 
@@ -54,9 +54,8 @@ class Product extends CatalogProduct implements Generateable
         }
     }
 
-    public function getStepSize()
+    public function getStepSize():int
     {
-        // TODO: Implement getStepSize() method.
-        return 1;
+        return Option::get("aero.generator", "types_product");
     }
 }

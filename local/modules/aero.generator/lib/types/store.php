@@ -11,7 +11,7 @@ namespace Aero\Generator\Types;
 use Bitrix\Catalog\StoreTable;
 use Faker\Factory;
 use Bitrix\Main\Loader;
-use Aero\Generator\Config;
+use Bitrix\Main\Config\Option;
 
 class Store implements Generateable
 {
@@ -74,9 +74,8 @@ class Store implements Generateable
             throw new \Exception("Can't include catalog module");
     }
 
-    public function getStepSize()
+    public function getStepSize():int
     {
-        $config = Config::getInstance();
-        return $config->getOption("types_store");
+        return (int) Option::get("aero.generator", "types_store");
     }
 }

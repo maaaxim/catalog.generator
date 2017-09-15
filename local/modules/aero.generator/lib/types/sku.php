@@ -8,7 +8,6 @@
 
 namespace Aero\Generator\Types;
 
-
 class Sku extends CatalogProduct implements Generateable
 {
     const ORDER = 7;
@@ -97,9 +96,8 @@ class Sku extends CatalogProduct implements Generateable
         $this->productName = $product["NAME"];
     }
 
-    public function getStepSize()
+    public function getStepSize():int
     {
         return 1;
-        // TODO: Implement getStepSize() method.
     }
 }

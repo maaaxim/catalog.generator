@@ -19,7 +19,7 @@ class Plan implements Generateable
         $plan->initProductsPlan();
     }
 
-    public function getStepSize()
+    public function getStepSize():int
     {
         return 1;
     }

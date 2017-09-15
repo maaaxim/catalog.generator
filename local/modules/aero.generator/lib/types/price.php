@@ -10,7 +10,7 @@ namespace Aero\Generator\Types;
 
 use Faker\Factory;
 use Bitrix\Main\Loader;
-use Aero\Generator\Config;
+use Bitrix\Main\Config\Option;
 
 class Price implements Generateable
 {
@@ -83,9 +83,8 @@ class Price implements Generateable
         $this->code = strtoupper(str_replace(' ', '_', $this->name));
     }
 
-    public function getStepSize()
+    public function getStepSize():int
     {
-        $config = Config::getInstance();
-        return $config->getOption("types_price");
+        return Option::get("aero.generator", "types_price");
     }
 }

@@ -8,7 +8,7 @@
 
 namespace Aero\Generator\Types;
 
-use Aero\Generator\Config;
+use Bitrix\Main\Config\Option;
 
 class ProductProperty extends Property implements Generateable
 {
@@ -17,9 +17,8 @@ class ProductProperty extends Property implements Generateable
      */
     const IBLOCK_CODE = "catalog_aero_generator";
 
-    public function getStepSize()
+    public function getStepSize():int
     {
-        $config = Config::getInstance();
-        return $config->getOption("types_productproperty");
+        return (int) Option::get("aero.generator", "types_productproperty");
     }
 }

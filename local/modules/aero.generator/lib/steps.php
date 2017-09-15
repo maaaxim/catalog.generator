@@ -29,8 +29,6 @@ class Steps
 
         $this->setCurrentStepNumber();
 
-        $this->stepSize = 1; // @TODO set up automatically depending on data size
-
         // $this->cleanSteps();
     }
 
@@ -45,7 +43,8 @@ class Steps
     public function createNext(){
         try {
             if ($this->initStep()) {
-                $this->type->generate();
+                for($i = 0; $i < $this->stepSize; $i++)
+                    $this->type->generate();
                 $this->finish();
             } else {
                 return 0;
@@ -88,7 +87,7 @@ class Steps
         // or get null
         $stepRes = GeneratorTable::getList([
             "order" => ["STATUS" => "ASC", "ID" => "ASC"],
-            "select" => ["ID", "STEP", "TYPE", "STATUS"],
+            "select" => ["ID", "STEP", "TYPE", "STATUS", "ITEMS_PER_STEP"],
             "limit" => 1
         ]);
         $lastItem = $stepRes->fetch();
@@ -98,14 +97,16 @@ class Steps
         } else {
             if ($lastItem["TYPE"] == "\Aero\Generator\Types\Product") {
                 echo "gen product";
-                $this->step = (int) $lastItem["STEP"];
-                $this->id   = (int) $lastItem["ID"];
-                $this->type = $this->createGenerateable($lastItem["TYPE"]);
+                $this->step     = (int) $lastItem["STEP"];
+                $this->id       = (int) $lastItem["ID"];
+                $this->stepSize = (int) $lastItem["ITEMS_PER_STEP"];
+                $this->type     = $this->createGenerateable($lastItem["TYPE"]);
             } elseif (in_array($lastItem["TYPE"], $steps)) {
                 echo "gen structure";
-                $this->step = (int) $lastItem["STEP"];
-                $this->id   = (int) $lastItem["ID"];
-                $this->type = $this->createGenerateable($lastItem["TYPE"]);
+                $this->step     = (int) $lastItem["STEP"];
+                $this->id       = (int) $lastItem["ID"];
+                $this->stepSize = (int) $lastItem["ITEMS_PER_STEP"];
+                $this->type     = $this->createGenerateable($lastItem["TYPE"]);
             } else {
                 echo "make plan";
                 $this->plan = new Plan();
@@ -120,7 +121,7 @@ class Steps
      * @param string $type
      * @return Generateable
      */
-    private function createGenerateable(string $type) {
+    private function createGenerateable(string $type):Generateable {
         if(!class_exists($type))
             throw new \InvalidArgumentException("$type is not a valid type!");
         return new $type();
