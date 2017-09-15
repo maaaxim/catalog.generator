@@ -27,8 +27,6 @@ class Steps
 
         $this->setCountFromDb();
 
-        $this->setCurrentStepNumber();
-
         // $this->cleanSteps();
     }
 
@@ -92,23 +90,23 @@ class Steps
         ]);
         $lastItem = $stepRes->fetch();
         if($lastItem["STATUS"] == 1){
-            echo "finished";
+            // echo "finished";
             return false;
         } else {
             if ($lastItem["TYPE"] == "\Aero\Generator\Types\Product") {
-                echo "gen product";
+                // echo "gen product";
                 $this->step     = (int) $lastItem["STEP"];
                 $this->id       = (int) $lastItem["ID"];
                 $this->stepSize = (int) $lastItem["ITEMS_PER_STEP"];
                 $this->type     = $this->createGenerateable($lastItem["TYPE"]);
             } elseif (in_array($lastItem["TYPE"], $steps)) {
-                echo "gen structure";
+                // echo "gen structure";
                 $this->step     = (int) $lastItem["STEP"];
                 $this->id       = (int) $lastItem["ID"];
                 $this->stepSize = (int) $lastItem["ITEMS_PER_STEP"];
                 $this->type     = $this->createGenerateable($lastItem["TYPE"]);
             } else {
-                echo "make plan";
+                // echo "make plan";
                 $this->plan = new Plan();
                 $this->plan->initStructurePlan();
                 return true;
@@ -141,17 +139,6 @@ class Steps
         }
     }
 
-    private function setCurrentStepNumber(){
-        $stepRes = GeneratorTable::getList([
-            "filter" => ["STATUS" => 0],
-            "order" => ["ID" => "ASC"],
-            "select" => ["STEP"],
-            "limit" => 1
-        ]);
-        if($stepFields = $stepRes->fetch())
-            $this->step = (int) $stepFields["STEP"];
-    }
-
     /**
      * Clean table
      */
@@ -171,9 +158,7 @@ class Steps
     private function setCountFromDb(){
         $cntRes = GeneratorTable::getList([
             'select' => ['CNT'],
-            'filter' => [
-                'TYPE' => '\Aero\Generator\Types\Product'
-            ],
+            // 'filter' => ['TYPE' => '\Aero\Generator\Types\Product'],
             'runtime' => [
                 new ExpressionField('CNT', 'COUNT(*)')
             ]
