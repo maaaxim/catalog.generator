@@ -24,10 +24,8 @@ class Steps
     protected $errors;
 
     public function __construct(){
-
         $this->setCountFromDb();
-
-        // $this->cleanSteps();
+        //$this->cleanSteps();
     }
 
     /**
@@ -93,7 +91,7 @@ class Steps
             // echo "finished";
             return false;
         } else {
-            if ($lastItem["TYPE"] == "\Aero\Generator\Types\Product") {
+            if (!in_array($lastItem["TYPE"], $steps) && !empty($lastItem["TYPE"])) {
                 // echo "gen product";
                 $this->step     = (int) $lastItem["STEP"];
                 $this->id       = (int) $lastItem["ID"];

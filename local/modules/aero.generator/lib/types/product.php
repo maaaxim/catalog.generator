@@ -8,6 +8,7 @@
 
 namespace Aero\Generator\Types;
 
+use Bitrix\Iblock\ElementTable;
 use Bitrix\Main\Config\Option;
 
 class Product extends CatalogProduct implements Generateable
@@ -54,8 +55,23 @@ class Product extends CatalogProduct implements Generateable
         }
     }
 
+    public function remove()
+    {
+        $elementRes = ElementTable::getList([
+            "filter" => ["IBLOCK_ID" => $this->iblockId],
+            "order" => ["ID" => "DESC"],
+            "select" => ["ID"],
+            "limit" => 1
+        ]);
+        if($elementFields = $elementRes->fetch()){
+            $id = (int) $elementFields["ID"];
+        }
+        \CIBlockElement::Delete($id);
+    }
+
     public function getStepSize():int
     {
+        // !WRONG
         return Option::get("aero.generator", "types_product");
     }
 }

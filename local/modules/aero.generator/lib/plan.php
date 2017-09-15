@@ -9,6 +9,8 @@
 namespace Aero\Generator;
 
 use Aero\Generator\Entity\GeneratorTable;
+use Aero\Generator\Types\Product;
+use Bitrix\Main\Config\Option;
 
 /**
  * Class Plan
@@ -44,15 +46,46 @@ class Plan
         $this->writePlan();
     }
 
+    /**
+     * Calc step size for product and write it to the plan
+     * refactor @TODO
+     */
     public function initProductsPlan()
     {
-        $data = [
-            "STEP" => 7,
-            "STATUS" => 0,
-            "TYPE" => '\Aero\Generator\Types\Product',
-            "ITEMS_PER_STEP" => 10
-        ];
-        GeneratorTable::add($data);
+        $timeElapsed = $this->getTimeElapsed();
+        $itemsPerStep = ceil(5 / $timeElapsed);
+        $productsNeeded = Option::get("aero.generator", "types_product");
+        $stepsCount = floor($productsNeeded / $itemsPerStep);
+        $remainder = $productsNeeded % $itemsPerStep;
+        for($i = 0; $i < $stepsCount; $i++){
+            $data = [
+                "STEP" => 7 + $i,
+                "STATUS" => 0,
+                "TYPE" => '\Aero\Generator\Types\Product',
+                "ITEMS_PER_STEP" => $itemsPerStep
+            ];
+            GeneratorTable::add($data);
+            $lastStep = $i;
+        }
+        if($remainder > 0){
+            $data = [
+                "STEP" => 7 + $lastStep + 1,
+                "STATUS" => 0,
+                "TYPE" => '\Aero\Generator\Types\Product',
+                "ITEMS_PER_STEP" => $remainder
+            ];
+            GeneratorTable::add($data);
+        }
+    }
+
+    private function getTimeElapsed():float
+    {
+        $start = microtime(true);
+        $product = new Product();
+        $product->generate();
+        $timeElapsed = microtime(true) - $start;
+        $product->remove();
+        return $timeElapsed;
     }
 
     private function fillPlan()
