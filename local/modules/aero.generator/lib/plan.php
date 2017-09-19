@@ -22,21 +22,28 @@ use Bitrix\Main\Config\Option;
 class Plan
 {
     /**
+     * @var
+     */
+    private $structureCreated;
+
+    /**
      * @var array things we can generate immediately
      */
     protected static $steps = [
-        0 => "Catalog",
-        1 => "ProductProperty",
-        2 => "SkuProperty",
-        3 => "Price",
-        4 => "Store",
-        5 => "Plan"
+        0 => "Plan",
+        1 => "Catalog",
+        2 => "ProductProperty",
+        3 => "SkuProperty",
+        4 => "Price",
+        5 => "Store",
+        6 => "Plan"
     ];
 
     private $plan;
 
     public function __construct()
     {
+        $this->setStructureCreated();
         $this->plan = [];
     }
 
@@ -44,6 +51,23 @@ class Plan
     {
         $this->fillPlan();
         $this->writePlan();
+    }
+
+    /**
+     * @return bool
+     */
+    public function getStructureCreated():bool
+    {
+        return $this->structureCreated;
+    }
+
+    /**
+     * Check structure exist and set field $structureCreated
+     */
+    private function setStructureCreated()
+    {
+        $tableRes = GeneratorTable::getList(["limit" => 1]);
+        $this->structureCreated = ($tableRes->fetch()) ? true : false;
     }
 
     /**

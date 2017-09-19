@@ -8,17 +8,41 @@
 
 namespace Aero\Generator\Types;
 
+/**
+ * Class Plan
+ * @package Aero\Generator\Types
+ */
 class Plan implements Generateable
 {
+
+    /**
+     * @var \Aero\Generator\Plan
+     */
+    private $plan;
+
+    /**
+     * Plan constructor.
+     */
+    public function __construct()
+    {
+        $this->plan = new \Aero\Generator\Plan();
+    }
+
     /**
      * Generate plan
      */
     function generate()
     {
-        $plan = new \Aero\Generator\Plan();
-        $plan->initProductsPlan();
+        if($this->plan->getStructureCreated()){
+            $this->plan->initProductsPlan();
+        } else {
+            $this->plan->initStructurePlan();
+        }
     }
 
+    /**
+     * @return int
+     */
     public function getStepSize():int
     {
         return 1;

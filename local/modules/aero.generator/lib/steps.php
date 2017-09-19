@@ -2,6 +2,7 @@
 
 namespace Aero\Generator;
 
+use Aero\Generator\Types\Plan as PlanType;
 use Aero\Generator\Entity\GeneratorTable;
 use Aero\Generator\Types\Generateable;
 use Bitrix\Main\Entity\ExpressionField;
@@ -24,8 +25,8 @@ class Steps
     protected $errors;
 
     public function __construct(){
-        $this->setCountFromDb();
-        //$this->cleanSteps();
+        $this->setCount();
+        // $this->cleanSteps();
     }
 
     /**
@@ -77,7 +78,6 @@ class Steps
      * @return bool
      */
     private function initStep():bool {
-        $steps = Plan::getSteps();
         // get last non-updated
         // or get last updated
         // or get null
@@ -91,6 +91,7 @@ class Steps
             // echo "finished";
             return false;
         } else {
+            $steps = Plan::getSteps();
             if (!in_array($lastItem["TYPE"], $steps) && !empty($lastItem["TYPE"])) {
                 // echo "gen product";
                 $this->step     = (int) $lastItem["STEP"];
@@ -99,15 +100,16 @@ class Steps
                 $this->type     = $this->createGenerateable($lastItem["TYPE"]);
             } elseif (in_array($lastItem["TYPE"], $steps)) {
                 // echo "gen structure";
-                $this->step     = (int) $lastItem["STEP"];
+                $this->step     = (int) $lastItem["STEP"]; // @TODO get structure gen number (not from db) cuz products steps are different
                 $this->id       = (int) $lastItem["ID"];
                 $this->stepSize = (int) $lastItem["ITEMS_PER_STEP"];
                 $this->type     = $this->createGenerateable($lastItem["TYPE"]);
             } else {
                 // echo "make plan";
-                $this->plan = new Plan();
-                $this->plan->initStructurePlan();
-                return true;
+                $this->step     = 1;
+                $this->id       = 0;
+                $this->stepSize = 1;
+                $this->type     = new PlanType();
             }
         }
         return true;
@@ -149,19 +151,20 @@ class Steps
     }
 
     /**
-     * Returns total steps quantity from database
+     * Returns total steps quantity
      *
      * @return int
      */
-    private function setCountFromDb(){
+    private function setCount(){
         $cntRes = GeneratorTable::getList([
             'select' => ['CNT'],
-            // 'filter' => ['TYPE' => '\Aero\Generator\Types\Product'],
             'runtime' => [
                 new ExpressionField('CNT', 'COUNT(*)')
             ]
         ]);
         $result = $cntRes->fetch();
         $this->stepCount = (int) $result["CNT"];
+        if($this->stepCount == 0)
+            $this->stepCount = sizeof(Plan::getSteps());
     }
 }
