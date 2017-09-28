@@ -1,0 +1,1 @@
+<? require($_SERVER["DOCUMENT_ROOT"] . "/local/modules/catalog.generator/admin/catalog_generator_controller.php");?>

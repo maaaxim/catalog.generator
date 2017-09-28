@@ -1,1 +1,0 @@
-<? require($_SERVER["DOCUMENT_ROOT"] . "/local/modules/aero.generator/admin/aero_generator_controller.php");?>
