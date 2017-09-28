@@ -1,4 +1,4 @@
-# aero.catalogGenerator
+# catalog.generator module
 
 @TODO
 1. Generate items according to plan
