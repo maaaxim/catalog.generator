@@ -140,6 +140,8 @@ class Plan
                 "TYPE" => $key,
                 "ITEMS_PER_STEP" => $max
             ];
+            if($key == "\Catalog\Generator\Types\Plan")
+                $data["STATUS"] = 1;
             GeneratorTable::add($data);
         }
     }
