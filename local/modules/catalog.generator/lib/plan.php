@@ -115,7 +115,7 @@ class Plan
     private function fillPlan()
     {
         foreach(self::$steps as $key => $name){
-            $class = '\\catalog\\Generator\\Types\\' . $name;
+            $class = '\\Catalog\\Generator\\Types\\' . $name;
             $object = new $class();
             if(!method_exists($class,'getStepSize'))
                 throw new \Exception("Method getStepSize is not exist in $class class");
@@ -151,7 +151,7 @@ class Plan
     {
         $steps = [];
         foreach(self::$steps as $key => $name){
-            $class = '\\catalog\\Generator\\Types\\' . $name;
+            $class = '\\Catalog\\Generator\\Types\\' . $name;
             $steps[] = $class;
         }
         return $steps;
