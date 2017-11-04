@@ -47,12 +47,6 @@ class Plan
         $this->plan = [];
     }
 
-    public function initStructurePlan()
-    {
-        $this->fillPlan();
-        $this->writePlan();
-    }
-
     /**
      * @return bool
      */
@@ -110,40 +104,6 @@ class Plan
         $timeElapsed = microtime(true) - $start;
         $product->remove();
         return $timeElapsed;
-    }
-
-    private function fillPlan()
-    {
-        foreach(self::$steps as $key => $name){
-            $class = '\\Catalog\\Generator\\Types\\' . $name;
-            $object = new $class();
-            if(!method_exists($class,'getStepSize'))
-                throw new \Exception("Method getStepSize is not exist in $class class");
-            $this->plan[$class] = [
-                "count" => $object->getStepSize()
-            ];
-        }
-    }
-
-    private function writePlan()
-    {
-        // Make step for each entity and type of entity
-        $iterator = 0;
-        foreach ($this->plan as $key => $item) {
-            $max = (int)$item["count"];
-            if ($max <= 0)
-                throw new \Exception("Must have more than 0 entity");
-            $iterator++;
-            $data = [
-                "STEP" => $iterator,
-                "STATUS" => 0,
-                "TYPE" => $key,
-                "ITEMS_PER_STEP" => $max
-            ];
-            if($key == "\Catalog\Generator\Types\Plan")
-                $data["STATUS"] = 1;
-            GeneratorTable::add($data);
-        }
     }
 
     /**

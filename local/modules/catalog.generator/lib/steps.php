@@ -26,7 +26,7 @@ class Steps
 
     public function __construct(){
         $this->setCount();
-        // $this->cleanSteps();
+        $this->cleanSteps();
     }
 
     /**
@@ -87,29 +87,53 @@ class Steps
             "limit" => 1
         ]);
         $lastItem = $stepRes->fetch();
+
+        // пусто - задаём всю структуру
+        // и сразу создаём первый товар
+        echo "<pre>"; var_dump($lastItem); echo "</pre>";
         if($lastItem["STATUS"] == 1){
             // echo "finished";
             return false;
         } else {
+
             $steps = Plan::getSteps();
+
+            // если в бд сущность не из структуры - генерим её
             if (!in_array($lastItem["TYPE"], $steps) && !empty($lastItem["TYPE"])) {
                 // echo "gen product";
                 $this->step     = (int) $lastItem["STEP"];
                 $this->id       = (int) $lastItem["ID"];
                 $this->stepSize = (int) $lastItem["ITEMS_PER_STEP"];
                 $this->type     = $this->createGenerateable($lastItem["TYPE"]);
-            } elseif (in_array($lastItem["TYPE"], $steps)) {
-                // echo "gen structure";
-                $this->step     = (int) $lastItem["STEP"]; // @TODO get structure gen number (not from db) cuz products steps are different
-                $this->id       = (int) $lastItem["ID"];
-                $this->stepSize = (int) $lastItem["ITEMS_PER_STEP"];
-                $this->type     = $this->createGenerateable($lastItem["TYPE"]);
+
+            // если все шаги пройдены - отвечаем 0
+            // } elseif {
+            // если таблица пуста - создаём план
             } else {
+
                 // echo "make plan";
-                $this->step     = 1;
-                $this->id       = 0;
-                $this->stepSize = 1;
-                $this->type     = new PlanType();
+                $catalog = new \Catalog\Generator\Types\Catalog();
+                $catalog->generate();
+
+                $productProperty = new \Catalog\Generator\Types\ProductProperty();
+                $productProperty->generate();
+
+                // @TODO учесть, что не всегда нужен
+                //$skuProperty = new \Catalog\Generator\Types\SkuProperty(); // if needed
+                //$skuProperty->generate();
+
+                $price = new \Catalog\Generator\Types\Price();
+                $price->generate();
+
+                $store = new \Catalog\Generator\Types\Store();
+                $store->generate();
+
+                // add test product
+                $plan = new Plan();
+                $plan->initProductsPlan();
+
+                // and start
+                $this->initStep();
             }
         }
         return true;
