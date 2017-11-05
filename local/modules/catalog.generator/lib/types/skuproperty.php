@@ -21,4 +21,14 @@ class SkuProperty extends Property implements Generateable
     {
         return (int) Option::get("catalog.generator", "types_skuproperty");
     }
+
+    /**
+     * Generate only if we need sku
+     */
+    public function generate()
+    {
+        $skuCount = (int) Option::get("catalog.generator", "sku_count");
+        if($skuCount > 0)
+            parent::generate();
+    }
 }

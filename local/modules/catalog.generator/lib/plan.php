@@ -22,46 +22,21 @@ use Bitrix\Main\Config\Option;
 class Plan
 {
     /**
-     * @var
-     */
-    private $structureCreated;
-
-    /**
      * @var array things we can generate immediately
      */
     protected static $steps = [
-        0 => "Plan",
-        1 => "Catalog",
-        2 => "ProductProperty",
-        3 => "SkuProperty",
-        4 => "Price",
-        5 => "Store",
-        6 => "Plan"
+        0 => "Catalog",
+        1 => "ProductProperty",
+        2 => "SkuProperty",
+        3 => "Price",
+        4 => "Store"
     ];
 
     private $plan;
 
     public function __construct()
     {
-        $this->setStructureCreated();
         $this->plan = [];
-    }
-
-    /**
-     * @return bool
-     */
-    public function getStructureCreated():bool
-    {
-        return $this->structureCreated;
-    }
-
-    /**
-     * Check structure exist and set field $structureCreated
-     */
-    private function setStructureCreated()
-    {
-        $tableRes = GeneratorTable::getList(["limit" => 1]);
-        $this->structureCreated = ($tableRes->fetch()) ? true : false;
     }
 
     /**
@@ -70,16 +45,17 @@ class Plan
      */
     public function initProductsPlan()
     {
+
         $timeElapsed = $this->getTimeElapsed();
         $itemsPerStep = ceil(5 / $timeElapsed);
         $productsNeeded = Option::get("catalog.generator", "types_product");
         $stepsCount = floor($productsNeeded / $itemsPerStep);
         $remainder = $productsNeeded % $itemsPerStep;
-        for($i = 0; $i < $stepsCount; $i++){
+
+        for($i = 1; $i < $stepsCount + 1; $i++){
             $data = [
-                "STEP" => 7 + $i,
+                "STEP" => $i,
                 "STATUS" => 0,
-                "TYPE" => '\Catalog\Generator\Types\Product',
                 "ITEMS_PER_STEP" => $itemsPerStep
             ];
             GeneratorTable::add($data);
@@ -89,7 +65,6 @@ class Plan
             $data = [
                 "STEP" => 7 + $lastStep + 1,
                 "STATUS" => 0,
-                "TYPE" => '\Catalog\Generator\Types\Product',
                 "ITEMS_PER_STEP" => $remainder
             ];
             GeneratorTable::add($data);

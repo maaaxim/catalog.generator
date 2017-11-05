@@ -3,7 +3,12 @@ require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_admi
 \Bitrix\Main\Loader::includeModule("catalog.generator");
 
 $steps = new \Catalog\Generator\Steps();
-echo $stepsCompleted = $steps->createNext();
+
+//$stepsCompleted = $steps->createNext();
+//$progress = new \Catalog\Generator\JsonBar();
+//$progress->advance($steps);
+//$progress->finish();
+//die();
 
 if(\Catalog\Generator\JsonBar::isAjax()){
     $progress = new \Catalog\Generator\JsonBar();

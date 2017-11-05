@@ -2,10 +2,10 @@
 
 namespace Catalog\Generator;
 
-use Catalog\Generator\Types\Plan as PlanType;
 use Catalog\Generator\Entity\GeneratorTable;
 use Catalog\Generator\Types\Generateable;
 use Bitrix\Main\Entity\ExpressionField;
+use Catalog\Generator\Types\Product;
 
 /**
  * Class Steps
@@ -15,7 +15,6 @@ use Bitrix\Main\Entity\ExpressionField;
  */
 class Steps
 {
-    protected $plan;
     protected $step;
     protected $stepSize;
     protected $stepCount;
@@ -26,7 +25,7 @@ class Steps
 
     public function __construct(){
         $this->setCount();
-        $this->cleanSteps();
+        // $this->cleanSteps(); die();
     }
 
     /**
@@ -78,38 +77,24 @@ class Steps
      * @return bool
      */
     private function initStep():bool {
-        // get last non-updated
-        // or get last updated
-        // or get null
+
         $stepRes = GeneratorTable::getList([
             "order" => ["STATUS" => "ASC", "ID" => "ASC"],
-            "select" => ["ID", "STEP", "TYPE", "STATUS", "ITEMS_PER_STEP"],
+            "select" => ["ID", "STEP", "STATUS", "ITEMS_PER_STEP"],
             "limit" => 1
         ]);
+
         $lastItem = $stepRes->fetch();
 
-        // пусто - задаём всю структуру
-        // и сразу создаём первый товар
-        echo "<pre>"; var_dump($lastItem); echo "</pre>";
+        // Последняя запись со статусом 1 - выгрузка завершена
         if($lastItem["STATUS"] == 1){
-            // echo "finished";
             return false;
         } else {
 
-            $steps = Plan::getSteps();
-
-            // если в бд сущность не из структуры - генерим её
-            if (!in_array($lastItem["TYPE"], $steps) && !empty($lastItem["TYPE"])) {
-                // echo "gen product";
-                $this->step     = (int) $lastItem["STEP"];
-                $this->id       = (int) $lastItem["ID"];
-                $this->stepSize = (int) $lastItem["ITEMS_PER_STEP"];
-                $this->type     = $this->createGenerateable($lastItem["TYPE"]);
-
-            // если все шаги пройдены - отвечаем 0
-            // } elseif {
             // если таблица пуста - создаём план
-            } else {
+            if ($lastItem == false) {
+
+                // $steps = Plan::getSteps();
 
                 // echo "make plan";
                 $catalog = new \Catalog\Generator\Types\Catalog();
@@ -118,9 +103,8 @@ class Steps
                 $productProperty = new \Catalog\Generator\Types\ProductProperty();
                 $productProperty->generate();
 
-                // @TODO учесть, что не всегда нужен
-                //$skuProperty = new \Catalog\Generator\Types\SkuProperty(); // if needed
-                //$skuProperty->generate();
+                $skuProperty = new \Catalog\Generator\Types\SkuProperty();
+                $skuProperty->generate();
 
                 $price = new \Catalog\Generator\Types\Price();
                 $price->generate();
@@ -133,9 +117,19 @@ class Steps
                 $plan->initProductsPlan();
 
                 // and start
+                $this->setCount();
                 $this->initStep();
+
+            } else {
+
+                // echo "gen product";
+                $this->step     = (int) $lastItem["STEP"];
+                $this->id       = (int) $lastItem["ID"];
+                $this->stepSize = (int) $lastItem["ITEMS_PER_STEP"];
+                $this->type     = new Product();
             }
         }
+
         return true;
     }
 
@@ -188,7 +182,5 @@ class Steps
         ]);
         $result = $cntRes->fetch();
         $this->stepCount = (int) $result["CNT"];
-        if($this->stepCount == 0)
-            $this->stepCount = sizeof(Plan::getSteps());
     }
 }

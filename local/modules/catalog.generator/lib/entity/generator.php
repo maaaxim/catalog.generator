@@ -40,11 +40,6 @@ class GeneratorTable extends Main\Entity\DataManager
                 'data_type' => 'integer',
                 'title' => Loc::getMessage('GENERATOR_ENTITY_STATUS_FIELD'),
             ],
-            'TYPE' => [
-                'data_type' => 'text',
-                'required' => true,
-                'title' => Loc::getMessage('GENERATOR_ENTITY_TYPE_FIELD'),
-            ],
             'ITEMS_PER_STEP' => [
                 'data_type' => 'integer',
                 'title' => Loc::getMessage('GENERATOR_ENTITY_ITEMS_PER_STEP_FIELD'),
