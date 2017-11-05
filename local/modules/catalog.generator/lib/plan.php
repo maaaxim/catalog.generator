@@ -63,7 +63,7 @@ class Plan
         }
         if($remainder > 0){
             $data = [
-                "STEP" => 7 + $lastStep + 1,
+                "STEP" => $lastStep + 1,
                 "STATUS" => 0,
                 "ITEMS_PER_STEP" => $remainder
             ];

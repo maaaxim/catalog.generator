@@ -86,61 +86,41 @@ class Steps
 
         $lastItem = $stepRes->fetch();
 
-        // Последняя запись со статусом 1 - выгрузка завершена
+        // Finish
         if($lastItem["STATUS"] == 1){
             return false;
         } else {
 
-            // если таблица пуста - создаём план
             if ($lastItem == false) {
 
-                // $steps = Plan::getSteps();
+                // Gen structure
+                $structure = Plan::getSteps();
+                foreach($structure as $part){
+                    $partObject = new $part();
+                    $partObject->generate();
+                }
 
-                // echo "make plan";
-                $catalog = new \Catalog\Generator\Types\Catalog();
-                $catalog->generate();
-
-                $productProperty = new \Catalog\Generator\Types\ProductProperty();
-                $productProperty->generate();
-
-                $skuProperty = new \Catalog\Generator\Types\SkuProperty();
-                $skuProperty->generate();
-
-                $price = new \Catalog\Generator\Types\Price();
-                $price->generate();
-
-                $store = new \Catalog\Generator\Types\Store();
-                $store->generate();
-
-                // add test product
+                // Gen products plan
                 $plan = new Plan();
                 $plan->initProductsPlan();
 
-                // and start
+                // Job first plan step
                 $this->setCount();
                 $this->initStep();
 
             } else {
 
-                // echo "gen product";
+                // Go step
                 $this->step     = (int) $lastItem["STEP"];
                 $this->id       = (int) $lastItem["ID"];
                 $this->stepSize = (int) $lastItem["ITEMS_PER_STEP"];
                 $this->type     = new Product();
+
+                // echo "<pre>"; var_dump($lastItem); echo "</pre>";
             }
         }
 
         return true;
-    }
-
-    /**
-     * @param string $type
-     * @return Generateable
-     */
-    private function createGenerateable(string $type):Generateable {
-        if(!class_exists($type))
-            throw new \InvalidArgumentException("$type is not a valid type!");
-        return new $type();
     }
 
     /**

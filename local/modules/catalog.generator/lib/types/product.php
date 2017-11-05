@@ -71,7 +71,7 @@ class Product extends CatalogProduct implements Generateable
 
     public function getStepSize():int
     {
-        // !WRONG
+        // !WRONG @TODO
         return Option::get("catalog.generator", "types_product");
     }
 }
