@@ -8,6 +8,7 @@
 
 namespace Catalog\Generator\Types;
 
+use Bitrix\Catalog\CatalogIblockTable;
 use Bitrix\Iblock\TypeLanguageTable;
 use Bitrix\Iblock\TypeTable;
 use Bitrix\Main\Config\Option;
@@ -145,13 +146,8 @@ class Catalog implements Generateable
      * @throws \Exception
      */
     private function setUpCatalog($catalogId){
-        global $APPLICATION;
         $arFields = ['IBLOCK_ID' => $catalogId];
-        $boolResult = \CCatalog::Add($arFields);
-        if ($boolResult == false) {
-            if ($ex = $APPLICATION->GetException())
-                throw new \Exception($ex->GetString());
-        }
+        CatalogIblockTable::add($arFields);
     }
 
     /**

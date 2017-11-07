@@ -25,7 +25,7 @@ class Steps
 
     public function __construct(){
         $this->setCount();
-        // $this->cleanSteps(); die();
+        //$this->cleanSteps(); die();
     }
 
     /**
@@ -77,50 +77,52 @@ class Steps
      * @return bool
      */
     private function initStep():bool {
-
+        $inProgress = true;
         $stepRes = GeneratorTable::getList([
             "order" => ["STATUS" => "ASC", "ID" => "ASC"],
             "select" => ["ID", "STEP", "STATUS", "ITEMS_PER_STEP"],
             "limit" => 1
         ]);
-
         $lastItem = $stepRes->fetch();
-
         // Finish
         if($lastItem["STATUS"] == 1){
-            return false;
+            $inProgress = false;
         } else {
-
             if ($lastItem == false) {
-
-                // Gen structure
-                $structure = Plan::getSteps();
-                foreach($structure as $part){
-                    $partObject = new $part();
-                    $partObject->generate();
-                }
-
-                // Gen products plan
-                $plan = new Plan();
-                $plan->initProductsPlan();
-
-                // Job first plan step
-                $this->setCount();
-                $this->initStep();
-
+                $this->firstStep();
             } else {
-
                 // Go step
                 $this->step     = (int) $lastItem["STEP"];
                 $this->id       = (int) $lastItem["ID"];
                 $this->stepSize = (int) $lastItem["ITEMS_PER_STEP"];
                 $this->type     = new Product();
-
-                // echo "<pre>"; var_dump($lastItem); echo "</pre>";
             }
         }
+        return $inProgress;
+    }
 
-        return true;
+    /**
+     * First step:
+     * 1. Generates db structure
+     * 2. Generates products generation plan
+     * 3. Initiates first step
+     */
+    public function firstStep()
+    {
+        // Gen structure
+        $structure = Plan::getSteps();
+        foreach($structure as $part){
+            $partObject = new $part();
+            $partObject->generate();
+        }
+
+        // Gen products plan
+        $plan = new Plan();
+        $plan->initProductsPlan();
+
+        // Job first plan step
+        $this->setCount();
+        $this->initStep();
     }
 
     /**

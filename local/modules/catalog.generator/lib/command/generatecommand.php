@@ -18,7 +18,7 @@ class GenerateCommand extends BitrixCommand
      * {@inheritdoc}
      */
     protected function configure(){
-        $this->setName('catalog:generate')
+        $this->setName('catalog.generator:start')
             ->setDescription('Start catalog generation process');
     }
 
@@ -26,20 +26,16 @@ class GenerateCommand extends BitrixCommand
      * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output){
-
-        $steps = new Steps();
-
         $output->writeln('<info>Catalog generation process started</info>');
+        $steps = new Steps();
+        if($steps->getCount() <= 0)
+            $steps->firstStep();
         $progress = new ProgressBar($output, $steps->getCount());
         $progress->start();
-
         while($stepsCompleted = $steps->createNext())
-            $progress->advance($stepsCompleted);
-
+            $progress->advance();
         $progress->finish();
-
         echo PHP_EOL;
-
         return 0;
     }
 }
