@@ -69,7 +69,7 @@ class catalog_generator extends CModule {
         DeleteDirFilesEx('/bitrix/js/' . $this->MODULE_ID . '/');
         DeleteDirFilesEx('/bitrix/panel/' . $this->MODULE_ID . '/');
         DeleteDirFiles(
-            $_SERVER["DOCUMENT_ROOT"] . "/local/modules/" . $this->MODULE_ID . "/install/admin",
+            $_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/" . $this->MODULE_ID . "/install/admin",
             $_SERVER["DOCUMENT_ROOT"] . "/bitrix/admin"
         );
     }

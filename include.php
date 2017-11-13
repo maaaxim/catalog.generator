@@ -10,7 +10,7 @@ require_once ($_SERVER["DOCUMENT_ROOT"] . "/vendor/autoload.php");
 \CJSCore::Init('jquery');
 
 // @TODO put somewhere
-define("MODULE_IMG_PATH", '/local/modules/catalog.generator/images/');
+define("MODULE_IMG_PATH", '/bitrix/modules/catalog.generator/images/');
 
 \CJSCore::RegisterExt(
 	"catalog_generator",

@@ -1,1 +1,1 @@
-<? require($_SERVER["DOCUMENT_ROOT"] . "/local/modules/catalog.generator/admin/catalog_generator_controller.php");?>
+<? require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/catalog.generator/admin/catalog_generator_controller.php");?>
