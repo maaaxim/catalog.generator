@@ -1,6 +1,18 @@
 {
-    "require": {
-        "fzaninotto/faker": "^1.7",
-        "notamedia/console-jedi": "1.*"
+  "name": "maaaxim/catalog.generator",
+  "description": "Catalog-generator",
+  "type": "bitrix-module",
+  "support": {
+    "source": "https://github.com/maaaxim/catalog.generator"
+  },
+  "authors": [
+    {
+      "name": "maaaxim"
     }
+  ],
+  "require": {
+    "composer/installers": "~1",
+    "fzaninotto/faker": "^1.7",
+    "notamedia/console-jedi": "1.*"
+  }
 }
