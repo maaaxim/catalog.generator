@@ -1,13 +1,17 @@
 {
   "name": "maaaxim/catalog.generator",
   "description": "Catalog-generator",
+  "keywords": ["bitrix", "modules", "ecommerce", "catalog", "generator"],
+  "homepage": "https://www.facebook.com/loboda.maxim",
   "type": "bitrix-module",
+  "license": "MIT",
   "support": {
     "source": "https://github.com/maaaxim/catalog.generator"
   },
   "authors": [
     {
-      "name": "maaaxim"
+      "name": "Maxim Loboda",
+      "homepage": "https://www.facebook.com/loboda.maxim"
     }
   ],
   "require": {
