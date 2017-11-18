@@ -17,6 +17,6 @@
   "require": {
     "composer/installers": "~1",
     "fzaninotto/faker": "^1.7",
-    "notamedia/console-jedi": "1.*"
+    "notamedia/console-jedi": "^1.1"
   }
 }

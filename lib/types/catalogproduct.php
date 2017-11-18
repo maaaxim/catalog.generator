@@ -105,7 +105,6 @@ abstract class CatalogProduct
     /**
      * Returns filled fields
      *
-     * @param array $arParams
      * @return array
      */
     public function getDataFields():array
@@ -231,7 +230,7 @@ abstract class CatalogProduct
      */
     public function getRandomImage():string
     {
-        $dir = $_SERVER['DOCUMENT_ROOT'] . MODULE_IMG_PATH;
+        $dir = $_SERVER['DOCUMENT_ROOT'] . MODULE_IMG_PATH; // @TODO check command line
         $files = array_values(array_diff(scandir($dir), ['..', '.']));
         $randKey = array_rand($files);
         $randFile = $files[$randKey];
