@@ -8,6 +8,8 @@
 
 namespace Catalog\Generator\Types;
 
+use Bitrix\Main\Config\Option;
+
 class Sku extends CatalogProduct implements Generateable
 {
     const ORDER = 7;
@@ -98,6 +100,6 @@ class Sku extends CatalogProduct implements Generateable
 
     public function getStepSize():int
     {
-        return 1;
+        return (int) Option::get("catalog.generator", "sku_count");
     }
 }

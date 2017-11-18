@@ -18,6 +18,15 @@ use Bitrix\Main\Loader;
 use Bitrix\Highloadblock\HighloadBlockTable;
 use Bitrix\Main\Entity\ExpressionField;
 use Bitrix\Main\Config\Option;
+use CCatalogProduct;
+use CIBlockElement;
+use CCatalogGroup;
+use CFile;
+use CIBlockProperty;
+use CIBlock;
+use CIBlockSection;
+use Cutil;
+use CSite;
 
 abstract class CatalogProduct
 {
@@ -72,7 +81,7 @@ abstract class CatalogProduct
      */
     public function getIblockProps():array
     {
-        $rsProps = \CIBlockProperty::GetList(
+        $rsProps = CIBlockProperty::GetList(
             [],
             ["ACTIVE" => "Y", "IBLOCK_ID" => $this->iblockId]
         );
@@ -103,16 +112,16 @@ abstract class CatalogProduct
         $iblockId = $this->iblockId;
 
         $imgPath = $this->getRandomImage();
-        $previewPicture = \CFile::MakeFileArray($imgPath);
+        $previewPicture = CFile::MakeFileArray($imgPath);
         $detailPicture = $previewPicture;
 
-        \CFile::ResizeImage(
+        CFile::ResizeImage(
             $previewPicture,
             ['width' => $this->config["preview_picture_width"], 'height' => $this->config["preview_picture_height"]],
             BX_RESIZE_IMAGE_EXACT
         );
 
-        \CFile::ResizeImage(
+        CFile::ResizeImage(
             $detailPicture,
             ['width' => $this->config["detail_picture_width"], 'height' => $this->config["detail_picture_height"]],
             BX_RESIZE_IMAGE_EXACT
@@ -120,13 +129,13 @@ abstract class CatalogProduct
 
         $elementName = $this->faker->sentence($this->config["words_in_el_name"]);
 
-        $ibFields = \CIBlock::GetFields($iblockId);
+        $ibFields = CIBlock::GetFields($iblockId);
         $sectionId = false;
         if (intval($arParams['SECTION_ID']) > 0) {
             $sectionId = $arParams['SECTION_ID'];
         } elseif (!$sectionId && $ibFields['IBLOCK_SECTION']['IS_REQUIRED'] == "Y") {
             $arFilter = ['IBLOCK_ID' => $iblockId, 'GLOBAL_ACTIVE' => 'Y'];
-            $rsSections = \CIBlockSection::GetList(["ID" => "ASC"], $arFilter, true, ['ID'], ['nTopCount' => 1]);
+            $rsSections = CIBlockSection::GetList(["ID" => "ASC"], $arFilter, true, ['ID'], ['nTopCount' => 1]);
             $arSection = $rsSections->GetNext();
             $sectionId = $arSection['ID'];
         }
@@ -136,7 +145,7 @@ abstract class CatalogProduct
             "IBLOCK_ID" => $iblockId,
             "NAME" => $elementName,
             "DATE_ACTIVE_FROM" => self::getCurDateSiteFormat(),
-            "CODE" => \Cutil::translit($elementName, "ru"),
+            "CODE" => Cutil::translit($elementName, "ru"),
             "ACTIVE" => "Y",
             "PREVIEW_TEXT" => $this->faker->sentence($this->config["preview_text_length"]),
             "DETAIL_TEXT" => self::nl2p($this->faker->text($this->config["detail_text_length"])),
@@ -228,7 +237,7 @@ abstract class CatalogProduct
     public static function getCurDateSiteFormat($mode = 'FULL')
     {
         global $DB;
-        return date($DB->DateFormatToPHP(\CSite::GetDateFormat($mode)), time());
+        return date($DB->DateFormatToPHP(CSite::GetDateFormat($mode)), time());
     }
 
     /**
@@ -366,7 +375,7 @@ abstract class CatalogProduct
     private function generateIblockPropValDate($iblockProp)
     {
         global $DB;
-        $siteFormat = \CSite::GetDateFormat('SHORT');
+        $siteFormat = CSite::GetDateFormat('SHORT');
         $phpFormat = $DB->DateFormatToPHP($siteFormat);
 
         if ($iblockProp['MULTIPLE'] == "Y") {
@@ -390,7 +399,7 @@ abstract class CatalogProduct
     private function generateIblockPropValDateTime($iblockProp)
     {
         global $DB;
-        $siteFormat = \CSite::GetDateFormat('FULL');
+        $siteFormat = CSite::GetDateFormat('FULL');
         $phpFormat = $DB->DateFormatToPHP($siteFormat);
 
         if ($iblockProp['MULTIPLE'] == "Y") { // множественное
@@ -486,10 +495,10 @@ abstract class CatalogProduct
         if ($iblockProp['MULTIPLE'] == "Y") {
             $val = [];
             for ($i = 0; $i < $this->config['property_multiple_count']; $i++) {
-                $val[] = \CFile::MakeFileArray(self::getRandomImage());
+                $val[] = CFile::MakeFileArray(self::getRandomImage());
             }
         } else {
-            $val = \CFile::MakeFileArray(self::getRandomImage());
+            $val = CFile::MakeFileArray(self::getRandomImage());
         }
 
         return $val;
@@ -508,7 +517,7 @@ abstract class CatalogProduct
                 $val = [];
                 $arSelect = ["ID"];
                 $arFilter = ["IBLOCK_ID" => $iblockProp['IBLOCK_ID'], "ACTIVE" => "Y"];
-                $rsElements = \CIBlockElement::GetList(
+                $rsElements = CIBlockElement::GetList(
                     ["RAND" => "ASC"], $arFilter,
                     false,
                     ["nTopCount" => $this->config['property_multiple_count']],
@@ -520,7 +529,7 @@ abstract class CatalogProduct
             } else {
                 $arSelect = ["ID"];
                 $arFilter = ["IBLOCK_ID" => $iblockProp['IBLOCK_ID'], "ACTIVE" => "Y"];
-                $rsElements = \CIBlockElement::GetList(
+                $rsElements = CIBlockElement::GetList(
                     ["RAND" => "ASC"],
                     $arFilter,
                     false,
@@ -577,7 +586,7 @@ abstract class CatalogProduct
      */
     public function getDataProduct($productId):array
     {
-        $arPriceType = \CCatalogGroup::GetBaseGroup();
+        $arPriceType = CCatalogGroup::GetBaseGroup();
         $arPriceTypeId = $arPriceType["ID"];
         $arPriceFields = [
             "PRODUCT_ID" => $productId,
@@ -668,7 +677,7 @@ abstract class CatalogProduct
     protected function addIblockElement():int
     {
         // create element
-        $element = new \CIBlockElement;
+        $element = new CIBlockElement;
 
         // get props array like code => val
         $arProps = $this->getDataProps();
@@ -694,7 +703,7 @@ abstract class CatalogProduct
         $productData = $this->getDataProduct($elementId);
 
         // add product
-        \CCatalogProduct::Add(
+        CCatalogProduct::Add(
             [
                 'ID' => $elementId,
                 'QUANTITY' => $totalCount,

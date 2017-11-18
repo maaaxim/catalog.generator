@@ -23,13 +23,15 @@ class Plan
 {
     /**
      * @var array things we can generate immediately
+     * @TODO to class Structure
      */
     protected static $steps = [
         0 => "Catalog",
         1 => "ProductProperty",
         2 => "SkuProperty",
         3 => "Price",
-        4 => "Store"
+        4 => "Store",
+        5 => "Section"
     ];
 
     private $plan;

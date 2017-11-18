@@ -10,6 +10,7 @@ namespace Catalog\Generator\Types;
 
 use Bitrix\Iblock\ElementTable;
 use Bitrix\Main\Config\Option;
+use Catalog\Generator\Entity\GeneratorTable;
 
 class Product extends CatalogProduct implements Generateable
 {
@@ -26,14 +27,8 @@ class Product extends CatalogProduct implements Generateable
      */
     protected $iblockId;
 
-    /**
-     * @var bool
-     */
-    protected $skuCount;
-
     public function __construct()
     {
-        $this->skuCount = (int) Option::get("catalog.generator", "sku_count");
         parent::__construct();
     }
 
@@ -45,9 +40,8 @@ class Product extends CatalogProduct implements Generateable
         $elementId = $this->addIblockElement();
         if($this->skuCount > 0){
             $sku = new Sku($elementId);
-            for($i = 0; $i < $this->skuCount; $i++){
+            for($i = 0; $i < $sku->stepSize; $i++)
                 $sku->generate();
-            }
         } else {
             $totalCount = $this->addStoresCount($elementId);
             $this->addCatalogProduct($elementId, $totalCount);
@@ -71,7 +65,12 @@ class Product extends CatalogProduct implements Generateable
 
     public function getStepSize():int
     {
-        // !WRONG @TODO
-        return Option::get("catalog.generator", "types_product");
+        $stepRes = GeneratorTable::getList([
+            "order" => ["STATUS" => "ASC", "ID" => "ASC"],
+            "select" => ["ID", "STEP", "STATUS", "ITEMS_PER_STEP"],
+            "limit" => 1
+        ]);
+        $lastItem = $stepRes->fetch();
+        return (int) $lastItem["ITEMS_PER_STEP"];
     }
 }

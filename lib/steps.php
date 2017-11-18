@@ -25,7 +25,7 @@ class Steps
 
     public function __construct(){
         $this->setCount();
-        //$this->cleanSteps(); die();
+        // $this->cleanSteps(); die();
     }
 
     /**
@@ -39,6 +39,7 @@ class Steps
     public function createNext(){
         try {
             if ($this->initStep()) {
+                $this->stepSize = $this->type->getStepSize();
                 for($i = 0; $i < $this->stepSize; $i++)
                     $this->type->generate();
                 $this->finish();
@@ -94,7 +95,7 @@ class Steps
                 // Go step
                 $this->step     = (int) $lastItem["STEP"];
                 $this->id       = (int) $lastItem["ID"];
-                $this->stepSize = (int) $lastItem["ITEMS_PER_STEP"];
+                // $this->stepSize = (int) $lastItem["ITEMS_PER_STEP"];
                 $this->type     = new Product();
             }
         }
@@ -113,7 +114,8 @@ class Steps
         $structure = Plan::getSteps();
         foreach($structure as $part){
             $partObject = new $part();
-            $partObject->generate();
+            for($i = 0; $i < $partObject->getStepSize(); $i++)
+                $partObject->generate();
         }
 
         // Gen products plan
@@ -128,14 +130,14 @@ class Steps
     /**
      * Update step in db
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function finish(){
         $result = GeneratorTable::update($this->id, [
             "STATUS" => 1,
         ]);
         if (!$result->isSuccess()){
-            throw new Exception($result->getErrorMessages());
+            throw new \Exception($result->getErrorMessages());
         }
     }
 
