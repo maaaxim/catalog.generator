@@ -41,11 +41,6 @@ class Section implements Generateable
     protected $faker;
 
     /**
-     * @var string
-     */
-    protected $name;
-
-    /**
      * Iblock code for product
      */
     const IBLOCK_CODE = "catalog_catalog_generator";
@@ -57,7 +52,6 @@ class Section implements Generateable
     {
         $this->setIblockId();
         $this->faker = Factory::create('ru_RU');
-        $this->name = $this->faker->sentence(rand(1, 3));
     }
 
     /**
@@ -102,7 +96,7 @@ class Section implements Generateable
     protected function createFirstLevelItem()
     {
         SectionTable::add([
-            "NAME" => $this->name,
+            "NAME" => $this->createName(),
             "IBLOCK_ID" => $this->iblockId,
             "TIMESTAMP_X" => new Date(),
             "DEPTH_LEVEL" => 1
@@ -117,7 +111,7 @@ class Section implements Generateable
     protected function createSecondLevelItem($sectionId)
     {
         SectionTable::add([
-            "NAME" => $this->name,
+            "NAME" => $this->createName(),
             "IBLOCK_ID" => $this->iblockId,
             "TIMESTAMP_X" => new Date(),
             "DEPTH_LEVEL" => 2,
@@ -152,5 +146,15 @@ class Section implements Generateable
         } else {
             throw new Exception("Iblock is not created!");
         }
+    }
+
+    /**
+     * @return string Creates name without dot in the end
+     */
+    protected function createName():string
+    {
+        $sentence = $this->faker->sentence(rand(1, 3));
+        $name = substr($sentence, 0, strlen($sentence) - 1);
+        return $name;
     }
 }

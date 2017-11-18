@@ -12,6 +12,7 @@ use Bitrix\Catalog\GroupTable;
 use Bitrix\Catalog\PriceTable;
 use Bitrix\Catalog\StoreProductTable;
 use Bitrix\Catalog\StoreTable;
+use Bitrix\Iblock\SectionTable;
 use Faker\Factory;
 use Bitrix\Iblock\IblockTable;
 use Bitrix\Main\Loader;
@@ -107,7 +108,7 @@ abstract class CatalogProduct
      * @param array $arParams
      * @return array
      */
-    public function getDataFields(array $arParams = []):array
+    public function getDataFields():array
     {
         $iblockId = $this->iblockId;
 
@@ -128,18 +129,7 @@ abstract class CatalogProduct
         );
 
         $elementName = $this->faker->sentence($this->config["words_in_el_name"]);
-
-        $ibFields = CIBlock::GetFields($iblockId);
-        $sectionId = false;
-        if (intval($arParams['SECTION_ID']) > 0) {
-            $sectionId = $arParams['SECTION_ID'];
-        } elseif (!$sectionId && $ibFields['IBLOCK_SECTION']['IS_REQUIRED'] == "Y") {
-            $arFilter = ['IBLOCK_ID' => $iblockId, 'GLOBAL_ACTIVE' => 'Y'];
-            $rsSections = CIBlockSection::GetList(["ID" => "ASC"], $arFilter, true, ['ID'], ['nTopCount' => 1]);
-            $arSection = $rsSections->GetNext();
-            $sectionId = $arSection['ID'];
-        }
-
+        $sectionId = $this->getSectionId();
         $arFields = [
             "IBLOCK_SECTION_ID" => $sectionId,
             "IBLOCK_ID" => $iblockId,
@@ -155,6 +145,27 @@ abstract class CatalogProduct
         ];
 
         return $arFields;
+    }
+
+    /**
+     * Returns rnd id of subsection
+     *
+     * @return int
+     */
+    protected function getSectionId():int
+    {
+        $secRes = SectionTable::getList([
+            "filter" => [
+                "IBLOCK_ID" => $this->iblockId,
+                "DEPTH_LEVEL" => 2
+            ],
+            "select" => ["ID"]
+        ]);
+        while($sectionFields = $secRes->fetch())
+            $sections[] = (int) $sectionFields["ID"];
+        $rndKey = array_rand($sections, 1);
+        $sectionId = (int) $sections[$rndKey];
+        return $sectionId;
     }
 
     /**
