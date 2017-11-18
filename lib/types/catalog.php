@@ -222,7 +222,7 @@ class Catalog implements Generateable
     /**
      * @return int
      */
-    public function getStepSize():int
+    public function getCountToGenerate():int
     {
         return 1;
     }

@@ -17,7 +17,7 @@ class ProductProperty extends Property implements Generateable
      */
     const IBLOCK_CODE = "catalog_catalog_generator";
 
-    public function getStepSize():int
+    public function getCountToGenerate():int
     {
         return (int) Option::get("catalog.generator", "types_productproperty");
     }

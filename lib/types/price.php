@@ -83,7 +83,7 @@ class Price implements Generateable
         $this->code = strtoupper(str_replace(' ', '_', $this->name));
     }
 
-    public function getStepSize():int
+    public function getCountToGenerate():int
     {
         return Option::get("catalog.generator", "types_price");
     }

@@ -74,7 +74,7 @@ class Store implements Generateable
             throw new \Exception("Can't include catalog module");
     }
 
-    public function getStepSize():int
+    public function getCountToGenerate():int
     {
         return (int) Option::get("catalog.generator", "types_store");
     }

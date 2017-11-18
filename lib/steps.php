@@ -39,7 +39,7 @@ class Steps
     public function createNext(){
         try {
             if ($this->initStep()) {
-                $this->stepSize = $this->type->getStepSize();
+                $this->stepSize = $this->type->getCountToGenerate();
                 for($i = 0; $i < $this->stepSize; $i++)
                     $this->type->generate();
                 $this->finish();
@@ -114,7 +114,7 @@ class Steps
         $structure = Plan::getSteps();
         foreach($structure as $part){
             $partObject = new $part();
-            for($i = 0; $i < $partObject->getStepSize(); $i++)
+            for($i = 0; $i < $partObject->getCountToGenerate(); $i++)
                 $partObject->generate();
         }
 

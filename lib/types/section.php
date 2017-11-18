@@ -16,7 +16,7 @@ class Section implements Generateable
         // TODO: Implement generate() method.
     }
 
-    public function getStepSize()
+    public function getCountToGenerate()
     {
         // TODO: Implement getStepSize() method.
         return 1;

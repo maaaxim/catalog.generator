@@ -63,7 +63,7 @@ class Product extends CatalogProduct implements Generateable
         \CIBlockElement::Delete($id);
     }
 
-    public function getStepSize():int
+    public function getCountToGenerate():int
     {
         $stepRes = GeneratorTable::getList([
             "order" => ["STATUS" => "ASC", "ID" => "ASC"],

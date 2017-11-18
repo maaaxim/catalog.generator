@@ -98,7 +98,7 @@ class Sku extends CatalogProduct implements Generateable
         $this->productName = $product["NAME"];
     }
 
-    public function getStepSize():int
+    public function getCountToGenerate():int
     {
         return (int) Option::get("catalog.generator", "sku_count");
     }
