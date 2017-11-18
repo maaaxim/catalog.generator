@@ -204,19 +204,12 @@ class Catalog implements Generateable
      * @throws \Exception
      */
     private function connectSkuToCatalog($skuId, $catalogId, $linkPropertyId){
-        global $APPLICATION;
         $arFields = [
             'IBLOCK_ID' => $skuId,
             'PRODUCT_IBLOCK_ID' => $catalogId,
             'SKU_PROPERTY_ID' => $linkPropertyId
         ];
-        $boolResult = \CCatalog::Add($arFields);
-        if ($boolResult == false) {
-            if ($ex = $APPLICATION->GetException()) {
-                if ($ex = $APPLICATION->GetException())
-                    throw new \Exception($ex->GetString());
-            }
-        }
+        CatalogIblockTable::add($arFields);
     }
 
     /**
