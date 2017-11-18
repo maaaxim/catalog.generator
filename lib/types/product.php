@@ -23,12 +23,18 @@ class Product extends CatalogProduct implements Generateable
     const IBLOCK_CODE = "catalog_catalog_generator";
 
     /**
+     * @var int
+     */
+    protected $skuCount;
+
+    /**
      * @var iblock id
      */
     protected $iblockId;
 
     public function __construct()
     {
+        $this->skuCount = (int) Option::get("catalog.generator", "sku_count");
         parent::__construct();
     }
 
@@ -40,7 +46,7 @@ class Product extends CatalogProduct implements Generateable
         $elementId = $this->addIblockElement();
         if($this->skuCount > 0){
             $sku = new Sku($elementId);
-            for($i = 0; $i < $sku->stepSize; $i++)
+            for($i = 0; $i < $this->skuCount; $i++)
                 $sku->generate();
         } else {
             $totalCount = $this->addStoresCount($elementId);

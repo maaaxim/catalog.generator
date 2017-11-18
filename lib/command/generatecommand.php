@@ -31,9 +31,11 @@ class GenerateCommand extends BitrixCommand
         if($steps->getCount() <= 0)
             $steps->firstStep();
         $progress = new ProgressBar($output, $steps->getCount());
+        $progress->setRedrawFrequency(1);
         $progress->start();
-        while($stepsCompleted = $steps->createNext())
+        while($stepsCompleted = $steps->createNext()){
             $progress->advance();
+        }
         $progress->finish();
         echo PHP_EOL;
         return 0;
