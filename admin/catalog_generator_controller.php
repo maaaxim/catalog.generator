@@ -1,10 +1,15 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_admin_before.php';
-\Bitrix\Main\Loader::includeModule("catalog.generator");
+use Bitrix\Main\Loader;
+use Catalog\Generator\JsonBar;
+use Catalog\Generator\Steps;
+use CJSCore;
 
-$steps = new \Catalog\Generator\Steps();
-if(\Catalog\Generator\JsonBar::isAjax()){
-    $progress = new \Catalog\Generator\JsonBar();
+require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_admin_before.php';
+Loader::includeModule("catalog.generator");
+
+$steps = new Steps();
+if(JsonBar::isAjax()){
+    $progress = new JsonBar();
     while($stepsCompleted = $steps->createNext()){
         $progress->advance($steps);
     }
@@ -13,7 +18,7 @@ if(\Catalog\Generator\JsonBar::isAjax()){
 }
 
 $APPLICATION->SetAdditionalCSS('/bitrix/panel/catalog.generator/catalog_generator.css');
-\CJSCore::Init(["catalog_generator"]);
+CJSCore::Init(["catalog_generator"]);
 
 require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_admin_after.php';
 ?>

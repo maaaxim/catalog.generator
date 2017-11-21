@@ -23,7 +23,8 @@ class Steps
     protected $id;
     protected $errors;
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->setCount();
         // $this->cleanSteps(); die();
     }
@@ -36,7 +37,8 @@ class Steps
      * @return int
      * @throws Exception
      */
-    public function createNext(){
+    public function createNext()
+    {
         try {
             if ($this->initStep()) {
                 $this->stepSize = $this->type->getCountToGenerate();
@@ -59,7 +61,8 @@ class Steps
      *
      * @return int
      */
-    public function getCount(){
+    public function getCount()
+    {
         return $this->stepCount;
     }
 
@@ -68,7 +71,8 @@ class Steps
      *
      * @return int
      */
-    public function getCurrent(){
+    public function getCurrent()
+    {
         return $this->step;
     }
 
@@ -77,7 +81,8 @@ class Steps
      *
      * @return bool
      */
-    private function initStep():bool {
+    private function initStep():bool
+    {
         $inProgress = true;
         $stepRes = GeneratorTable::getList([
             "order" => ["STATUS" => "ASC", "ID" => "ASC"],
@@ -132,7 +137,8 @@ class Steps
      *
      * @throws \Exception
      */
-    private function finish(){
+    private function finish()
+    {
         $result = GeneratorTable::update($this->id, [
             "STATUS" => 1,
         ]);
@@ -144,7 +150,8 @@ class Steps
     /**
      * Clean table
      */
-    private function cleanSteps(){
+    private function cleanSteps()
+    {
         $stepRes = GeneratorTable::getList([
             "select" => ["ID"]
         ]);
@@ -157,7 +164,8 @@ class Steps
      *
      * @return int
      */
-    private function setCount(){
+    private function setCount()
+    {
         $cntRes = GeneratorTable::getList([
             'select' => ['CNT'],
             'runtime' => [

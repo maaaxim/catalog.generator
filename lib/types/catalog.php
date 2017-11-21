@@ -13,6 +13,9 @@ use Bitrix\Iblock\TypeLanguageTable;
 use Bitrix\Iblock\TypeTable;
 use Bitrix\Main\Config\Option;
 use Bitrix\Main\Loader;
+use CIBlock;
+use CIBlockProperty;
+use Exception;
 
 /**
  * Class Catalog
@@ -40,7 +43,8 @@ class Catalog implements Generateable
     /**
      * Catalog constructor.
      */
-    public function __construct(){;
+    public function __construct()
+    {
         $this->skuPerProduct = (int) Option::get("catalog.generator", "sku_count");
         // need sku?
         if($this->skuPerProduct > 0)
@@ -52,7 +56,8 @@ class Catalog implements Generateable
     /**
      * @inheritdoc
      */
-    function generate(){
+    function generate()
+    {
         $this->includeModules();
         $this->makeType();
         $this->cleanCache();
@@ -62,7 +67,8 @@ class Catalog implements Generateable
     /**
      * Include modules
      */
-    private function includeModules(){
+    private function includeModules()
+    {
         if(!Loader::includeModule("catalog"))
             throw new Exception("Catalog module is not included!");
         if(!Loader::includeModule("iblock"))
@@ -72,7 +78,8 @@ class Catalog implements Generateable
     /**
      * Create iblock types
      */
-    private function makeType(){
+    private function makeType()
+    {
         $id = self::IBLOCK_TYPE;
         $typesRes = TypeTable::getList(["filter" => ["ID" => $id]]);
         if(!$typeFields = $typesRes->fetch()){
@@ -90,7 +97,8 @@ class Catalog implements Generateable
     /**
      * Clean cache
      */
-    private function cleanCache(){
+    private function cleanCache()
+    {
         global $CACHE_MANAGER;
         $CACHE_MANAGER->CleanAll();
     }
@@ -98,7 +106,8 @@ class Catalog implements Generateable
     /**
      * Create iblock data
      */
-    private function makeIblocks(){
+    private function makeIblocks()
+    {
         $typeRes = TypeTable::getList([
             "filter" => ["=ID" => self::IBLOCK_TYPE],
             "select" => ["ID"]
@@ -121,21 +130,23 @@ class Catalog implements Generateable
      * @return bool
      * @throws \Exception
      */
-    private function makeCatalogIblock($iblockType){
-        $ib = new \CIBlock;
+    private function makeCatalogIblock($iblockType)
+    {
+        $ib = new CIBlock;
         $arFields = [
             "ACTIVE" => "Y",
             "NAME" => "Catalog",
             "CODE" => "catalog_" . $iblockType,
-            "LIST_PAGE_URL" => "/catalog_" . $iblockType . "/", // @TODO real paths
-            "DETAIL_PAGE_URL" => "catalog_" . $iblockType . "/",
+            "LIST_PAGE_URL" => "/catalog/",
+            "SECTION_PAGE_URL" => "/catalog/#SECTION_CODE_PATH#/",
+            "DETAIL_PAGE_URL"  => "/catalog/#SECTION_CODE_PATH#/#ELEMENT_CODE#/",
             "IBLOCK_TYPE_ID" => $iblockType,
             "SITE_ID" => ["s1"], // @TODO check it
             "SORT" => 500
         ];
         $catalogId = $ib->Add($arFields);
         if($catalogId <= 0)
-            throw new \Exception($ib->LAST_ERROR . " =>" .$iblockType . " error happened!");
+            throw new Exception($ib->LAST_ERROR . " =>" .$iblockType . " error happened!");
         return $catalogId;
     }
 
@@ -145,7 +156,8 @@ class Catalog implements Generateable
      * @param $catalogId
      * @throws \Exception
      */
-    private function setUpCatalog($catalogId){
+    private function setUpCatalog($catalogId)
+    {
         $arFields = ['IBLOCK_ID' => $catalogId];
         CatalogIblockTable::add($arFields);
     }
@@ -157,8 +169,9 @@ class Catalog implements Generateable
      * @return bool
      * @throws \Exception
      */
-    private function makeSkuIblock($iblockType){
-        $ib = new \CIBlock;
+    private function makeSkuIblock($iblockType)
+    {
+        $ib = new CIBlock;
         $arFields = [
             "ACTIVE" => "Y",
             "NAME" => "Sku",
@@ -169,7 +182,7 @@ class Catalog implements Generateable
         ];
         $skuId = $ib->Add($arFields);
         if($skuId <= 0)
-            throw new \Exception($ib->LAST_ERROR . " error happened!");
+            throw new Exception($ib->LAST_ERROR . " error happened!");
         return $skuId;
     }
 
@@ -180,7 +193,8 @@ class Catalog implements Generateable
      * @param $catalogId
      * @return bool
      */
-    private function linkSkuToCatlaog($skuId, $catalogId){
+    private function linkSkuToCatlaog($skuId, $catalogId)
+    {
         $arFields = [
             "NAME" => "Catalog element id",
             "ACTIVE" => "Y",
@@ -190,7 +204,7 @@ class Catalog implements Generateable
             "IBLOCK_ID" => $skuId,
             "LINK_IBLOCK_ID" => $catalogId
         ];
-        $ibp = new \CIBlockProperty;
+        $ibp = new CIBlockProperty;
         $linkPropertyId = $ibp->Add($arFields);
         return $linkPropertyId;
     }
@@ -203,7 +217,8 @@ class Catalog implements Generateable
      * @param $linkPropertyId
      * @throws \Exception
      */
-    private function connectSkuToCatalog($skuId, $catalogId, $linkPropertyId){
+    private function connectSkuToCatalog($skuId, $catalogId, $linkPropertyId)
+    {
         $arFields = [
             'IBLOCK_ID' => $skuId,
             'PRODUCT_IBLOCK_ID' => $catalogId,

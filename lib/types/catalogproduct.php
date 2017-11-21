@@ -559,7 +559,6 @@ abstract class CatalogProduct
     private function setConfig()
     {
         $this->config = [
-            "count"                      => Option::get(self::MODULE_NAME, "count"),
             "words_in_el_name"           => Option::get(self::MODULE_NAME, "words_in_el_name"),
             "preview_text_length"        => Option::get(self::MODULE_NAME, "preview_text_length"),
             "detail_text_length"         => Option::get(self::MODULE_NAME, "detail_text_length"),

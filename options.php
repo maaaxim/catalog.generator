@@ -19,7 +19,6 @@ if ($moduleRight >= "R"):
 				["types_productproperty", GetMessage("CATALOG_CREATOR_TOTAL_PRODUCT_PROPERTIES"), ["text", 24], 'default' => '100'],
 				["types_skuproperty",     GetMessage("CATALOG_CREATOR_TOTAL_SKU_PROPERTIES"), ["text", 24], 'default' => '200'],
                 ["sku_count",             GetMessage("CATALOG_CREATOR_SKU_PER_PRODUCT"), ["text", 24], 'default' => '10'],
-				["count", GetMessage("CATALOG_CREATOR_OPT_COUNT"), ["text", 24], 'default' => '50'],
 				["words_in_el_name", GetMessage("CATALOG_CREATOR_OPT_WORDS_IN_EL_NAME"), ["text", 24], 'default' => '5'],
 				["preview_text_length", GetMessage("CATALOG_CREATOR_OPT_PREVIEW_TEXT_LENGTH"), ["text", 24], 'default' => '150'],
 				["detail_text_length", GetMessage("CATALOG_CREATOR_OPT_DETAIL_TEXT_LENGTH"), ["text", 24], 'default' => '600'],

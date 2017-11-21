@@ -13,6 +13,7 @@ use Bitrix\Iblock\SectionTable;
 use Bitrix\Main\Type\Date;
 use Exception;
 use Faker\Factory;
+use CUtil;
 
 /**
  * Class Section
@@ -95,11 +96,13 @@ class Section implements Generateable
      */
     protected function createFirstLevelItem()
     {
+        $name = $this->createName();
         SectionTable::add([
-            "NAME" => $this->createName(),
+            "NAME" => $name,
             "IBLOCK_ID" => $this->iblockId,
             "TIMESTAMP_X" => new Date(),
-            "DEPTH_LEVEL" => 1
+            "DEPTH_LEVEL" => 1,
+            "CODE" => CUtil::translit($name, "ru")
         ]);
     }
 
@@ -110,12 +113,14 @@ class Section implements Generateable
      */
     protected function createSecondLevelItem($sectionId)
     {
+        $name = $this->createName();
         SectionTable::add([
-            "NAME" => $this->createName(),
+            "NAME" => $name,
             "IBLOCK_ID" => $this->iblockId,
             "TIMESTAMP_X" => new Date(),
             "DEPTH_LEVEL" => 2,
-            "IBLOCK_SECTION_ID" => $sectionId
+            "IBLOCK_SECTION_ID" => $sectionId,
+            "CODE" => CUtil::translit($name, "ru")
         ]);
     }
 

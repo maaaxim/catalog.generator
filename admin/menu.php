@@ -14,8 +14,8 @@ $menu = [
         'items' => [
             [
                 'text' => Loc::getMessage('CATALOG_MAKER_SUBMENU_TITLE'),
-                'url' => 'catalog_generator_controller.php?param1=paramval&lang=' . LANGUAGE_ID,
-                'more_url' => ['catalog_generator_controller.php?param1=paramval&lang=' . LANGUAGE_ID],
+                'url' => 'catalog_generator_controller.php',
+                'more_url' => ['catalog_generator_controller.php'],
                 'title' => Loc::getMessage('CATALOG_MAKER_SUBMENU_TITLE'),
             ]
         ],

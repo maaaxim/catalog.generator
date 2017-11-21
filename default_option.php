@@ -7,7 +7,6 @@ $catalog_generator_default_option = [
     "types_productproperty" => '100',
     "types_skuproperty" => '200',
     "sku_count" => '10',
-    "count" => '50',
     "words_in_el_name" => '5',
     "preview_text_length" => '150',
     "detail_text_length" => '600',

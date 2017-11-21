@@ -81,7 +81,6 @@ abstract class Property
 
         // choose random type
         $type = $types[rand(0, sizeof($types) - 1)];
-
         // gen prop
         switch($type) {
             // str
