@@ -1,20 +1,25 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: maxim
- * Date: 26.08.2017
- * Time: 21:38
- */
 
 namespace Catalog\Generator;
 
+use Bitrix\Main\Application;
 
+/**
+ * Class JsonBar responsible for showing response status to frontend
+ * @package Catalog\Generator
+ */
 class JsonBar
 {
+    /**
+     * @var array Contains response status info
+     */
     protected $response;
-    protected $percent;
 
-    public function __construct(){
+    /**
+     * JsonBar constructor.
+     */
+    public function __construct()
+    {
         $this->response = [
             "max"      => false,
             "step"     => false,
@@ -30,10 +35,9 @@ class JsonBar
      * @param Steps $stepsInstance
      * @internal param int $step Number of steps to advance
      */
-    public function advance(Steps $stepsInstance){
-
+    public function advance(Steps $stepsInstance)
+    {
         $this->response["text"]  = "Generating...";
-
         $this->response["step"] = $stepsInstance->getCurrent();
         $this->response["max"] = $stepsInstance->getCount();
 
@@ -53,7 +57,8 @@ class JsonBar
     /**
      * Finishing the process.
      */
-    public function finish(){
+    public function finish()
+    {
         $this->response["finished"] = true;
         $this->response["percent"]  = 100;
         $this->response["text"]  = "Finished!";
@@ -65,8 +70,10 @@ class JsonBar
      *
      * @return bool
      */
-    public static function isAjax(){
-        if($_REQUEST["ajax"] == "y")
+    public static function isAjax()
+    {
+        $request = Application::getInstance()->getContext()->getRequest();
+        if($request->isAjaxRequest())
             return true;
         else
             return false;
@@ -75,7 +82,8 @@ class JsonBar
     /**
      * Show json response
      */
-    private function notify(){
+    private function notify()
+    {
         echo json_encode($this->response);
         die();
     }
