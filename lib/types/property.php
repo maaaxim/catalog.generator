@@ -355,19 +355,27 @@ abstract class Property
     /**
      * creates hl-block
      *
-     * @param $entityPostfix
-     * @param $tablePostfix
+     * @param string $entityPostfix
+     * @param string $tablePostfix
+     * @param int $attempt recursion attempt count
      * @return int
      * @throws \Exception
      */
-    private function addHlBlock(string $entityPostfix, string $tablePostfix):int
+    private function addHlBlock(string $entityPostfix, string $tablePostfix, $attempt = 0):int
     {
         $result = HighloadBlockTable::add([
             'NAME' => 'CatalogGenerator' . $entityPostfix,
             'TABLE_NAME' => "b_catalog_generator_" . $tablePostfix,
         ]);
         if (!$result->isSuccess()) {
-            throw new \Exception(implode(" ", $result->getErrorMessages()));
+            if($attempt > 5)
+                throw new \Exception(implode(" ", $result->getErrorMessages()));
+            $hlIblockId = $this->addHlBlock(
+                $entityPostfix . randString(5),
+                $tablePostfix . randString(5),
+                $attempt + 1
+            );
+            return $hlIblockId;
         } else {
             $hlIblockId = $result->getId();
         }

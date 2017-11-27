@@ -15,49 +15,49 @@ use Catalog\Generator\Types\Product;
 class Steps
 {
     /**
-     *
+     * Path to pics
      */
     const MODULE_IMG_PATH = '/bitrix/modules/catalog.generator/images/';
 
     /**
-     *
+     * Iblock type code
      */
     const IBLOCK_TYPE = "catalog_generator";
 
     /**
-     *
+     * Module name
      */
     const MODULE_NAME = "catalog.generator";
 
     /**
-     * @var
+     * @var current step
      */
     protected $step;
 
     /**
-     * @var
+     * @var step size
      */
     protected $stepSize;
 
     /**
-     * @var
+     * @var step count
      */
     protected $stepCount;
 
     /**
-     * @var
+     * @var type of generateable
      */
     protected $type;
 
     /**
-     * @var
+     * @var step id
      */
     protected $id;
 
     /**
      * @var
      */
-    protected $errors;
+    protected $error = "";
 
     public function __construct()
     {
@@ -85,8 +85,7 @@ class Steps
                 return 0;
             }
         } catch (\Exception $exception) {
-            $this->errors[] = $exception;
-            // $exception->getMessage()
+            $this->error = $exception;
             return 0;
         }
         return $this->stepSize;
@@ -210,5 +209,13 @@ class Steps
         ]);
         $result = $cntRes->fetch();
         $this->stepCount = (int) $result["CNT"];
+    }
+
+    /**
+     * @return array
+     */
+    public function getError()
+    {
+        return $this->error;
     }
 }

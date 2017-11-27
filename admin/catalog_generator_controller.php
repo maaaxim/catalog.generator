@@ -9,9 +9,9 @@ Loader::includeModule("catalog.generator");
 
 $steps = new Steps();
 if(JsonBar::isAjax()){
-    $progress = new JsonBar();
+    $progress = new JsonBar($steps);
     while($stepsCompleted = $steps->createNext()){
-        $progress->advance($steps);
+        $progress->advance();
     }
 
     $progress->finish();

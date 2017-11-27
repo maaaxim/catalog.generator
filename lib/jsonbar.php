@@ -16,10 +16,17 @@ class JsonBar
     protected $response;
 
     /**
-     * JsonBar constructor.
+     * @var Steps
      */
-    public function __construct()
+    protected $stepsInstance;
+
+    /**
+     * JsonBar constructor.
+     * @param Steps $stepsInstance
+     */
+    public function __construct(Steps $stepsInstance)
     {
+        $this->stepsInstance = $stepsInstance;
         $this->response = [
             "max"      => false,
             "step"     => false,
@@ -32,14 +39,13 @@ class JsonBar
     /**
      * Advances the progress output X steps.
      *
-     * @param Steps $stepsInstance
      * @internal param int $step Number of steps to advance
      */
-    public function advance(Steps $stepsInstance)
+    public function advance()
     {
         $this->response["text"]  = "Generating...";
-        $this->response["step"] = $stepsInstance->getCurrent();
-        $this->response["max"] = $stepsInstance->getCount();
+        $this->response["step"] = $this->stepsInstance->getCurrent();
+        $this->response["max"] = $this->stepsInstance->getCount();
 
         if($this->response["step"] == 0)
             $this->finish();
@@ -61,7 +67,13 @@ class JsonBar
     {
         $this->response["finished"] = true;
         $this->response["percent"]  = 100;
-        $this->response["text"]  = "Finished!";
+        $error = $this->stepsInstance->getError();
+        $errorMessage = $error->getMessage();
+        if(strlen($errorMessage) > 0){
+            $this->response["text"]  = $errorMessage;
+        } else {
+            $this->response["text"]  = "Finished!";
+        }
         $this->notify();
     }
 
@@ -70,7 +82,7 @@ class JsonBar
      *
      * @return bool
      */
-    public static function isAjax():bool
+    public static function isAjax()
     {
         $request = Application::getInstance()->getContext()->getRequest();
         if($request->isAjaxRequest())

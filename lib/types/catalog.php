@@ -9,6 +9,7 @@
 namespace Catalog\Generator\Types;
 
 use Bitrix\Catalog\CatalogIblockTable;
+use Bitrix\Iblock\IblockTable;
 use Bitrix\Iblock\TypeLanguageTable;
 use Bitrix\Iblock\TypeTable;
 use Bitrix\Main\Config\Option;
@@ -116,6 +117,8 @@ class Catalog implements Generateable
                 $linkPropertyId = $this->linkSkuToCatlaog($skuId, $catalogId);
                 $this->connectSkuToCatalog($skuId, $catalogId, $linkPropertyId);
             }
+        } else {
+            throw new Exception("Тип инфоблока не создан!");
         }
     }
 
@@ -128,6 +131,13 @@ class Catalog implements Generateable
      */
     private function makeCatalogIblock($iblockType)
     {
+        $iblockRes = IblockTable::getList([
+            "filter" => ["CODE" => "catalog_" . $iblockType],
+            "select" => ["ID"],
+            "limit" => 1
+        ]);
+        if($iblockRes->fetch())
+            throw new Exception("Каталог уже создан. Удалите каталог");
         $ib = new CIBlock;
         $arFields = [
             "ACTIVE" => "Y",
@@ -167,6 +177,13 @@ class Catalog implements Generateable
      */
     private function makeSkuIblock($iblockType)
     {
+        $iblockRes = IblockTable::getList([
+            "filter" => ["CODE" => "sku_" . $iblockType],
+            "select" => ["ID"],
+            "limit" => 1
+        ]);
+        if($iblockRes->fetch())
+            throw new Exception("Каталог sku уже создан. Удалите каталог sku");
         $ib = new CIBlock;
         $arFields = [
             "ACTIVE" => "Y",
