@@ -61,6 +61,7 @@
         this.initHandlers = function () {
             $(document).ready(function () {
                 $(document).on("submit", "#progress-starter", function () {
+                    that.setText("Initalization...");
                     that.update(that.step);
                     // @TODO deactivate event after click
                     return false;

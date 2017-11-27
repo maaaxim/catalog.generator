@@ -55,6 +55,11 @@ abstract class Property
     private $faker;
 
     /**
+     * @var array
+     */
+    protected static $randomSymbols = ["abcdefghijklnmopqrstuvwxyz", "0123456789"];
+
+    /**
      * Property constructor.
      */
     public function __construct()
@@ -117,7 +122,7 @@ abstract class Property
         if ($propertyResult->isSuccess()) {
             $id = (int) $propertyResult->getId();
         } else {
-            throw new \Exception($propertyResult->getErrorMessages());
+            throw new \Exception(implode(" ", $propertyResult->getErrorMessages()));
         }
         return $id;
     }
@@ -153,7 +158,8 @@ abstract class Property
             'PROPERTY_TYPE' => PropertyTable::TYPE_STRING,
             'USER_TYPE' => null,
             'NAME' => $this->name,
-            'CODE' => "STRING_" . $this->code,
+            // @TODO не добавлять, если есть с таким кодом
+            'CODE' => $this->getCode(),
             'MULTIPLE' => 'N',
             'ACTIVE' => 'Y',
             "IBLOCK_ID" => $this->iblockId
@@ -172,7 +178,7 @@ abstract class Property
             'PROPERTY_TYPE' => PropertyTable::TYPE_NUMBER,
             'USER_TYPE' => null,
             'NAME' => $this->name,
-            'CODE' => $this->code,
+            'CODE' => $this->getCode(),
             'MULTIPLE' => 'N',
             'ACTIVE' => 'Y',
             "IBLOCK_ID" => $this->iblockId
@@ -199,7 +205,7 @@ abstract class Property
             'PROPERTY_TYPE' => PropertyTable::TYPE_ELEMENT,
             'USER_TYPE' => null,
             'NAME' => $this->name,
-            'CODE' => $this->code,
+            'CODE' => $this->getCode(),
             'MULTIPLE' => 'N',
             'ACTIVE' => 'Y',
             "LINK_IBLOCK_ID" => $iblockId,
@@ -219,7 +225,7 @@ abstract class Property
             'PROPERTY_TYPE' => PropertyTable::TYPE_LIST,
             'USER_TYPE' => null,
             'NAME' => $this->name,
-            'CODE' => $this->code,
+            'CODE' => $this->getCode(),
             'MULTIPLE' => 'Y',
             'ACTIVE' => 'Y',
             "IBLOCK_ID" => $this->iblockId
@@ -229,6 +235,19 @@ abstract class Property
         $this->generateEnums($propId);
 
         return $propId;
+    }
+
+    /**
+     * Returns code in bitrix format
+     *
+     * @return string
+     */
+    protected function getCode():string
+    {
+        $code = $this->code . randString(15, self::$randomSymbols);
+        $code = substr($code, 0, 49);
+        $code = strtoupper($code);
+        return $code;
     }
 
     /**
@@ -371,8 +390,8 @@ abstract class Property
             if($attempt > 5)
                 throw new \Exception(implode(" ", $result->getErrorMessages()));
             $hlIblockId = $this->addHlBlock(
-                $entityPostfix . randString(5),
-                $tablePostfix . randString(5),
+                $entityPostfix . randString(5, self::$randomSymbols),
+                $tablePostfix . randString(5, self::$randomSymbols),
                 $attempt + 1
             );
             return $hlIblockId;

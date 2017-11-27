@@ -70,6 +70,7 @@ class JsonBar
         $error = $this->stepsInstance->getError();
         $errorMessage = $error->getMessage();
         if(strlen($errorMessage) > 0){
+            echo "<pre>"; var_dump($error); echo "</pre>";
             $this->response["text"]  = $errorMessage;
         } else {
             $this->response["text"]  = "Finished!";
