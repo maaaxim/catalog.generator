@@ -70,7 +70,7 @@ class JsonBar
      *
      * @return bool
      */
-    public static function isAjax()
+    public static function isAjax():bool
     {
         $request = Application::getInstance()->getContext()->getRequest();
         if($request->isAjaxRequest())

@@ -3,7 +3,6 @@
 namespace Catalog\Generator;
 
 use Catalog\Generator\Entity\GeneratorTable;
-use Catalog\Generator\Types\Generateable;
 use Bitrix\Main\Entity\ExpressionField;
 use Catalog\Generator\Types\Product;
 
@@ -15,12 +14,49 @@ use Catalog\Generator\Types\Product;
  */
 class Steps
 {
+    /**
+     *
+     */
+    const MODULE_IMG_PATH = '/bitrix/modules/catalog.generator/images/';
+
+    /**
+     *
+     */
+    const IBLOCK_TYPE = "catalog_generator";
+
+    /**
+     *
+     */
+    const MODULE_NAME = "catalog.generator";
+
+    /**
+     * @var
+     */
     protected $step;
+
+    /**
+     * @var
+     */
     protected $stepSize;
+
+    /**
+     * @var
+     */
     protected $stepCount;
 
+    /**
+     * @var
+     */
     protected $type;
+
+    /**
+     * @var
+     */
     protected $id;
+
+    /**
+     * @var
+     */
     protected $errors;
 
     public function __construct()

@@ -17,6 +17,9 @@ class SkuProperty extends Property implements Generateable
      */
     const IBLOCK_CODE = "sku_catalog_generator";
 
+    /**
+     * @return int
+     */
     public function getCountToGenerate():int
     {
         return (int) Option::get("catalog.generator", "types_skuproperty");

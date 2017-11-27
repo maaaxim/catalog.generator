@@ -12,8 +12,6 @@ use Bitrix\Main\Config\Option;
 
 class Sku extends CatalogProduct implements Generateable
 {
-    const ORDER = 7;
-
     /**
      * Iblock code for sku
      */

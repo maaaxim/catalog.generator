@@ -13,6 +13,7 @@ use Bitrix\Iblock\TypeLanguageTable;
 use Bitrix\Iblock\TypeTable;
 use Bitrix\Main\Config\Option;
 use Bitrix\Main\Loader;
+use Catalog\Generator\Steps;
 use CIBlock;
 use CIBlockProperty;
 use Exception;
@@ -25,11 +26,6 @@ use Exception;
  */
 class Catalog implements Generateable
 {
-    /**
-     * Iblock type id
-     */
-    const IBLOCK_TYPE = "catalog_generator";
-
     /**
      * @var bool
      */
@@ -80,7 +76,7 @@ class Catalog implements Generateable
      */
     private function makeType()
     {
-        $id = self::IBLOCK_TYPE;
+        $id = Steps::IBLOCK_TYPE;
         $typesRes = TypeTable::getList(["filter" => ["ID" => $id]]);
         if(!$typeFields = $typesRes->fetch()){
             TypeTable::add(["ID" => $id]);
@@ -109,7 +105,7 @@ class Catalog implements Generateable
     private function makeIblocks()
     {
         $typeRes = TypeTable::getList([
-            "filter" => ["=ID" => self::IBLOCK_TYPE],
+            "filter" => ["=ID" => Steps::IBLOCK_TYPE],
             "select" => ["ID"]
         ]);
         if ($typeFields = $typeRes->fetch()){

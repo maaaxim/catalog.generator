@@ -11,12 +11,10 @@ namespace Catalog\Generator\Types;
 use Bitrix\Iblock\ElementTable;
 use Bitrix\Main\Config\Option;
 use Catalog\Generator\Entity\GeneratorTable;
+use CIBlockElement;
 
 class Product extends CatalogProduct implements Generateable
 {
-    // @TODO replace
-    const MODULE_NAME = "catalog.generator";
-
     /**
      * Iblock code for product
      */
@@ -66,7 +64,7 @@ class Product extends CatalogProduct implements Generateable
         if($elementFields = $elementRes->fetch()){
             $id = (int) $elementFields["ID"];
         }
-        \CIBlockElement::Delete($id);
+        CIBlockElement::Delete($id);
     }
 
     public function getCountToGenerate():int

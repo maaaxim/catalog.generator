@@ -13,6 +13,7 @@ use Bitrix\Catalog\PriceTable;
 use Bitrix\Catalog\StoreProductTable;
 use Bitrix\Catalog\StoreTable;
 use Bitrix\Iblock\SectionTable;
+use Catalog\Generator\Steps;
 use Faker\Factory;
 use Bitrix\Iblock\IblockTable;
 use Bitrix\Main\Loader;
@@ -31,9 +32,6 @@ use CSite;
 
 abstract class CatalogProduct
 {
-    // @TODO replace
-    const MODULE_NAME = "catalog.generator";
-
     /**
      * @var \Faker\Generator
      */
@@ -230,7 +228,7 @@ abstract class CatalogProduct
      */
     public function getRandomImage():string
     {
-        $dir = $_SERVER['DOCUMENT_ROOT'] . MODULE_IMG_PATH; // @TODO check command line
+        $dir = $_SERVER['DOCUMENT_ROOT'] . Steps::MODULE_IMG_PATH;
         $files = array_values(array_diff(scandir($dir), ['..', '.']));
         $randKey = array_rand($files);
         $randFile = $files[$randKey];
@@ -559,30 +557,30 @@ abstract class CatalogProduct
     private function setConfig()
     {
         $this->config = [
-            "words_in_el_name"           => Option::get(self::MODULE_NAME, "words_in_el_name"),
-            "preview_text_length"        => Option::get(self::MODULE_NAME, "preview_text_length"),
-            "detail_text_length"         => Option::get(self::MODULE_NAME, "detail_text_length"),
-            "preview_picture_width"      => Option::get(self::MODULE_NAME, "preview_picture_width"),
-            "preview_picture_height"     => Option::get(self::MODULE_NAME, "preview_picture_height"),
-            "detail_picture_width"       => Option::get(self::MODULE_NAME, "detail_picture_width"),
-            "detail_picture_height"      => Option::get(self::MODULE_NAME, "detail_picture_height"),
-            "catalog_price_max_decimals" => Option::get(self::MODULE_NAME, "catalog_price_max_decimals"),
-            "catalog_price_min"          => Option::get(self::MODULE_NAME, "catalog_price_min"),
-            "catalog_price_max"          => Option::get(self::MODULE_NAME, "catalog_price_max"),
-            "catalog_weight_min"         => Option::get(self::MODULE_NAME, "catalog_weight_min"),
-            "catalog_weight_max"         => Option::get(self::MODULE_NAME, "catalog_weight_max"),
-            "catalog_width_min"          => Option::get(self::MODULE_NAME, "catalog_width_min"),
-            "catalog_width_max"          => Option::get(self::MODULE_NAME, "catalog_width_max"),
-            "catalog_length_min"         => Option::get(self::MODULE_NAME, "catalog_length_min"),
-            "catalog_length_max"         => Option::get(self::MODULE_NAME, "catalog_length_max"),
-            "catalog_height_min"         => Option::get(self::MODULE_NAME, "catalog_height_min"),
-            "catalog_height_max"         => Option::get(self::MODULE_NAME, "catalog_height_max"),
-            "catalog_quantity_min"       => Option::get(self::MODULE_NAME, "catalog_quantity_min"),
-            "catalog_quantity_max"       => Option::get(self::MODULE_NAME, "catalog_quantity_max"),
-            "property_multiple_count"    => Option::get(self::MODULE_NAME, "property_multiple_count"),
-            "property_string_length"     => Option::get(self::MODULE_NAME, "property_string_length"),
-            "property_text_length"       => Option::get(self::MODULE_NAME, "property_text_length"),
-            "types_price"                => Option::get(self::MODULE_NAME, "types_price")
+            "words_in_el_name"           => Option::get(Steps::MODULE_NAME, "words_in_el_name"),
+            "preview_text_length"        => Option::get(Steps::MODULE_NAME, "preview_text_length"),
+            "detail_text_length"         => Option::get(Steps::MODULE_NAME, "detail_text_length"),
+            "preview_picture_width"      => Option::get(Steps::MODULE_NAME, "preview_picture_width"),
+            "preview_picture_height"     => Option::get(Steps::MODULE_NAME, "preview_picture_height"),
+            "detail_picture_width"       => Option::get(Steps::MODULE_NAME, "detail_picture_width"),
+            "detail_picture_height"      => Option::get(Steps::MODULE_NAME, "detail_picture_height"),
+            "catalog_price_max_decimals" => Option::get(Steps::MODULE_NAME, "catalog_price_max_decimals"),
+            "catalog_price_min"          => Option::get(Steps::MODULE_NAME, "catalog_price_min"),
+            "catalog_price_max"          => Option::get(Steps::MODULE_NAME, "catalog_price_max"),
+            "catalog_weight_min"         => Option::get(Steps::MODULE_NAME, "catalog_weight_min"),
+            "catalog_weight_max"         => Option::get(Steps::MODULE_NAME, "catalog_weight_max"),
+            "catalog_width_min"          => Option::get(Steps::MODULE_NAME, "catalog_width_min"),
+            "catalog_width_max"          => Option::get(Steps::MODULE_NAME, "catalog_width_max"),
+            "catalog_length_min"         => Option::get(Steps::MODULE_NAME, "catalog_length_min"),
+            "catalog_length_max"         => Option::get(Steps::MODULE_NAME, "catalog_length_max"),
+            "catalog_height_min"         => Option::get(Steps::MODULE_NAME, "catalog_height_min"),
+            "catalog_height_max"         => Option::get(Steps::MODULE_NAME, "catalog_height_max"),
+            "catalog_quantity_min"       => Option::get(Steps::MODULE_NAME, "catalog_quantity_min"),
+            "catalog_quantity_max"       => Option::get(Steps::MODULE_NAME, "catalog_quantity_max"),
+            "property_multiple_count"    => Option::get(Steps::MODULE_NAME, "property_multiple_count"),
+            "property_string_length"     => Option::get(Steps::MODULE_NAME, "property_string_length"),
+            "property_text_length"       => Option::get(Steps::MODULE_NAME, "property_text_length"),
+            "types_price"                => Option::get(Steps::MODULE_NAME, "types_price")
         ];
     }
 

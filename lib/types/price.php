@@ -8,6 +8,8 @@
 
 namespace Catalog\Generator\Types;
 
+use CCatalogGroup;
+use Exception;
 use Faker\Factory;
 use Bitrix\Main\Loader;
 use Bitrix\Main\Config\Option;
@@ -42,7 +44,7 @@ class Price implements Generateable
     /**
      * Generates price type
      *
-     * @throws \Exception
+     * @throws Exception
      */
     function generate()
     {
@@ -57,20 +59,20 @@ class Price implements Generateable
                 "en" => $this->name
             ]
         ];
-        $priceId = \CCatalogGroup::Add($arFields);
+        $priceId = CCatalogGroup::Add($arFields);
         if ($priceId <= 0)
-            throw new \Exception("Add price error");
+            throw new Exception("Add price error");
     }
 
     /**
      * Including modules
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function includeModules()
     {
         if(!Loader::includeModule("catalog"))
-            throw new \Exception("Can't include catalog module");
+            throw new Exception("Can't include catalog module");
     }
 
     /**
