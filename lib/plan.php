@@ -73,6 +73,9 @@ class Plan
         }
     }
 
+    /**
+     * @return float
+     */
     private function getTimeElapsed():float
     {
         $start = microtime(true);

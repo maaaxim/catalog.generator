@@ -14,6 +14,7 @@ use Bitrix\Main\Type\Date;
 use Exception;
 use Faker\Factory;
 use CUtil;
+use Catalog\Generator\Exception as GeneratorException;
 
 /**
  * Class Section
@@ -136,7 +137,7 @@ class Section implements Generateable
      * Set iblock id
      * @TODO DRY Catalog\Generator\Types\Product setIblockId
      *
-     * @throws \Exception
+     * @throws GeneratorException
      */
     protected function setIblockId()
     {
@@ -149,7 +150,7 @@ class Section implements Generateable
         if ($iblockFields = $iblockRes->fetch()) {
             $this->iblockId = (int)$iblockFields["ID"];
         } else {
-            throw new Exception("Iblock is not created!");
+            throw new GeneratorException("Iblock is not created!");
         }
     }
 

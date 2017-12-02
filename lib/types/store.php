@@ -12,6 +12,7 @@ use Bitrix\Catalog\StoreTable;
 use Faker\Factory;
 use Bitrix\Main\Loader;
 use Bitrix\Main\Config\Option;
+use Catalog\Generator\Exception as GeneratorException;
 
 class Store implements Generateable
 {
@@ -66,12 +67,12 @@ class Store implements Generateable
     /**
      * Including modules
      *
-     * @throws \Exception
+     * @throws GeneratorException
      */
     private function includeModules()
     {
         if(!Loader::includeModule("catalog"))
-            throw new \Exception("Can't include catalog module");
+            throw new GeneratorException("Can't include catalog module");
     }
 
     public function getCountToGenerate():int

@@ -16,6 +16,7 @@ use Bitrix\Main\Loader;
 use Faker\Factory;
 use Bitrix\Iblock\TypeTable;
 use Bitrix\Iblock\TypeLanguageTable;
+use Catalog\Generator\Exception as GeneratorException;
 
 abstract class Property
 {
@@ -114,7 +115,7 @@ abstract class Property
     /**
      * @param $parameters
      * @return int
-     * @throws \Exception
+     * @throws GeneratorException
      */
     private function addProperty(array $parameters):int
     {
@@ -122,7 +123,7 @@ abstract class Property
         if ($propertyResult->isSuccess()) {
             $id = (int) $propertyResult->getId();
         } else {
-            throw new \Exception(implode(" ", $propertyResult->getErrorMessages()));
+            throw new GeneratorException(implode(" ", $propertyResult->getErrorMessages()));
         }
         return $id;
     }
@@ -130,7 +131,7 @@ abstract class Property
     /**
      * Set iblock id
      *
-     * @throws \Exception
+     * @throws GeneratorException
      */
     protected function setIblockId()
     {
@@ -143,7 +144,7 @@ abstract class Property
         if($iblockFields = $iblockRes->fetch()){
             $this->iblockId = (int) $iblockFields["ID"];
         } else {
-            throw new \Exception("Iblock is not created!");
+            throw new GeneratorException("Iblock is not created!");
         }
     }
 
@@ -254,7 +255,7 @@ abstract class Property
      * Generates enums for list property
      *
      * @param int $propId
-     * @throws \Exception
+     * @throws GeneratorException
      */
     private function generateEnums(int $propId)
     {
@@ -269,7 +270,7 @@ abstract class Property
                 "XML_ID" => $xmlId
             ]);
             if($enumId <= 0)
-                throw new \Exception("Prop enum is not set");
+                throw new GeneratorException("Prop enum is not set");
         }
     }
 
@@ -277,12 +278,12 @@ abstract class Property
      * Generates reference property
      *
      * @return int
-     * @throws \Exception
+     * @throws GeneratorException
      */
     protected function generateReference():int
     {
         if(!Loader::includeModule("highloadblock"))
-            throw new \Exception("hl iblock is not defined");
+            throw new GeneratorException("hl iblock is not defined");
 
         $convertToCamelCase = function ($sentence) {
             $ucSentence = ucwords($sentence);
@@ -296,7 +297,7 @@ abstract class Property
         // Add hl
         $hlIblockId = $this->addHlBlock($entityName, $tableName);
         if($hlIblockId <= 0)
-            throw new \Exception("Can't create hl-iblock");
+            throw new GeneratorException("Can't create hl-iblock");
 
         // Add hl fields
         $arUserFields = $this->getDefaultHlFields($hlIblockId);
@@ -325,7 +326,7 @@ abstract class Property
 
         $propId = $this->addProperty($propertyDescription);
         if($propId <= 0)
-            throw new \Exception("Can't create property");
+            throw new GeneratorException("Can't create property");
 
         $this->generateEntityItems($hlIblockId);
 
@@ -336,7 +337,7 @@ abstract class Property
      * Create few hl data
      *
      * @param $hlIblockId
-     * @throws \Exception
+     * @throws GeneratorException
      */
     private function generateEntityItems(int $hlIblockId)
     {
@@ -345,7 +346,7 @@ abstract class Property
         $entityClass = $entity->getDataClass();
 
         if(!class_exists($entityClass))
-            throw new \Exception($entityClass . " class is not exist");
+            throw new GeneratorException($entityClass . " class is not exist");
 
         for($i = 0; $i <= self::MAX_ENTITY_COUNT; $i++){
             $sentence = $this->faker->sentence(1,3);
@@ -378,7 +379,7 @@ abstract class Property
      * @param string $tablePostfix
      * @param int $attempt recursion attempt count
      * @return int
-     * @throws \Exception
+     * @throws GeneratorException
      */
     private function addHlBlock(string $entityPostfix, string $tablePostfix, $attempt = 0):int
     {
@@ -388,7 +389,7 @@ abstract class Property
         ]);
         if (!$result->isSuccess()) {
             if($attempt > 5)
-                throw new \Exception(implode(" ", $result->getErrorMessages()));
+                throw new GeneratorException(implode(" ", $result->getErrorMessages()));
             $hlIblockId = $this->addHlBlock(
                 $entityPostfix . randString(5, self::$randomSymbols),
                 $tablePostfix . randString(5, self::$randomSymbols),
@@ -405,7 +406,7 @@ abstract class Property
      * adding user fields for hl-block
      *
      * @param $arUserFields
-     * @throws \Exception
+     * @throws GeneratorException
      */
     private function addUserFields(array $arUserFields)
     {
@@ -419,7 +420,7 @@ abstract class Property
                 continue;
             $userFieldId = $obUserField->Add($arFields);
             if($userFieldId <= 0)
-                throw new \Exception("Can't create user type props");
+                throw new GeneratorException("Can't create user type props");
         }
     }
 
@@ -541,7 +542,7 @@ abstract class Property
      * @param $typeId
      * @param $iblockCode
      * @return int
-     * @throws \Exception
+     * @throws GeneratorException
      */
     public function generateHelperIblock(string $typeId, string $iblockCode):int
     {
@@ -563,7 +564,7 @@ abstract class Property
             ];
             $iblockId = $ib->Add($arFields);
             if($iblockId <= 0)
-                throw new \Exception($ib->LAST_ERROR . " error happened!");
+                throw new GeneratorException($ib->LAST_ERROR . " error happened!");
         } else {
             $iblockId = (int) $iblockFields["ID"];
         }

@@ -29,6 +29,7 @@ use CIBlock;
 use CIBlockSection;
 use Cutil;
 use CSite;
+use Catalog\Generator\Exception as GeneratorException;
 
 abstract class CatalogProduct
 {
@@ -264,7 +265,7 @@ abstract class CatalogProduct
     /**
      * Set iblock id
      *
-     * @throws \Exception
+     * @throws GeneratorException
      */
     protected function setIblockId()
     {
@@ -277,7 +278,7 @@ abstract class CatalogProduct
         if ($iblockFields = $iblockRes->fetch()) {
             $this->iblockId = (int)$iblockFields["ID"];
         } else {
-            throw new \Exception("Iblock is not created!");
+            throw new GeneratorException("Iblock is not created!");
         }
     }
 
@@ -286,7 +287,7 @@ abstract class CatalogProduct
      *
      * @param $iblockProp
      * @return array
-     * @throws \Exception
+     * @throws GeneratorException
      */
     private function generateIblockPropValReference($iblockProp):array
     {
@@ -303,7 +304,7 @@ abstract class CatalogProduct
         $arHlBlock = $hlRes->fetch();
 
         if (empty($arHlBlock))
-            throw new \Exception("Hl iblock shouldn't be emppty!");
+            throw new GeneratorException("Hl iblock shouldn't be emppty!");
 
         $hlBlock = HighloadBlockTable::getById($arHlBlock['ID'])->fetch();
         $entity = HighloadBlockTable::compileEntity($hlBlock);
@@ -623,13 +624,13 @@ abstract class CatalogProduct
 
     /**
      * @param $elementId
-     * @throws \Exception
+     * @throws GeneratorException
      */
     protected function addPrices(int $elementId)
     {
         $priceCount = (int)$this->config["types_price"];
         if ($priceCount <= 0)
-            throw new \Exception("We need more then 0 prices");
+            throw new GeneratorException("We need more then 0 prices");
         $priceTypesRes = GroupTable::getList([
             "select" => ["ID", "BASE"]
         ]);
@@ -648,7 +649,7 @@ abstract class CatalogProduct
             ];
             $result = PriceTable::add($fields);
             if (!$result->isSuccess()) {
-                throw new \Exception(implode(" ", $result->getErrorMessages()));
+                throw new GeneratorException(implode(" ", $result->getErrorMessages()));
             }
         }
     }

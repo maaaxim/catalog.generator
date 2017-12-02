@@ -5,6 +5,7 @@ namespace Catalog\Generator;
 use Catalog\Generator\Entity\GeneratorTable;
 use Bitrix\Main\Entity\ExpressionField;
 use Catalog\Generator\Types\Product;
+use Catalog\Generator\Exception as GeneratorException;
 
 /**
  * Class Steps
@@ -84,7 +85,7 @@ class Steps
             } else {
                 return 0;
             }
-        } catch (\Exception $exception) {
+        } catch (GeneratorException $exception) {
             $this->error = $exception;
             return 0;
         }
@@ -178,7 +179,7 @@ class Steps
             "STATUS" => 1,
         ]);
         if (!$result->isSuccess()){
-            throw new \Exception($result->getErrorMessages());
+            throw new GeneratorException($result->getErrorMessages());
         }
     }
 
