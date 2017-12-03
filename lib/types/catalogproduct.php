@@ -57,7 +57,7 @@ abstract class CatalogProduct
         $this->setIblockId();
         $this->faker = Factory::create('ru_RU');
         if (!Loader::includeModule('catalog'))
-            throw new \Exception("Catalog module is not included");
+            throw new GeneratorException("Catalog module is not included");
     }
 
     /**

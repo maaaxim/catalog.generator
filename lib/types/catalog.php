@@ -17,7 +17,7 @@ use Bitrix\Main\Loader;
 use Catalog\Generator\Steps;
 use CIBlock;
 use CIBlockProperty;
-use Exception;
+use Catalog\Generator\Exception as GeneratorException;
 
 /**
  * Class Catalog
@@ -67,9 +67,9 @@ class Catalog implements Generateable
     private function includeModules()
     {
         if(!Loader::includeModule("catalog"))
-            throw new Exception("Catalog module is not included!");
+            throw new GeneratorException("Catalog module is not included!");
         if(!Loader::includeModule("iblock"))
-            throw new Exception("Iblock module is not included!");
+            throw new GeneratorException("Iblock module is not included!");
     }
 
     /**
@@ -102,6 +102,8 @@ class Catalog implements Generateable
 
     /**
      * Create iblock data
+     *
+     * @throws GeneratorException
      */
     private function makeIblocks()
     {
@@ -118,7 +120,7 @@ class Catalog implements Generateable
                 $this->connectSkuToCatalog($skuId, $catalogId, $linkPropertyId);
             }
         } else {
-            throw new Exception("Тип инфоблока не создан!");
+            throw new GeneratorException("Тип инфоблока не создан!");
         }
     }
 
@@ -127,7 +129,7 @@ class Catalog implements Generateable
      *
      * @param $iblockType
      * @return bool
-     * @throws \Exception
+     * @throws GeneratorException
      */
     private function makeCatalogIblock($iblockType)
     {
@@ -137,7 +139,7 @@ class Catalog implements Generateable
             "limit" => 1
         ]);
         if($iblockRes->fetch())
-            throw new Exception("Каталог уже создан. Удалите каталог");
+            throw new GeneratorException("Каталог уже создан. Удалите каталог");
         $ib = new CIBlock;
         $arFields = [
             "ACTIVE" => "Y",
@@ -152,7 +154,7 @@ class Catalog implements Generateable
         ];
         $catalogId = $ib->Add($arFields);
         if($catalogId <= 0)
-            throw new Exception($ib->LAST_ERROR . " =>" .$iblockType . " error happened!");
+            throw new GeneratorException($ib->LAST_ERROR . " =>" .$iblockType . " error happened!");
         return $catalogId;
     }
 
@@ -173,7 +175,7 @@ class Catalog implements Generateable
      *
      * @param $iblockType
      * @return bool
-     * @throws \Exception
+     * @throws GeneratorException
      */
     private function makeSkuIblock($iblockType)
     {
@@ -183,7 +185,7 @@ class Catalog implements Generateable
             "limit" => 1
         ]);
         if($iblockRes->fetch())
-            throw new Exception("Каталог sku уже создан. Удалите каталог sku");
+            throw new GeneratorException("Каталог sku уже создан. Удалите каталог sku");
         $ib = new CIBlock;
         $arFields = [
             "ACTIVE" => "Y",
@@ -195,7 +197,7 @@ class Catalog implements Generateable
         ];
         $skuId = $ib->Add($arFields);
         if($skuId <= 0)
-            throw new Exception($ib->LAST_ERROR . " error happened!");
+            throw new GeneratorException($ib->LAST_ERROR . " error happened!");
         return $skuId;
     }
 

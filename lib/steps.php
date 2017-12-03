@@ -179,7 +179,7 @@ class Steps
             "STATUS" => 1,
         ]);
         if (!$result->isSuccess()){
-            throw new GeneratorException($result->getErrorMessages());
+            throw new ($result->getErrorMessages());
         }
     }
 
